@@ -1,0 +1,17 @@
+{
+    "name": "poirot/collection",
+    "description": "Data Collection and Entities",
+    "type"       : "library",
+    "authors": [
+        {
+            "name": "Payam Naderi",
+            "email": "naderi.payam@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "target-dir": "Poirot/Collection",
+    "autoload"  : {
+        "psr-0": { "Poirot\\Collection": "." },
+        "files": [ "Core.php" ]
+    }
+}
