@@ -14,19 +14,17 @@ namespace Poirot\Core {
      */
     function array_merge(array $a, array $b)
     {
-        foreach ($b as $key => $value) {
-            if (array_key_exists($key, $a)) {
-                if (is_int($key)) {
-                    $a[] = $value;
-                } elseif (is_array($value) && is_array($a[$key])) {
+        foreach ($b as $key => $value)
+            if (array_key_exists($key, $a))
+                if (is_int($key))
+                    if (!in_array($value, $a))
+                        $a[] = $value;
+                elseif (is_array($value) && is_array($a[$key]))
                     $a[$key] = array_merge($a[$key], $value);
-                } else {
+                else
                     $a[$key] = $value;
-                }
-            } else {
+            else
                 $a[$key] = $value;
-            }
-        }
 
         return $a;
     }
