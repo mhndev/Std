@@ -4,6 +4,19 @@ namespace Poirot\Core
     trait SetterSetup
     {
         /**
+         * @var array List Setters By Priority
+         * [
+         *  'service_config',
+         *  'listeners',
+         *  // ...
+         * ]
+         *
+         * application calls setter methods from top ...
+         *
+         */
+        # protected $__setup_array_priority = array();
+
+        /**
          * Setter Setup From Array
          *
          * @param array $setters        Associated Array
@@ -17,6 +30,18 @@ namespace Poirot\Core
         {
             if (array_values($setters) == $setters)
                 throw new \InvalidArgumentException('Setters Array must be associative array.');
+
+            $sortQuee = $this->__setup_array_priority;
+            uksort($setters, function($a, $b) use ($sortQuee) {
+                // sort array to reach setter priorities
+                $ai = array_search($a, $sortQuee);
+                $ai = ($ai !== false) ? $ai : 1000;
+
+                $bi = array_search($b, $sortQuee);
+                $bi = ($bi !== false) ? $bi : 1000;
+
+                return $ai <= $bi ? -1 : 1;
+            });
 
             foreach($setters as $key => $val) {
                 $setter = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
