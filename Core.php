@@ -40,7 +40,7 @@ namespace Poirot\Core
                 $bi = array_search($b, $sortQuee);
                 $bi = ($bi !== false) ? $bi : 1000;
 
-                return $ai <= $bi ? -1 : 1;
+                return $ai < $bi ? -1 : ($ai == $bi) ? 0 : 1;
             });
 
             foreach($setters as $key => $val) {
