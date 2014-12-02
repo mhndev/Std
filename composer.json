@@ -1,6 +1,6 @@
 {
-    "name": "poirot/collection",
-    "description": "Data Collection and Entities",
+    "name": "poirot/core",
+    "description": "Poirot Base Functionalities",
     "type"       : "library",
     "authors": [
         {
@@ -9,9 +9,8 @@
             "role": "Developer"
         }
     ],
-    "target-dir": "Poirot/Collection",
+    "target-dir": "Poirot/Core",
     "autoload"  : {
-        "psr-0": { "Poirot\\Collection": "." },
         "files": [ "Core.php" ]
     }
 }
