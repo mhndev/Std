@@ -11,6 +11,11 @@
     ],
     "target-dir": "Poirot/Core",
     "autoload"  : {
-        "files": [ "Core.php" ]
+        "psr-0": {
+            "Poirot\\Core": "."
+        },
+        "files": [
+            "Core.php"
+        ]
     }
 }
