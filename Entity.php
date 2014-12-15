@@ -5,7 +5,7 @@ use Poirot\Core;
 
 include_once 'Core.php';
 
-class Entity implements EntityInterface
+class Entity implements Interfaces\EntityInterface
 {
     const DEFAULT_NONE_VALUE = null;
 

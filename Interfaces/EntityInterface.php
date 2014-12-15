@@ -1,7 +1,7 @@
 <?php
-namespace Poirot\Core;
+namespace Poirot\Core\Interfaces;
 
-interface EntityInterface 
+interface EntityInterface
 {
     /**
      * Set Entity
