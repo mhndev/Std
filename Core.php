@@ -44,8 +44,9 @@ namespace Poirot\Core
             });
 
             foreach($setters as $key => $val) {
-                $setter = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
+                $setter = 'set' . sanitize_camelcase($key);
                 if (method_exists($this, $setter)) {
+                    // check for methods
                     $this->{$setter}($val);
                 } elseif($throwException) {
                     throw new \InvalidArgumentException(
@@ -89,5 +90,17 @@ namespace Poirot\Core
                 $a[$key] = $value;
 
         return $a;
+    }
+
+    /**
+     * Sanitize Underscore To Camelcase
+     *
+     * @param string $key Key
+     *
+     * @return string
+     */
+    function sanitize_camelcase($key)
+    {
+        return str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
     }
 }
