@@ -4,79 +4,66 @@ namespace Poirot\Core;
 use Poirot\Core;
 
 /**
- * Object is the base class that implements the *property* feature.
- *
- * A property is defined by a getter method (e.g. `getLabel`), and/or a setter method (e.g. `setLabel`). For example,
- * the following getter and setter methods define a property named `label`:
+ * Here is a simple optionsClass example:
  *
  * ~~~
- * private $_label;
+ * class Options extend AbstractOptions {
  *
- * public function getLabel()
- * {
- *     return $this->_label;
- * }
+ *  // >>> Plug(Full) Properties >>>>>
  *
- * public function setLabel($value)
- * {
- *     $this->_label = $value;
- * }
- * ~~~
+ *  protected $fname;
  *
- * Property names are *case-insensitive*.
+ *  protected $prefix = '';
  *
- * A property can be accessed like a member variable of an object. Reading or writing a property will cause the invocation
- * of the corresponding getter or setter method. For example,
+ *  // Property Setter/Getter Methods must be Public
  *
- * ~~~
- * // equivalent to $label = $object->getLabel();
- * $label = $object->label;
- * // equivalent to $object->setLabel('abc');
- * $object->label = 'abc';
- * ~~~
+ *  public function setFullName($fname)
+ *  {
+ *      $this->fname = $fname;
+ *  }
  *
- * If a property has only a getter method and has no setter method, it is considered as *read-only*. In this case, trying
- * to modify the property value will cause an exception.
+ *  public function getFullName()
+ *  {
+ *      return $this->prefix.$this->fname;
+ *  }
  *
- * One can call [[hasProperty()]], [[canGetProperty()]] and/or [[canSetProperty()]] to check the existence of a property.
+ *  // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
  *
- * Besides the property feature, Object also introduces an important object initialization life cycle. In particular,
- * creating an new instance of Object or its derived class will involve the following life cycles sequentially:
+ *  // >>> ReadOnly Access >>>>>
  *
- * 1. the class constructor is invoked;
- * 2. object properties are initialized according to the given configuration;
- * 3. the `init()` method is invoked.
+ *  public function getClassName()
+ *  {
+ *      return get_class($this);
+ *  }
  *
- * In the above, both Step 2 and 3 occur at the end of the class constructor. It is recommended that
- * you perform object initialization in the `init()` method because at that stage, the object configuration
- * is already applied.
+ *  // <<<<<<
  *
- * In order to ensure the above life cycles, if a child class of Object needs to override the constructor,
- * it should be done like the following:
+ * // >>> WriteOnly Access >>>>>
  *
- * ~~~
- * public function __construct($param1, $param2, ..., $config = [])
- * {
- *     ...
- *     parent::__construct($config);
+ *  public function setPrefix($prefix)
+ *  {
+ *      $this->prefix = $prefix
+ *  }
+ *
+ *  // <<<<<<
  * }
  * ~~~
  *
- * That is, a `$config` parameter (defaults to `[]`) should be declared as the last parameter
- * of the constructor, and the parent implementation should be called at the end of the constructor.
+ * How to use it:
  *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
+ * ~~~
+ * $opt = new Options(['prefix' => 'Eng.', 'full_name' => 'Payam Naderi']);
+ * $opt->setPrefix('Eng.'); // same as above
+ * foreach($opt->props()->readable as $key) // get all readable props
+ *  if (!empty($opt->$key))
+ *      echo($opt->$key); // get key value
+ *
+ * echo $opt->getClassName();
+ * ~~~
+ * 
  */
 abstract class AbstractOptions implements Interfaces\FieldMagicalInterface
 {
-    // option_name
-    # full access
-       # writeonly
-    // public function setOptionName($val);
-       # readonly
-    // public function getOptionName();
-
     /**
      * Construct
      *
