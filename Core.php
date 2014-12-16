@@ -103,4 +103,19 @@ namespace Poirot\Core
     {
         return str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
     }
+
+    /**
+     * Sanitize CamelCase To under_score
+     *
+     * @param string $key Key
+     *
+     * @return string
+     */
+    function sanitize_underscore($key)
+    {
+        $pattern     = array('#(?<=(?:[A-Z]))([A-Z]+)([A-Z][A-z])#', '#(?<=(?:[a-z0-9]))([A-Z])#');
+        $replacement = array('\1_\2', '_\1');
+
+        return preg_replace($pattern, $replacement, $key);
+    }
 }
