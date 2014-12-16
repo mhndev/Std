@@ -155,7 +155,7 @@ abstract class AbstractOptions implements Interfaces\FieldMagicalInterface
     }
 
     /**
-     * Get Option Properties Information
+     * Get Options Properties Information
      *
      * @return AbstractOptions\PropsObject
      */
