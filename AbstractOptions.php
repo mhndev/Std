@@ -2,6 +2,7 @@
 namespace Poirot\Core;
 
 use Poirot\Core;
+use Poirot\Core\AbstractOptions\PropsObject;
 
 /**
  * Here is a simple optionsClass example:
@@ -60,10 +61,15 @@ use Poirot\Core;
  *
  * echo $opt->getClassName();
  * ~~~
- * 
+ *
  */
 abstract class AbstractOptions implements Interfaces\FieldMagicalInterface
 {
+    /**
+     * @var PropsObject Cached Props Once Call props()
+     */
+    protected $_cachedProps;
+
     /**
      * Construct
      *
@@ -155,6 +161,9 @@ abstract class AbstractOptions implements Interfaces\FieldMagicalInterface
      */
     function props()
     {
+        if ($this->_cachedProps)
+            return $this->_cachedProps;
+
         $ref     = new \ReflectionClass($this);
         $methods = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
         $props   = [];
@@ -167,7 +176,9 @@ abstract class AbstractOptions implements Interfaces\FieldMagicalInterface
                     strtolower(str_replace($prefix, '', $method->getName()))
                 );
 
-        return new AbstractOptions\PropsObject($props);
+        $this->_cachedProps = new AbstractOptions\PropsObject($props);
+
+        return $this->props();
     }
 
     /**
