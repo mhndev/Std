@@ -102,12 +102,18 @@ class Entity implements Interfaces\EntityInterface
     /**
      * Set Properties
      *
+     * - by deleting existence properties
+     *
      * @param Entity $entity
      *
      * @return $this
      */
     public function setFrom(Entity $entity)
     {
+        foreach ($this->keys() as $key)
+            // Delete All Currently Properties
+            $this->del($key);
+
         $this->merge($entity);
 
         return $this;
