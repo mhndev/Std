@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Core
 {
-    trait SetterSetup
+    trait BuilderSetterTrait
     {
         /**
          * @var array List Setters By Priority
