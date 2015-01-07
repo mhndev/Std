@@ -31,17 +31,21 @@ namespace Poirot\Core
             if (array_values($setters) == $setters)
                 throw new \InvalidArgumentException('Setters Array must be associative array.');
 
-            $sortQuee = $this->__setup_array_priority;
-            uksort($setters, function($a, $b) use ($sortQuee) {
-                // sort array to reach setter priorities
-                $ai = array_search($a, $sortQuee);
-                $ai = ($ai !== false) ? $ai : 1000;
+            if (isset($this->__setup_array_priority)
+                && is_array($this->__setup_array_priority)
+            ) {
+                $sortQuee = $this->__setup_array_priority;
+                uksort($setters, function($a, $b) use ($sortQuee) {
+                    // sort array to reach setter priorities
+                    $ai = array_search($a, $sortQuee);
+                    $ai = ($ai !== false) ? $ai : 1000;
 
-                $bi = array_search($b, $sortQuee);
-                $bi = ($bi !== false) ? $bi : 1000;
+                    $bi = array_search($b, $sortQuee);
+                    $bi = ($bi !== false) ? $bi : 1000;
 
-                return $ai < $bi ? -1 : ($ai == $bi) ? 0 : 1;
-            });
+                    return $ai < $bi ? -1 : ($ai == $bi) ? 0 : 1;
+                });
+            }
 
             foreach($setters as $key => $val) {
                 $setter = 'set' . sanitize_camelcase($key);
