@@ -63,7 +63,7 @@ use Poirot\Core\AbstractOptions\PropsObject;
  * ~~~
  *
  */
-abstract class AbstractOptions implements Interfaces\FieldMagicalInterface
+abstract class AbstractOptions implements Interfaces\iMagicalFields
 {
     /**
      * @var PropsObject Cached Props Once Call props()
@@ -77,11 +77,27 @@ abstract class AbstractOptions implements Interfaces\FieldMagicalInterface
      */
     function __construct(array $options = [])
     {
-        if (!empty($options) && array_values($options) == $options)
+        if (!empty($options))
+            $this->setFromArray($options);
+    }
+
+    /**
+     * Set Options From Array
+     *
+     * @param array $options
+     *
+     * @throws \Exception
+     * @return $this
+     */
+    function setFromArray(array $options)
+    {
+        if (array_values($options) == $options)
             throw new \InvalidArgumentException('Options Array must be associative array.');
 
         foreach($options as $key => $val)
             $this->__set($key, $val);
+
+        return $this;
     }
 
     /**

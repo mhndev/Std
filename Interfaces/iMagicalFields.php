@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Core\Interfaces;
 
-interface FieldMagicalInterface
+interface iMagicalFields
 {
     /**
      * @param string $key
