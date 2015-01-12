@@ -78,7 +78,7 @@ abstract class AbstractOptions implements Interfaces\iMagicalFields
     function __construct(array $options = [])
     {
         if (!empty($options))
-            $this->setFromArray($options);
+            $this->fromArray($options);
     }
 
     /**
@@ -89,7 +89,7 @@ abstract class AbstractOptions implements Interfaces\iMagicalFields
      * @throws \Exception
      * @return $this
      */
-    function setFromArray(array $options)
+    function fromArray(array $options)
     {
         if (array_values($options) == $options)
             throw new \InvalidArgumentException('Options Array must be associative array.');
