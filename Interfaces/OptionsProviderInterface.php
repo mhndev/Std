@@ -14,4 +14,20 @@ interface OptionsProviderInterface
      * @return AbstractOptions
      */
     function options();
+
+    /**
+     * Get An Bare Options Instance
+     *
+     * ! it used on easy access to options instance
+     *   before constructing class
+     *   [php]
+     *      $opt = Filesystem::optionsIns();
+     *      $opt->setSomeOption('value');
+     *
+     *      $class = new Filesystem($opt);
+     *   [/php]
+     *
+     * @return AbstractOptions
+     */
+    static function optionsIns();
 }
