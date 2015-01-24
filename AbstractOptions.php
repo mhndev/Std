@@ -73,18 +73,35 @@ abstract class AbstractOptions implements Interfaces\iMagicalFields
     /**
      * Construct
      *
-     * @param array $options Options Array
+     * @param array|AbstractOptions $options Options
      */
-    function __construct(array $options = [])
+    function __construct($options = null)
     {
-        if (!empty($options))
+        if ($options !== null)
+            $this->from($options);
+    }
+
+    /**
+     * Set Options
+     *
+     * @param array|AbstractOptions $options
+     *
+     * @return $this
+     */
+    public function from($options)
+    {
+        if (is_array($options))
             $this->fromArray($options);
+        elseif ($options instanceof AbstractOptions)
+            $this->fromOption($options);
+
+        return $this;
     }
 
     /**
      * Set Options From Array
      *
-     * @param array $options
+     * @param array $options Options Array
      *
      * @throws \Exception
      * @return $this
@@ -96,6 +113,36 @@ abstract class AbstractOptions implements Interfaces\iMagicalFields
 
         foreach($options as $key => $val)
             $this->__set($key, $val);
+
+        return $this;
+    }
+
+    /**
+     * Set Options From Same Option Object
+     *
+     * - check for private and write_only methods
+     *   to fully options copied to source option
+     *   class object
+     *
+     * @param AbstractOptions $options Options Object
+     *
+     * @throws \Exception
+     * @return $this
+     */
+    function fromOption(AbstractOptions $options)
+    {
+        if (!is_a($options, self))
+            throw new \Exception(sprintf(
+                'Given Options Is Not Same As Provided Class Options. you given "%s".'
+                , get_class($options)
+            ));
+
+        foreach($this->options()->props()->writable as $key)
+            if (isset($options->{$key}))
+                $this->options()->{$key} = $options->{$key};
+
+        // call your copy options actions:
+        // ...
 
         return $this;
     }
