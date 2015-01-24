@@ -188,9 +188,9 @@ abstract class AbstractOptions implements Interfaces\iMagicalFields
                 // this is not property method
                 unset($methods[$i]);
             else
-                $props[$prefix][] = Core\sanitize_underscore(
-                    strtolower(str_replace($prefix, '', $method->getName()))
-                );
+                $props[$prefix][] = strtolower(Core\sanitize_underscore(
+                    str_replace($prefix, '', $method->getName())
+                ));
 
         $this->_cachedProps = new AbstractOptions\PropsObject($props);
 
