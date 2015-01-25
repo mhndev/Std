@@ -129,19 +129,21 @@ abstract class AbstractOptions implements Interfaces\iMagicalFields
      * @throws \Exception
      * @return $this
      */
-    function fromOption(AbstractOptions $options)
+    function fromOption(/*AbstractOptions*/ $options) // php is a donkey, why strict_error
     {
-        if (!is_a($options, self))
+        if (!$options instanceof $this)
+            // only get same option object
             throw new \Exception(sprintf(
                 'Given Options Is Not Same As Provided Class Options. you given "%s".'
                 , get_class($options)
             ));
 
-        foreach($this->options()->props()->writable as $key)
+        foreach($options->props()->writable as $key)
             if (isset($options->{$key}))
-                $this->options()->{$key} = $options->{$key};
+                $this->__set($key, $options->{$key});
 
-        // call your copy options actions:
+        // call your inherit options actions:
+        // maybe you want access protected methods or properties
         // ...
 
         return $this;
