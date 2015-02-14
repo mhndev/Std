@@ -156,7 +156,7 @@ abstract class AbstractOptions implements Interfaces\iMagicalFields
      * @throws \Exception
      * @return void
      */
-    public function __set($key, $value)
+    function __set($key, $value)
     {
         $setter = 'set' . sanitize_camelcase($key);
         if ($this->isMethodExists($setter))
@@ -178,7 +178,7 @@ abstract class AbstractOptions implements Interfaces\iMagicalFields
      * @throws \Exception
      * @return mixed
      */
-    public function __get($key)
+    function __get($key)
     {
         $getter = 'get' . sanitize_camelcase($key);
         if ($this->isMethodExists($getter))
@@ -198,7 +198,7 @@ abstract class AbstractOptions implements Interfaces\iMagicalFields
      * @param string $key
      * @return bool
      */
-    public function __isset($key)
+    function __isset($key)
     {
         try {
             $this->__get($key);
@@ -214,7 +214,7 @@ abstract class AbstractOptions implements Interfaces\iMagicalFields
      * @param string $key
      * @return void
      */
-    public function __unset($key)
+    function __unset($key)
     {
         $this->__set($key, null);
     }
@@ -244,6 +244,20 @@ abstract class AbstractOptions implements Interfaces\iMagicalFields
         $this->_cachedProps = new AbstractOptions\PropsObject($props);
 
         return $this->props();
+    }
+
+    /**
+     * Get Properties as array
+     *
+     * @return array
+     */
+    function toArray()
+    {
+        $rArray = [];
+        foreach($this->props()->readable as $p)
+            $rArray[$p] = $this->__get($p);
+
+        return $rArray;
     }
 
     /**
