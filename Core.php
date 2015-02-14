@@ -1,4 +1,8 @@
 <?php
+namespace {
+    !defined('POIROT_CORE_LOADED') and define('POIROT_CORE_LOADED', true);
+}
+
 namespace Poirot\Core
 {
     trait BuilderSetterTrait
