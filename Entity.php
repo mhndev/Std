@@ -2,10 +2,11 @@
 namespace Poirot\Core;
 
 use Poirot\Core;
+use Poirot\Core\Interfaces\iEntityPoirot;
 
 include_once 'Core.php';
 
-class Entity implements Interfaces\EntityInterface
+class Entity implements iEntityPoirot
 {
     const DEFAULT_NONE_VALUE = null;
 
@@ -104,11 +105,11 @@ class Entity implements Interfaces\EntityInterface
      *
      * - by deleting existence properties
      *
-     * @param Entity $entity
+     * @param iEntityPoirot $entity
      *
      * @return $this
      */
-    public function setFrom(Entity $entity)
+    public function setFrom(iEntityPoirot $entity)
     {
         foreach ($this->keys() as $key)
             // Delete All Currently Properties
@@ -122,11 +123,11 @@ class Entity implements Interfaces\EntityInterface
     /**
      * Merge/Set Data With Entity
      *
-     * @param Entity $entity Merge Entity
+     * @param iEntityPoirot $entity Merge Entity
      *
      * @return $this
      */
-    public function merge(Entity $entity)
+    public function merge(iEntityPoirot $entity)
     {
         foreach($entity->keys() as $key)
             $this->set($key, $entity->get($key));
@@ -174,11 +175,11 @@ class Entity implements Interfaces\EntityInterface
     /**
      * Get a copy of properties as hydrate structure
      *
-     * @param Entity $entity Entity
+     * @param iEntityPoirot $entity Entity
      *
      * @return mixed
      */
-    public function getAs(Entity $entity)
+    public function getAs(iEntityPoirot $entity)
     {
         return $entity->setFrom($this)
             ->borrow();
