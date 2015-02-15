@@ -149,7 +149,7 @@ trait EntityTrait
      */
     public function del($prop)
     {
-        if (!$this->has($prop))
+        if ($this->has($prop))
             unset($this->properties[$prop]);
 
         return $this;
