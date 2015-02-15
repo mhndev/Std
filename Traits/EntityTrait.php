@@ -65,12 +65,17 @@ trait EntityTrait
      */
     public function get($prop, $default = '__not_set_value__')
     {
-        if (!$this->has($prop) && $default === self::$__not_set_value__)
+        // avoid recursive trait call, may conflict on classes that
+        // implement in this case has() method
+        #if (!$this->has($prop) && $default === self::$__not_set_value__)
+        if (!array_key_exists($prop, $this->properties)
+            && $default === self::$__not_set_value__
+        )
             throw new \Exception(
                 sprintf('Property "%s" not found in entity.', $prop)
             );
 
-        return ($this->has($prop))
+        return (array_key_exists($prop, $this->properties))
             ? $this->properties[$prop]
             : $default;
     }
