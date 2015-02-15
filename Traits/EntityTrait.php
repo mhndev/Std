@@ -154,7 +154,7 @@ trait EntityTrait
      */
     public function del($prop)
     {
-        if ($this->has($prop))
+        if (array_key_exists($prop, $this->properties))
             unset($this->properties[$prop]);
 
         return $this;
