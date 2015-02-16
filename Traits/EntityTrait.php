@@ -4,7 +4,7 @@ namespace Poirot\Core\Traits;
 !defined('POIROT_CORE_LOADED') and include_once dirname(__FILE__).'/../Core.php';
 
 use Poirot\Core;
-use Poirot\Core\Interfaces\iEntityPoirot;
+use Poirot\Core\Interfaces\iPoirotEntity;
 
 trait EntityTrait
 {
@@ -23,14 +23,14 @@ trait EntityTrait
     /**
      * Construct
      *
-     * @param array|iEntityPoirot $props Properties
+     * @param array|iPoirotEntity $props Properties
      *
      * @throws \Exception
      */
     public function __construct($props = null)
     {
         if ($props) {
-            if ($props instanceof iEntityPoirot)
+            if ($props instanceof iPoirotEntity)
                 $props = $props->getAs(new self());
 
             if (!is_array($props))
@@ -103,11 +103,11 @@ trait EntityTrait
      *
      * - by deleting existence properties
      *
-     * @param iEntityPoirot $entity
+     * @param iPoirotEntity $entity
      *
      * @return $this
      */
-    public function setFrom(iEntityPoirot $entity)
+    public function setFrom(iPoirotEntity $entity)
     {
         foreach ($this->keys() as $key)
             // Delete All Currently Properties
@@ -121,11 +121,11 @@ trait EntityTrait
     /**
      * Merge/Set Data With Entity
      *
-     * @param iEntityPoirot $entity Merge Entity
+     * @param iPoirotEntity $entity Merge Entity
      *
      * @return $this
      */
-    public function merge(iEntityPoirot $entity)
+    public function merge(iPoirotEntity $entity)
     {
         foreach($entity->keys() as $key)
             $this->set($key, $entity->get($key));
@@ -173,11 +173,11 @@ trait EntityTrait
     /**
      * Get a copy of properties as hydrate structure
      *
-     * @param iEntityPoirot $entity Entity
+     * @param iPoirotEntity $entity Entity
      *
      * @return mixed
      */
-    public function getAs(iEntityPoirot $entity)
+    public function getAs(iPoirotEntity $entity)
     {
         return $entity->setFrom($this)
             ->borrow();
