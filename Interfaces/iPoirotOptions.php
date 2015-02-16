@@ -6,6 +6,13 @@ use Poirot\Core\AbstractOptions\PropsObject;
 interface iPoirotOptions extends iMagicalFields
 {
     /**
+     * Construct
+     *
+     * @param array|iPoirotOptions $options Options
+     */
+    function __construct($options = null);
+
+    /**
      * Set Options
      *
      * @param array|iPoirotOptions $options
@@ -40,6 +47,9 @@ interface iPoirotOptions extends iMagicalFields
      * @return $this
      */
     function fromOption(iPoirotOptions $options);
+    // PHP rise Deceleration Fatal Error even on options
+    // that is extend iPoirotOptions interface
+
 
     /**
      * Get Properties as array

@@ -76,7 +76,7 @@ abstract class AbstractOptions
     /**
      * Construct
      *
-     * @param array|AbstractOptions $options Options
+     * @param array|iPoirotOptions $options Options
      */
     function __construct($options = null)
     {
