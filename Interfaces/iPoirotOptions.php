@@ -24,6 +24,8 @@ interface iPoirotOptions extends iMagicalFields
     /**
      * Set Options From Array
      *
+     * * only get associated array
+     *
      * @param array $options Options Array
      *
      * @throws \Exception

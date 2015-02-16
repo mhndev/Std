@@ -95,7 +95,7 @@ abstract class AbstractOptions
     {
         if (is_array($options))
             $this->fromArray($options);
-        elseif ($options instanceof AbstractOptions)
+        elseif ($options instanceof iPoirotOptions)
             $this->fromOption($options);
 
         return $this;
@@ -145,8 +145,7 @@ abstract class AbstractOptions
             ));
 
         foreach($options->props()->writable as $key)
-            if (isset($options->{$key}))
-                $this->__set($key, $options->{$key});
+            $this->__set($key, $options->{$key});
 
         // call your inherit options actions:
         // maybe you want access protected methods or properties
