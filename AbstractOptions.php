@@ -3,6 +3,7 @@ namespace Poirot\Core;
 
 use Poirot\Core;
 use Poirot\Core\AbstractOptions\PropsObject;
+use Poirot\Core\Interfaces\iPoirotOptions;
 
 /**
  * Here is a simple optionsClass example:
@@ -63,7 +64,9 @@ use Poirot\Core\AbstractOptions\PropsObject;
  * ~~~
  *
  */
-abstract class AbstractOptions implements Interfaces\iMagicalFields
+abstract class AbstractOptions
+    implements
+    Interfaces\iPoirotOptions
 {
     /**
      * @var PropsObject Cached Props Once Call props()
@@ -84,11 +87,11 @@ abstract class AbstractOptions implements Interfaces\iMagicalFields
     /**
      * Set Options
      *
-     * @param array|AbstractOptions $options
+     * @param array|iPoirotOptions $options
      *
      * @return $this
      */
-    public function from($options)
+    function from($options)
     {
         if (is_array($options))
             $this->fromArray($options);
@@ -120,16 +123,19 @@ abstract class AbstractOptions implements Interfaces\iMagicalFields
     /**
      * Set Options From Same Option Object
      *
-     * - check for private and write_only methods
-     *   to fully options copied to source option
-     *   class object
+     * note: it will take an option object instance of $this
+     *       OpenOptions only take OpenOptions as argument
      *
-     * @param AbstractOptions $options Options Object
+     * - also you can check for private and write_only
+     *   methods inside Options Object to get fully coincident copy
+     *   of Options Class Object
+     *
+     * @param iPoirotOptions $options Options Object
      *
      * @throws \Exception
      * @return $this
      */
-    function fromOption(/*AbstractOptions*/ $options) // php is a donkey, why strict_error
+    function fromOption(iPoirotOptions $options)
     {
         if (!$options instanceof $this)
             // only get same option object
