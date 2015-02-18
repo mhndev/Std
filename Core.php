@@ -33,7 +33,10 @@ namespace Poirot\Core
         function setupFromArray(array $setters, $throwException = false)
         {
             if (array_values($setters) == $setters)
-                throw new \InvalidArgumentException('Setters Array must be associative array.');
+                throw new \InvalidArgumentException(sprintf(
+                    'Setters Array must be associative array. given: %s'
+                    , var_export($setters, true)
+                ));
 
             if (isset($this->__setup_array_priority)
                 && is_array($this->__setup_array_priority)
