@@ -40,7 +40,7 @@ class OpenOptions implements Interfaces\iPoirotOptions
         $name = strtolower(\Poirot\Core\sanitize_underscore($name));
 
         // Take Action:
-        $return = false;
+        $return = null;
         switch ($action) {
             case 'set':
                 // init option value:
@@ -49,6 +49,7 @@ class OpenOptions implements Interfaces\iPoirotOptions
                         "Method {$method} need argument as option value."
                     );
                 $this->__set($name, $arguments[0]);
+                $return = $this;
                 break;
 
             case 'get':
