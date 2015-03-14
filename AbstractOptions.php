@@ -3,6 +3,7 @@ namespace Poirot\Core;
 
 use Poirot\Core;
 use Poirot\Core\AbstractOptions\PropsObject;
+use Poirot\Core\Interfaces\iOptionImplement;
 use Poirot\Core\Interfaces\iPoirotOptions;
 
 /**
@@ -130,12 +131,12 @@ abstract class AbstractOptions
      *   methods inside Options Object to get fully coincident copy
      *   of Options Class Object
      *
-     * @param iPoirotOptions $options Options Object
+     * @param iOptionImplement $options Options Object
      *
      * @throws \Exception
      * @return $this
      */
-    function fromOption(iPoirotOptions $options)
+    function fromOption(iOptionImplement $options)
     {
         if (!$options instanceof $this)
             // only get same option object
