@@ -66,8 +66,7 @@ use Poirot\Core\Interfaces\iPoirotOptions;
  *
  */
 abstract class AbstractOptions
-    implements
-    Interfaces\iPoirotOptions
+    implements Interfaces\iPoirotOptions
 {
     /**
      * @var PropsObject Cached Props Once Call props()
