@@ -112,7 +112,7 @@ abstract class AbstractOptions
      */
     function fromArray(array $options)
     {
-        if (array_values($options) == $options)
+        if (!empty($options) && array_values($options) === $options)
             throw new \InvalidArgumentException('Options Array must be associative array.');
 
         foreach($options as $key => $val)
