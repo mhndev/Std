@@ -96,7 +96,7 @@ abstract class AbstractOptions
         if (is_array($options))
             $this->fromArray($options);
         elseif ($options instanceof iPoirotOptions)
-            $this->fromOption($options);
+            $this->fromSimilar($options);
 
         return $this;
     }
@@ -135,7 +135,7 @@ abstract class AbstractOptions
      * @throws \Exception
      * @return $this
      */
-    function fromOption(iOptionImplement $options)
+    function fromSimilar(/*iOptionImplement*/ $options)
     {
         if (!$options instanceof $this)
             // only get same option object

@@ -41,7 +41,7 @@ interface iOptionImplement extends iMagicalFields
      * @throws \Exception
      * @return $this
      */
-    function fromOption(iOptionImplement $options);
+    function fromSimilar(/*iOptionImplement*/ $options);
     // PHP rise Deceleration Fatal Error even on options
     // that is extend iPoirotOptions interface
 
