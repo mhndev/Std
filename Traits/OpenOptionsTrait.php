@@ -65,7 +65,7 @@ trait OpenOptionsTrait
         if (is_array($options))
             $this->fromArray($options);
         elseif ($options instanceof iOptionImplement)
-            $this->fromOption($options);
+            $this->fromSimilar($options);
 
         return $this;
     }
@@ -107,7 +107,7 @@ trait OpenOptionsTrait
      * @throws \Exception
      * @return $this
      */
-    function fromOption(iOptionImplement $options)
+    function fromSimilar(/*iOptionImplement*/ $options)
     {
         if (!$options instanceof $this)
             // only get same option object
