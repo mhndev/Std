@@ -4,6 +4,7 @@ namespace Poirot\Core\Traits;
 !defined('POIROT_CORE_LOADED') and include_once dirname(__FILE__).'/../Core.php';
 
 use Poirot\Core;
+use Poirot\Core\Interfaces\EntityInterface;
 use Poirot\Core\Interfaces\iPoirotEntity;
 
 trait EntityTrait
@@ -103,11 +104,11 @@ trait EntityTrait
      *
      * - by deleting existence properties
      *
-     * @param iPoirotEntity $entity
+     * @param EntityInterface $entity
      *
      * @return $this
      */
-    public function setFrom(iPoirotEntity $entity)
+    public function setFrom(EntityInterface $entity)
     {
         foreach ($this->keys() as $key)
             // Delete All Currently Properties
@@ -121,11 +122,11 @@ trait EntityTrait
     /**
      * Merge/Set Data With Entity
      *
-     * @param iPoirotEntity $entity Merge Entity
+     * @param EntityInterface $entity Merge Entity
      *
      * @return $this
      */
-    public function merge(iPoirotEntity $entity)
+    public function merge(EntityInterface $entity)
     {
         foreach($entity->keys() as $key)
             $this->set($key, $entity->get($key));
