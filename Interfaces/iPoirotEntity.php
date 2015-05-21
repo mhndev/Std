@@ -4,15 +4,6 @@ namespace Poirot\Core\Interfaces;
 interface iPoirotEntity extends EntityInterface
 {
     /**
-     * Set Properties From Entity Object
-     *
-     * @param EntityInterface $entity
-     *
-     * @return $this
-     */
-    function setFrom(EntityInterface $entity);
-
-    /**
      * Merge/Set Data With Entity
      *
      * @param EntityInterface $entity Merge Entity

@@ -22,6 +22,13 @@ trait EntityTrait
     protected $properties = array();
 
     /**
+     * SetFrom Resource
+     *
+     * @var mixed|$this
+     */
+    protected $_resource;
+
+    /**
      * Construct
      *
      * @param array|iPoirotEntity $props Properties
@@ -100,23 +107,64 @@ trait EntityTrait
     }
 
     /**
-     * Set Properties
+     * Set Entity From A Given Resource
      *
-     * - by deleting existence properties
+     * - you have to set resource internally that can given
+     *   by getResource method later
      *
-     * @param EntityInterface $entity
+     * @param mixed $resource
      *
      * @return $this
      */
-    public function setFrom(EntityInterface $entity)
+    public function setFrom($resource)
     {
+        $this->_resource = $resource;
+
+        $resource = $this->__setFrom($resource);
         foreach ($this->keys() as $key)
             // Delete All Currently Properties
             $this->del($key);
 
-        $this->merge($entity);
+        $this->merge($resource);
 
         return $this;
+    }
+
+    /**
+     * Set Properties
+     *
+     * - You can implement this method on subclasses
+     *
+     * @param EntityInterface $resource
+     *
+     * @throws \InvalidArgumentException
+     * @return iPoirotEntity Generic Entity Used By SetFrom Method
+     */
+    protected function __setFrom($resource)
+    {
+        if (!$resource instanceof EntityInterface)
+            throw new \InvalidArgumentException(sprintf(
+                'Resource must be instance of EntityInterface but "%s" given.'
+                , is_object($resource) ? get_class($resource) : gettype($resource)
+            ));
+
+        return $resource;
+    }
+
+    /**
+     * Get Resource Data
+     *
+     * - if no resource data was set on from(method)
+     *   return $this
+     *
+     * @return mixed|$this
+     */
+    function getResource()
+    {
+        if (!$this->_resource)
+            $this->_resource = $this;
+
+        return $this->_resource;
     }
 
     /**
