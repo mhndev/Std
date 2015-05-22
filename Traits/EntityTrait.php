@@ -125,6 +125,9 @@ trait EntityTrait
     {
         $this->__validateProps($resource);
 
+        if ($resource instanceof $this)
+            $resource = $resource->borrow();
+
         if ($resource instanceof iPoirotEntity)
             $resource = $resource->getAs(new self)->borrow();
 
