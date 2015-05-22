@@ -37,28 +37,8 @@ trait EntityTrait
      */
     public function __construct($props = null)
     {
-        if ($props) {
-            if ($props instanceof iPoirotEntity)
-                $props = $props->getAs(new self());
-
-            if (!is_array($props))
-                throw new \Exception(
-                    sprintf(
-                        'Properties must instance of "Entity" or "Array" but "%s" given.',
-                        is_object($props) ? get_class($props) : gettype($props)
-                    )
-                );
-
-            if (!empty($this->properties)) {
-                // maybe we have some predefined props field in class
-                // protected properties = array( .... );
-                $props = Core\array_merge($this->properties, $props);
-            }
-
-            foreach($props as $key => $val) {
-                $this->set($key, $val);
-            }
-        }
+        if ($props)
+            $this->setFrom($props);
     }
 
     /**
@@ -120,12 +100,13 @@ trait EntityTrait
     {
         $this->_resource = $resource;
 
-        $resource = $this->__setFrom($resource);
         foreach ($this->keys() as $key)
             // Delete All Currently Properties
             $this->del($key);
 
-        $this->merge($resource);
+        $resource = $this->__setFrom($resource);
+        foreach($resource as $key => $val)
+            $this->set($key, $val);
 
         return $this;
     }
@@ -138,17 +119,25 @@ trait EntityTrait
      * @param EntityInterface $resource
      *
      * @throws \InvalidArgumentException
-     * @return iPoirotEntity Generic Entity Used By SetFrom Method
+     * @return array
      */
     protected function __setFrom($resource)
     {
-        if (!$resource instanceof EntityInterface)
-            throw new \InvalidArgumentException(sprintf(
-                'Resource must be instance of EntityInterface but "%s" given.'
-                , is_object($resource) ? get_class($resource) : gettype($resource)
-            ));
+        $this->__validateProps($resource);
+
+        if ($resource instanceof iPoirotEntity)
+            $resource = $resource->getAs(new self)->borrow();
 
         return $resource;
+    }
+
+    protected function __validateProps($resource)
+    {
+        if (!$resource instanceof iPoirotEntity && !is_array($resource))
+            throw new \InvalidArgumentException(sprintf(
+                'Resource must be instance of EntityInterface or array but "%s" given.'
+                , is_object($resource) ? get_class($resource) : gettype($resource)
+            ));
     }
 
     /**
@@ -224,7 +213,7 @@ trait EntityTrait
      *
      * @param iPoirotEntity $entity Entity
      *
-     * @return mixed
+     * @return iPoirotEntity
      */
     public function getAs(iPoirotEntity $entity)
     {
