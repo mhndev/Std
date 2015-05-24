@@ -23,7 +23,7 @@ class ObjectCollection implements iObjectCollection
      *       for better search and performance
      *
      * @param object $object
-     * @param array $data    it can be used to attach some data
+     * @param array $data    associate array that it can be used to attach some data
      *                       this data can be available for some codes
      *                       block that need this data ...
      *                       in case of render, view renderer can match
@@ -36,6 +36,9 @@ class ObjectCollection implements iObjectCollection
     function attach($object, array $data = null)
     {
         $this->_validateObject($object);
+
+        if ($data == array_values($data))
+            throw new \InvalidArgumentException('Data tags must be associative array.');
 
         $data['etag'] = $this->getETag($object); // so we can search by etag hash
 
@@ -105,17 +108,22 @@ class ObjectCollection implements iObjectCollection
      */
     function search(array $data)
     {
+        if ($data == array_values($data))
+            throw new \InvalidArgumentException('Data tags must be associative array.');
+
         $return = [];
 
+        // .....................
         if (isset($data['etag']) && $hash = $data['etag'])
             // ETags is unique and if present only search for etag match
             if ($this->has($hash))
-                return [$this->_objs[$hash]];
+                return [ $hash => $this->_objs[$hash]['object'] ];
+        // ............................................................
 
         foreach($this->_objs as $hash => $obAr) {
             $obData = $obAr['data'];
             if ($data == array_intersect($obData, $data))
-                $return[] = $this->_objs[$hash];
+                $return[$hash] = $this->_objs[$hash]['object'];
         }
 
         return $return;
@@ -149,7 +157,7 @@ class ObjectCollection implements iObjectCollection
      *       performance
      *
      * @param object $object
-     * @param array $data
+     * @param array $data Associative Array
      *
      * @throws \Exception Object not stored
      * @return $this
@@ -158,6 +166,9 @@ class ObjectCollection implements iObjectCollection
     {
         if (!$this->has($object))
             throw new \Exception('Object Not Found.');
+
+        if ($data == array_values($data))
+            throw new \InvalidArgumentException('Data tags must be associative array.');
 
         $hash = $this->getETag($object);
 
