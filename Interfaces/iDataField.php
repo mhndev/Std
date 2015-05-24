@@ -11,5 +11,5 @@ namespace Poirot\Core\Interfaces;
  * DataField->field = 1;
  *
  */
-interface iDataField extends iMagicalFields, \Countable, \Traversable
+interface iDataField extends iMagicalFields
 { }
