@@ -6,10 +6,12 @@ interface iObjectCollection extends \Iterator, \Countable
     /**
      * Attach Object
      *
+     * - replace object with new data if exists
+     *
      * note: recommend that object index by Unified ETag
      *       for better search and performance
      *
-     * @param object     $header
+     * @param object     $object
      * @param array      $data   it can be used to attach some data
      *                           this data can be available for some codes
      *                           block that need this data ...
@@ -20,7 +22,7 @@ interface iObjectCollection extends \Iterator, \Countable
      * @throws \InvalidArgumentException Object Type Mismatch
      * @return string ETag Hash Identifier of object
      */
-    function attach($header, array $data = null);
+    function attach($object, array $data = null);
 
     /**
      * Detach By ETag Hash Or Object Match
@@ -43,14 +45,11 @@ interface iObjectCollection extends \Iterator, \Countable
     /**
      * Search for first object that match accurate data
      *
-     * note: we can use some data hash generation algorithm
-     *       like md5/serialize to match
+     * @param array $data
      *
-     * @param mixed $data
-     *
-     * @return object|false
+     * @return array[object]
      */
-    function search($data);
+    function search(array $data);
 
     /**
      * Get Tag Data Of Specific Object
