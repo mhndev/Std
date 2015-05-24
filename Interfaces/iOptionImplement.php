@@ -8,7 +8,7 @@ interface iOptionImplement extends iMagicalFields
     /**
      * Set Options
      *
-     * @param array|iPoirotOptions $options
+     * @param array|iPoirotOptions|mixed $options
      *
      * @return $this
      */
