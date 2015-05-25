@@ -33,7 +33,7 @@ class ObjectCollection implements iObjectCollection
      * @throws \InvalidArgumentException Object Type Mismatch
      * @return string ETag Hash Identifier of object
      */
-    function attach($object, array $data = null)
+    function attach($object, array $data = [])
     {
         $this->_validateObject($object);
 
@@ -101,6 +101,8 @@ class ObjectCollection implements iObjectCollection
 
     /**
      * Search for first object that match accurate data
+     *
+     * // TODO search case-insensitive
      *
      * @param array $data
      *

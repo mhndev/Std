@@ -22,7 +22,7 @@ interface iObjectCollection extends \Iterator, \Countable
      * @throws \InvalidArgumentException Object Type Mismatch
      * @return string ETag Hash Identifier of object
      */
-    function attach($object, array $data = null);
+    function attach($object, array $data = []);
 
     /**
      * Detach By ETag Hash Or Object Match
