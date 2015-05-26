@@ -1,11 +1,13 @@
 <?php
 namespace Poirot\Core\Traits;
 
+use Poirot\Core;
 use Poirot\Core\AbstractOptions\PropsObject;
-use Poirot\Core\Interfaces\iOptionImplement;
 
 trait OpenOptionsTrait
 {
+    use OptionsTrait;
+
     /**
      * @var array
      */
@@ -27,7 +29,7 @@ trait OpenOptionsTrait
         // Option Name:
         $name = $method;
         $name = substr($name, -(strlen($name)-3)); // 3 for set/get
-        $name = strtolower(\Poirot\Core\sanitize_underscore($name));
+        $name = strtolower(Core\sanitize_underscore($name));
 
         // Take Action:
         $return = null;
@@ -51,75 +53,6 @@ trait OpenOptionsTrait
         }
 
         return $return;
-    }
-
-    /**
-     * Set Options
-     *
-     * @param array|iOptionImplement $options
-     *
-     * @return $this
-     */
-    function from($options)
-    {
-        if (is_array($options))
-            $this->fromArray($options);
-        elseif ($options instanceof iOptionImplement)
-            $this->fromSimilar($options);
-
-        return $this;
-    }
-
-    /**
-     * Set Options From Array
-     *
-     * @param array $options Options Array
-     *
-     * @throws \Exception
-     * @return $this
-     */
-    function fromArray(array $options)
-    {
-        if (empty($options))
-            return $this;
-
-        if (array_values($options) == $options)
-            throw new \InvalidArgumentException('Options Array must be associative array.');
-
-        foreach($options as $key => $val)
-            $this->__set($key, $val);
-
-        return $this;
-    }
-
-    /**
-     * Set Options From Same Option Object
-     *
-     * note: it will take an option object instance of $this
-     *       OpenOptions only take OpenOptions as argument
-     *
-     * - also you can check for private and write_only
-     *   methods inside Options Object to get fully coincident copy
-     *   of Options Class Object
-     *
-     * @param iOptionImplement $options Options Object
-     *
-     * @throws \Exception
-     * @return $this
-     */
-    function fromSimilar(/*iOptionImplement*/ $options)
-    {
-        if (!$options instanceof $this)
-            // only get same option object
-            throw new \Exception(sprintf(
-                'Given Options Is Not Same As Provided Class Options. you given "%s".'
-                , get_class($options)
-            ));
-
-        foreach($options->props()->writable as $key)
-            $this->__set($key, $options->{$key});
-
-        return $this;
     }
 
     /**
