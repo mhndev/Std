@@ -83,7 +83,7 @@ abstract class AbstractOptions
         if ($options !== null)
             $this->from($options);
     }
-
+    
     /**
      * Set Options
      *
@@ -95,7 +95,7 @@ abstract class AbstractOptions
     {
         if (is_array($options))
             $this->fromArray($options);
-        elseif ($options instanceof iPoirotOptions)
+        elseif ($options instanceof iOptionImplement)
             $this->fromSimilar($options);
 
         return $this;
@@ -137,12 +137,15 @@ abstract class AbstractOptions
      */
     function fromSimilar(/*iOptionImplement*/ $options)
     {
+        if ($options instanceof iOptionImplement)
+            return $this->fromArray($options->toArray());
+
         if (!$options instanceof $this)
             // only get same option object
-            throw new \Exception(sprintf(
+            /*throw new \Exception(sprintf(
                 'Given Options Is Not Same As Provided Class Options. you given "%s".'
                 , get_class($options)
-            ));
+            ));*/
 
         foreach($options->props()->writable as $key)
             $this->__set($key, $options->{$key});
