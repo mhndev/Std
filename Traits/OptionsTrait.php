@@ -65,8 +65,12 @@ trait OptionsTrait
      */
     function fromSimilar(/*iOptionImplement*/ $options)
     {
-        if ($options instanceof iOptionImplement)
-            return $this->fromArray($options->toArray());
+        if ($options instanceof iOptionImplement) {
+            foreach($options->props()->readable as $key)
+                $this->__set($key, $options->{$key});
+
+            return $this;
+        }
 
         if (!$options instanceof $this)
             // only get same option object
