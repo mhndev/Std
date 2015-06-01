@@ -18,7 +18,7 @@ trait EntityTrait
      *
      * @var array
      */
-    protected $properties = array();
+    protected $properties = [];
 
     /**
      * Construct
@@ -27,29 +27,25 @@ trait EntityTrait
      *
      * @throws \Exception
      */
-    public function __construct($props = null)
+    public function __construct($props = null, $debug = false)
     {
         if ($props) {
             if ($props instanceof iPoirotEntity)
-                $props = $props->getAs(new self());
+                $props = $props->getAs(new self);
 
             if (!is_array($props))
-                throw new \Exception(
-                    sprintf(
-                        'Properties must instance of "Entity" or "Array" but "%s" given.',
-                        is_object($props) ? get_class($props) : gettype($props)
-                    )
-                );
+                throw new \Exception(sprintf(
+                    'Properties must instance of "Entity" or "Array" but "%s" given.',
+                    is_object($props) ? get_class($props) : gettype($props)
+                ));
 
-            if (!empty($this->properties)) {
+            if (!empty($this->properties))
                 // maybe we have some predefined props field in class
                 // protected properties = array( .... );
                 $props = Core\array_merge($this->properties, $props);
-            }
 
-            foreach($props as $key => $val) {
+            foreach($props as $key => $val)
                 $this->set($key, $val);
-            }
         }
     }
 
@@ -90,7 +86,7 @@ trait EntityTrait
      */
     public function set($prop, $value = '__not_set_value__')
     {
-        if ($value == self::$__not_set_value__)
+        if ($value === self::$__not_set_value__)
             $value = self::$DEFAULT_NONE_VALUE;
 
         $this->properties[$prop] = $value;
