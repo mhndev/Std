@@ -4,6 +4,7 @@ namespace Poirot\Core\Traits;
 !defined('POIROT_CORE_LOADED') and include_once dirname(__FILE__).'/../Core.php';
 
 use Poirot\Core;
+use Poirot\Core\Interfaces\EntityInterface;
 use Poirot\Core\Interfaces\iPoirotEntity;
 
 trait EntityTrait
@@ -21,6 +22,13 @@ trait EntityTrait
     protected $properties = [];
 
     /**
+     * SetFrom Resource
+     *
+     * @var mixed|$this
+     */
+    protected $_resource;
+
+    /**
      * Construct
      *
      * @param array|iPoirotEntity $props Properties
@@ -29,24 +37,8 @@ trait EntityTrait
      */
     function __construct($props = null)
     {
-        if ($props) {
-            if ($props instanceof iPoirotEntity)
-                $props = $props->getAs(new self);
-
-            if (!is_array($props))
-                throw new \Exception(sprintf(
-                    'Properties must instance of "Entity" or "Array" but "%s" given.',
-                    is_object($props) ? get_class($props) : gettype($props)
-                ));
-
-            if (!empty($this->properties))
-                // maybe we have some predefined props field in class
-                // protected properties = array( .... );
-                $props = Core\array_merge($this->properties, $props);
-
-            foreach($props as $key => $val)
-                $this->set($key, $val);
-        }
+        if ($props)
+            $this->setFrom($props);
     }
 
     /**
@@ -95,33 +87,87 @@ trait EntityTrait
     }
 
     /**
-     * Set Properties
+     * Set Entity From A Given Resource
      *
-     * - by deleting existence properties
+     * - you have to set resource internally that can given
+     *   by getResource method later
      *
-     * @param iPoirotEntity $entity
+     * @param mixed $resource
      *
      * @return $this
      */
-    function setFrom(iPoirotEntity $entity)
+
+    public function setFrom($resource)
     {
+        $this->_resource = $resource;
+
         foreach ($this->keys() as $key)
             // Delete All Currently Properties
             $this->del($key);
 
-        $this->merge($entity);
+        $resource = $this->__setFrom($resource);
+        foreach($resource as $key => $val)
+            $this->set($key, $val);
 
         return $this;
     }
 
     /**
+     * Set Properties
+     *
+     * - You can implement this method on subclasses
+     *
+     * @param EntityInterface $resource
+     *
+     * @throws \InvalidArgumentException
+     * @return array
+     */
+    protected function __setFrom($resource)
+    {
+        $this->__validateProps($resource);
+
+        if ($resource instanceof $this)
+            $resource = $resource->borrow();
+
+        if ($resource instanceof iPoirotEntity)
+            $resource = $resource->getAs(new self)->borrow();
+
+        return $resource;
+    }
+
+    protected function __validateProps($resource)
+    {
+        if (!$resource instanceof iPoirotEntity && !is_array($resource))
+            throw new \InvalidArgumentException(sprintf(
+                'Resource must be instance of EntityInterface or array but "%s" given.'
+                , is_object($resource) ? get_class($resource) : gettype($resource)
+            ));
+    }
+
+    /**
+     * Get Resource Data
+     *
+     * - if no resource data was set on from(method)
+     *   return $this
+     *
+     * @return mixed|$this
+     */
+    function getResource()
+    {
+        if (!$this->_resource)
+            $this->_resource = $this;
+
+        return $this->_resource;
+    }
+
+    /**
      * Merge/Set Data With Entity
      *
-     * @param iPoirotEntity $entity Merge Entity
+     * @param EntityInterface $entity Merge Entity
      *
      * @return $this
      */
-    function merge(iPoirotEntity $entity)
+    public function merge(EntityInterface $entity)
     {
         foreach($entity->keys() as $key)
             $this->set($key, $entity->get($key));
@@ -171,7 +217,7 @@ trait EntityTrait
      *
      * @param iPoirotEntity $entity Entity
      *
-     * @return mixed
+     * @return iPoirotEntity
      */
     function getAs(iPoirotEntity $entity)
     {

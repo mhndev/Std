@@ -4,6 +4,28 @@ namespace Poirot\Core\Interfaces;
 interface EntityInterface
 {
     /**
+     * Set Entity From A Given Resource
+     *
+     * - you have to set resource internally that can given
+     *   by getResource method later
+     *
+     * @param mixed $resource
+     *
+     * @return $this
+     */
+    function setFrom($resource);
+
+    /**
+     * Get Resource Data
+     *
+     * - if no resource data was set on from(method)
+     *   return $this
+     *
+     * @return mixed|$this
+     */
+    function getResource();
+
+    /**
      * Set Entity
      *
      * @param string $key   Entity Key

@@ -6,7 +6,7 @@ interface iPoirotOptions extends iOptionImplement
     /**
      * Construct
      *
-     * @param array|iOptionImplement $options Options
+     * @param array|iOptionImplement|mixed $options Options
      */
     function __construct($options = null);
 }
