@@ -27,7 +27,7 @@ trait EntityTrait
      *
      * @throws \Exception
      */
-    public function __construct($props = null, $debug = false)
+    function __construct($props = null)
     {
         if ($props) {
             if ($props instanceof iPoirotEntity)
@@ -59,7 +59,7 @@ trait EntityTrait
      * @throws \Exception
      * @return mixed
      */
-    public function get($prop, $default = '__not_set_value__')
+    function get($prop, $default = '__not_set_value__')
     {
         // avoid recursive trait call, may conflict on classes that
         // implement in this case has() method
@@ -84,7 +84,7 @@ trait EntityTrait
      *
      * @return $this
      */
-    public function set($prop, $value = '__not_set_value__')
+    function set($prop, $value = '__not_set_value__')
     {
         if ($value === self::$__not_set_value__)
             $value = self::$DEFAULT_NONE_VALUE;
@@ -103,7 +103,7 @@ trait EntityTrait
      *
      * @return $this
      */
-    public function setFrom(iPoirotEntity $entity)
+    function setFrom(iPoirotEntity $entity)
     {
         foreach ($this->keys() as $key)
             // Delete All Currently Properties
@@ -121,7 +121,7 @@ trait EntityTrait
      *
      * @return $this
      */
-    public function merge(iPoirotEntity $entity)
+    function merge(iPoirotEntity $entity)
     {
         foreach($entity->keys() as $key)
             $this->set($key, $entity->get($key));
@@ -136,7 +136,7 @@ trait EntityTrait
      *
      * @return boolean
      */
-    public function has($prop)
+    function has($prop)
     {
         return array_key_exists($prop, $this->properties);
     }
@@ -148,7 +148,7 @@ trait EntityTrait
      *
      * @return $this
      */
-    public function del($prop)
+    function del($prop)
     {
         if (array_key_exists($prop, $this->properties))
             unset($this->properties[$prop]);
@@ -161,7 +161,7 @@ trait EntityTrait
      *
      * @return array
      */
-    public function keys()
+    function keys()
     {
         return array_keys($this->properties);
     }
@@ -173,7 +173,7 @@ trait EntityTrait
      *
      * @return mixed
      */
-    public function getAs(iPoirotEntity $entity)
+    function getAs(iPoirotEntity $entity)
     {
         return $entity->setFrom($this)
             ->borrow();
@@ -192,7 +192,7 @@ trait EntityTrait
      *
      * @return mixed
      */
-    public function borrow()
+    function borrow()
     {
         return $this->properties;
     }
