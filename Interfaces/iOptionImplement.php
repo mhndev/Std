@@ -3,7 +3,7 @@ namespace Poirot\Core\Interfaces;
 
 use Poirot\Core\AbstractOptions\PropsObject;
 
-interface iOptionImplement extends iMagicalFields
+interface iOptionImplement extends iMagicalFields, iDataSetConveyor
 {
     /**
      * Set Options
@@ -13,18 +13,6 @@ interface iOptionImplement extends iMagicalFields
      * @return $this
      */
     function from($options);
-
-    /**
-     * Set Options From Array
-     *
-     * * only get associated array
-     *
-     * @param array $options Options Array
-     *
-     * @throws \Exception
-     * @return $this
-     */
-    function fromArray(array $options);
 
     /**
      * Set Options From Same Option Object
@@ -44,14 +32,6 @@ interface iOptionImplement extends iMagicalFields
     function fromSimilar(/*iOptionImplement*/ $options);
     // PHP rise Deceleration Fatal Error even on options
     // that is extend iPoirotOptions interface
-
-
-    /**
-     * Get Properties as array
-     *
-     * @return array
-     */
-    function toArray();
 
     /**
      * Get Options Properties Information

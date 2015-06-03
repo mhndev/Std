@@ -38,7 +38,7 @@ trait EntityTrait
     function __construct($props = null)
     {
         if ($props)
-            $this->setFrom($props);
+            $this->from($props);
     }
 
     /**
@@ -97,17 +97,12 @@ trait EntityTrait
      * @return $this
      */
 
-    public function setFrom($resource)
+    function from($resource)
     {
         $this->_resource = $resource;
 
-        foreach ($this->keys() as $key)
-            // Delete All Currently Properties
-            $this->del($key);
-
         $resource = $this->__setFrom($resource);
-        foreach($resource as $key => $val)
-            $this->set($key, $val);
+        $this->fromArray($resource);
 
         return $this;
     }
@@ -221,7 +216,7 @@ trait EntityTrait
      */
     function getAs(iPoirotEntity $entity)
     {
-        return $entity->setFrom($this)
+        return $entity->from($this)
             ->borrow();
     }
 
@@ -239,6 +234,36 @@ trait EntityTrait
      * @return mixed
      */
     function borrow()
+    {
+        return $this->toArray();
+    }
+
+    // Implement Data Conveyor:
+
+    /**
+     * Set Options From Array
+     *
+     * @param array $options Options Array
+     *
+     * @throws \Exception
+     * @return $this
+     */
+    function fromArray(array $options)
+    {
+        foreach ($this->keys() as $key)
+            // Delete All Currently Properties
+            $this->del($key);
+
+        foreach($options as $key => $val)
+            $this->set($key, $val);
+    }
+
+    /**
+     * Get Properties as array
+     *
+     * @return array
+     */
+    function toArray()
     {
         return $this->properties;
     }

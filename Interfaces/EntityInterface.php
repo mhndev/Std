@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Core\Interfaces;
 
-interface EntityInterface
+interface EntityInterface extends iDataSetConveyor
 {
     /**
      * Set Entity From A Given Resource
@@ -13,7 +13,7 @@ interface EntityInterface
      *
      * @return $this
      */
-    function setFrom($resource);
+    function from($resource);
 
     /**
      * Get Resource Data

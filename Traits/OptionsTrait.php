@@ -3,6 +3,7 @@ namespace Poirot\Core\Traits;
 
 use Poirot\Core;
 use Poirot\Core\AbstractOptions\PropsObject;
+use Poirot\Core\Interfaces\iDataSetConveyor;
 use Poirot\Core\Interfaces\iOptionImplement;
 
 trait OptionsTrait
