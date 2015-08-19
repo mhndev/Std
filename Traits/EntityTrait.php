@@ -183,6 +183,16 @@ trait EntityTrait
     }
 
     /**
+     * Is Entity Empty?
+     *
+     * @return boolean
+     */
+    function isEmpty()
+    {
+        return empty($this->properties);
+    }
+
+    /**
      * Delete a property
      *
      * @param string $prop Property
