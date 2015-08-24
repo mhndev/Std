@@ -32,6 +32,10 @@ namespace Poirot\Core
          */
         function setupFromArray(array $setters, $throwException = false)
         {
+            if (empty($setters))
+                # nothing to do
+                return $this;
+
             if (array_values($setters) == $setters)
                 throw new \InvalidArgumentException(sprintf(
                     'Setters Array must be associative array. given: %s'
