@@ -21,6 +21,10 @@ trait EntityTrait
      */
     protected $properties = [];
 
+    protected $__mapedPropObjects = [
+        # 'hash_string' => $none_string_property_value
+    ];
+
     /**
      * SetFrom Resource
      *
@@ -45,7 +49,7 @@ trait EntityTrait
      * Get Property
      * - throw exception if property not found and default get not set
      *
-     * @param string     $prop    Property name
+     * @param mixed      $prop    Property name
      * @param null|mixed $default Default Value if not exists
      *
      * @throws \Exception
@@ -53,9 +57,11 @@ trait EntityTrait
      */
     function get($prop, $default = '__not_set_value__')
     {
+        if (!is_string($prop))
+            $prop = $this->__hashNoneStringProp($prop);
+
         // avoid recursive trait call, may conflict on classes that
         // implement in this case has() method
-        #if (!$this->has($prop) && $default === self::$__not_set_value__)
         if (!array_key_exists($prop, $this->properties)
             && $default === self::$__not_set_value__
         )
@@ -71,13 +77,21 @@ trait EntityTrait
     /**
      * Set Property with value
      *
-     * @param string $prop  Property
-     * @param mixed  $value Value
+     * @param mixed $prop  Property
+     * @param mixed $value Value
      *
      * @return $this
      */
     function set($prop, $value = '__not_set_value__')
     {
+        if (!is_string($prop)) {
+            $propObj = $prop;
+            $prop    = $this->__hashNoneStringProp($prop);
+
+            ## store object map
+            $this->__mapedPropObjects[$prop] = $propObj;
+        }
+
         if ($value === self::$__not_set_value__)
             $value = self::$DEFAULT_NONE_VALUE;
 
@@ -85,6 +99,14 @@ trait EntityTrait
 
         return $this;
     }
+
+        protected function __hashNoneStringProp($prop)
+        {
+            if(is_object($prop))
+                return spl_object_hash($prop);
+            else
+                return md5(serialize($prop));
+        }
 
     /**
      * Set Entity From A Given Resource
@@ -179,6 +201,9 @@ trait EntityTrait
      */
     function has($prop)
     {
+        if (!is_string($prop))
+            $prop = $this->__hashNoneStringProp($prop);
+
         return array_key_exists($prop, $this->properties);
     }
 
@@ -201,6 +226,11 @@ trait EntityTrait
      */
     function del($prop)
     {
+        if (!is_string($prop)) {
+            $prop = $this->__hashNoneStringProp($prop);
+            unset($this->__mapedPropObjects[$prop]);
+        }
+
         if (array_key_exists($prop, $this->properties))
             unset($this->properties[$prop]);
 
@@ -214,7 +244,15 @@ trait EntityTrait
      */
     function keys()
     {
-        return array_keys($this->properties);
+        $keys = [];
+        foreach(array_keys($this->properties) as $k) {
+            if (array_key_exists($k, $this->__mapedPropObjects))
+                $k = $this->__mapedPropObjects[$k];
+
+            $keys[] = $k;
+        }
+
+        return $keys;
     }
 
     /**
