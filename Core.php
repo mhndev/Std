@@ -1,6 +1,11 @@
 <?php
 namespace {
     !defined('POIROT_CORE_LOADED') and define('POIROT_CORE_LOADED', true);
+
+    !defined('DS') and define('DS', DIRECTORY_SEPARATOR);
+
+    # !! don't store this value, void mean everything nothing
+    !defined('VOID') and define('VOID', uniqid('__not_set_value__'));
 }
 
 namespace Poirot\Core
