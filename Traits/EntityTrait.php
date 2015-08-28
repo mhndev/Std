@@ -57,8 +57,9 @@ trait EntityTrait
      */
     function get($prop, $default = '__not_set_value__')
     {
-        if (!is_string($prop))
+        if (!is_string($prop) && !is_numeric($prop))
             $prop = $this->__hashNoneStringProp($prop);
+
 
         // avoid recursive trait call, may conflict on classes that
         // implement in this case has() method
@@ -84,7 +85,7 @@ trait EntityTrait
      */
     function set($prop, $value = '__not_set_value__')
     {
-        if (!is_string($prop)) {
+        if (!is_string($prop) && !is_numeric($prop)) {
             $propObj = $prop;
             $prop    = $this->__hashNoneStringProp($prop);
 
@@ -201,7 +202,7 @@ trait EntityTrait
      */
     function has($prop)
     {
-        if (!is_string($prop))
+        if (!is_string($prop) && !is_numeric($prop))
             $prop = $this->__hashNoneStringProp($prop);
 
         return array_key_exists($prop, $this->properties);
@@ -226,7 +227,7 @@ trait EntityTrait
      */
     function del($prop)
     {
-        if (!is_string($prop)) {
+        if (!is_string($prop) && !is_numeric($prop)) {
             $prop = $this->__hashNoneStringProp($prop);
             unset($this->__mapedPropObjects[$prop]);
         }
