@@ -113,6 +113,36 @@ namespace Poirot\Core
     }
 
     /**
+     * Flatten Value
+     *
+     * @param mixed $value
+     *
+     * @return string
+     */
+    function flatten($value)
+    {
+        if ($value instanceof \Closure) {
+            $closureReflection = new \ReflectionFunction($value);
+            $value = sprintf(
+                '(Closure at %s:%s)',
+                $closureReflection->getFileName(),
+                $closureReflection->getStartLine()
+            );
+        } elseif (is_object($value)) {
+            $value = sprintf('object(%s)', get_class($value));
+        } elseif (is_resource($value)) {
+            $value = sprintf('resource(%s)', get_resource_type($value));
+        } elseif (is_array($value)) {
+            foreach($value as $k => &$v)
+                $v = flatten($v);
+
+            $value = implode(',', $value);
+        }
+
+        return $value;
+    }
+
+    /**
      * Sanitize Underscore To Camelcase
      *
      * @param string $key Key
