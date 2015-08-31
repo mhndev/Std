@@ -103,9 +103,39 @@ namespace Poirot\Core
                         $a[] = $value;
                 }
                 elseif (is_array($value) && is_array($a[$key]))
-                    $a[$key] = array_merge($a[$key], $value);
+                    $a[$key] = \Poirot\Core\array_merge($a[$key], $value);
                 else
                     $a[$key] = $value;
+            } else
+                $a[$key] = $value;
+
+        return $a;
+    }
+
+    /**
+     * Merge two arrays together, reserve previous values
+     *
+     * @param  array $a
+     * @param  array $b
+     * @return array
+     */
+    function array_merge_recursive(array $a, array $b)
+    {
+        foreach ($b as $key => $value)
+            if (array_key_exists($key, $a)) {
+                if (is_int($key)) {
+                    if (!in_array($value, $a))
+                        $a[] = $value;
+                }
+                elseif (is_array($value) && is_array($a[$key]))
+                    $a[$key] = \Poirot\Core\array_merge_recursive($a[$key], $value);
+                else {
+                    $cv = $a[$key];
+                    $a[$key] = [];
+                    $pa = &$a[$key];
+                    array_push($pa, $cv);
+                    array_push($pa, $value);
+                }
             } else
                 $a[$key] = $value;
 
