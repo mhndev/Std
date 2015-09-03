@@ -167,6 +167,8 @@ namespace Poirot\Core
                 $v = flatten($v);
 
             $value = implode(',', $value);
+        } elseif (is_string($value)) {
+            $value = sprintf('string(%s)', $value);
         }
 
         return $value;
