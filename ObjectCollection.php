@@ -232,7 +232,7 @@ class ObjectCollection implements iObjectCollection
      */
     public function valid()
     {
-        return ($this->_itr_current !== false);
+        return $this->_itr_current;
     }
 
     /**
