@@ -83,6 +83,26 @@ namespace Poirot\Core
     }
 
     /**
+     * Check Variable/Object Is String
+     *
+     * @param mixed $var
+     *
+     * @return bool
+     */
+    function is_string($var)
+    {
+        return (
+            (!is_array($var))
+            &&
+            (
+                (!is_object($var) && @settype($var, 'string') !== false)
+                ||
+                (is_object($var)  && method_exists($var, '__toString' ))
+            )
+        );
+    }
+
+    /**
      * Merge two arrays together.
      *
      * If an integer key exists in both arrays, the value from the second array
