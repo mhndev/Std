@@ -5,6 +5,7 @@ namespace Poirot\Core\Traits;
 
 use Poirot\Core;
 use Poirot\Core\Interfaces\EntityInterface;
+use Poirot\Core\Interfaces\iDataSetConveyor;
 use Poirot\Core\Interfaces\iPoirotEntity;
 
 trait EntityTrait
@@ -119,13 +120,10 @@ trait EntityTrait
      *
      * @return $this
      */
-
     function from($resource)
     {
         $this->_resource = $resource;
-
-        $resource = $this->__setFrom($resource);
-        $this->fromArray($resource);
+        $this->__setFrom($resource);
 
         return $this;
     }
@@ -138,24 +136,22 @@ trait EntityTrait
      * @param EntityInterface $resource
      *
      * @throws \InvalidArgumentException
-     * @return array
+     * @return void
      */
     protected function __setFrom($resource)
     {
         $this->__validateProps($resource);
 
-        if ($resource instanceof $this)
-            $resource = $resource->borrow();
+        if ($resource instanceof iDataSetConveyor)
+            $resource = $resource->toArray();
 
-        if ($resource instanceof iPoirotEntity)
-            $resource = $resource->getAs(new self)->borrow();
-
-        return $resource;
+        if (is_array($resource))
+            $this->fromArray($resource);
     }
 
     protected function __validateProps($resource)
     {
-        if (!$resource instanceof iPoirotEntity && !is_array($resource))
+        if (!$resource instanceof iDataSetConveyor && !is_array($resource))
             throw new \InvalidArgumentException(sprintf(
                 'Resource must be instance of EntityInterface or array but "%s" given.'
                 , is_object($resource) ? get_class($resource) : gettype($resource)
