@@ -68,7 +68,7 @@ trait OptionsTrait
     {
         if ($options instanceof iOptionImplement) {
             foreach($options->props()->readable as $key)
-                $this->__set($key, $options->{$key});
+                $this->__set($key, $options->__get($key));
 
             return $this;
         }
@@ -81,7 +81,7 @@ trait OptionsTrait
             ));*/
 
             foreach($options->props()->writable as $key)
-                $this->__set($key, $options->{$key});
+                $this->__set($key, $options->__get($key));
 
         // call your inherit options actions:
         // maybe you want access protected methods or properties
