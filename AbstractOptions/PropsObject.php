@@ -3,21 +3,20 @@ namespace Poirot\Core\AbstractOptions;
 
 final class PropsObject
 {
-    public $plug = [];
-
+    ## read/write options
+    public $complex  = [];
     public $readable = [];
-
     public $writable = [];
 
     function __construct(array $props)
     {
-        if (array_key_exists('set', $props))
-            $this->writable = $props['set'];
+        if (array_key_exists('writable', $props))
+            $this->writable = $props['writable'];
 
-        if (array_key_exists('get', $props))
-            $this->readable = $props['get'];
+        if (array_key_exists('readable', $props))
+            $this->readable = $props['readable'];
 
         if (is_array($this->writable) && is_array($this->writable))
-            $this->plug = array_intersect($this->writable, $this->writable);
+            $this->complex = array_intersect($this->writable, $this->writable);
     }
 }

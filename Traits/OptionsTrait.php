@@ -178,13 +178,12 @@ trait OptionsTrait
                 // this is not property method
                 unset($methods[$i]);
             else
-                $props[$prefix][] = strtolower(Core\sanitize_underscore(
+                ## set --> props['writable']
+                $props[($prefix=='set')?'writable':'readable'][] = strtolower(Core\sanitize_underscore(
                     str_replace($prefix, '', $method->getName())
                 ));
 
-        $this->_cachedProps = new PropsObject($props);
-
-        return $this->props();
+        return $this->_cachedProps = new PropsObject($props);
     }
 
     /**
