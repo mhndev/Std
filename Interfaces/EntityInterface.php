@@ -62,6 +62,13 @@ interface EntityInterface extends iDataSetConveyor
     function isEmpty();
 
     /**
+     * Empty Entity Data
+     *
+     * @return $this
+     */
+    function unload();
+
+    /**
      * Delete Entity With Key
      *
      * @param string $key Entity Key

@@ -175,21 +175,6 @@ trait EntityTrait
     }
 
     /**
-     * Merge/Set Data With Entity
-     *
-     * @param EntityInterface $entity Merge Entity
-     *
-     * @return $this
-     */
-    public function merge(EntityInterface $entity)
-    {
-        foreach($entity->keys() as $key)
-            $this->set($key, $entity->get($key));
-
-        return $this;
-    }
-
-    /**
      * Has Property
      *
      * @param string $prop Property
@@ -212,6 +197,19 @@ trait EntityTrait
     function isEmpty()
     {
         return empty($this->properties);
+    }
+
+    /**
+     * Empty Entity Data
+     *
+     * @return $this
+     */
+    function unload()
+    {
+        foreach($this->keys() as $key)
+            $this->del($key);
+
+        return $this;
     }
 
     /**
@@ -288,6 +286,8 @@ trait EntityTrait
     /**
      * Set Options From Array
      *
+     * - don't delete current entity
+     *
      * @param array $options Options Array
      *
      * @throws \Exception
@@ -295,12 +295,10 @@ trait EntityTrait
      */
     function fromArray(array $options)
     {
-        foreach ($this->keys() as $key)
-            // Delete All Currently Properties
-            $this->del($key);
-
         foreach($options as $key => $val)
             $this->set($key, $val);
+
+        return $this;
     }
 
     /**
