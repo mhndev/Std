@@ -204,7 +204,7 @@ trait EntityTrait
      *
      * @return $this
      */
-    function unload()
+    function clean()
     {
         foreach($this->keys() as $key)
             $this->del($key);

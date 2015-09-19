@@ -66,7 +66,7 @@ interface EntityInterface extends iDataSetConveyor
      *
      * @return $this
      */
-    function unload();
+    function clean();
 
     /**
      * Delete Entity With Key

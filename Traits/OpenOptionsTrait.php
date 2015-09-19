@@ -61,9 +61,8 @@ trait OpenOptionsTrait
             case 'set':
                 // init option value:
                 if (empty($arguments))
-                    throw new \InvalidArgumentException(
-                        "Method {$method} need argument as option value."
-                    );
+                    $arguments[0] = null;
+
                 $this->__set($name, $arguments[0]);
                 $return = $this;
                 break;
@@ -134,7 +133,7 @@ trait OpenOptionsTrait
         if ($this->isMethodExists($getter))
             ## get from getter method
             $return = $this->$getter();
-        elseif (isset($this->properties[$key]))
+        elseif (array_key_exists($key, $this->properties))
             $return = $this->properties[$key];
         else throw new \Exception(sprintf(
             'The Property "%s" is not found.'

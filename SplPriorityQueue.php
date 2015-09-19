@@ -86,13 +86,13 @@ class SplPriorityQueue extends \SplPriorityQueue
      *
      * @param  mixed $data
      *
-     * @return bool
+     * @return mixed|false
      */
-    function has($data)
+    function find($data)
     {
         foreach ($this->__mapped_items as $item) {
             if ($item['data'] === $data)
-                return true;
+                return $data;
         }
 
         return false;
