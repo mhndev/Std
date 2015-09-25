@@ -22,6 +22,9 @@ trait OptionsTrait
      */
     function from($options)
     {
+        if ($options instanceof iDataSetConveyor)
+            $options = $options->toArray();
+
         if (is_array($options))
             $this->fromArray($options);
         elseif ($options instanceof iOptionImplement)
