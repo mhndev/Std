@@ -111,8 +111,8 @@ trait OptionsTrait
                 , $key
             ));
         else throw new \Exception(sprintf(
-            'The Property "%s" not having any Public Setter Method Match.'
-            , $key
+            'The Property (%s) not having any Public Setter Method Match on (%s).'
+            , $key, get_class($this)
         ));
     }
 
@@ -176,15 +176,16 @@ trait OptionsTrait
         $ref     = new \ReflectionClass($this);
         $methods = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
         $props   = [];
-        foreach($methods as $i => $method)
-            if (! in_array($prefix = substr($method->getName(), 0, 3), ['set', 'get']))
+        foreach($methods as $i => $method) {
+            if (!in_array($prefix = substr($method->getName(), 0, 3), ['set', 'get']))
                 // this is not property method
                 unset($methods[$i]);
             else
                 ## set --> props['writable']
-                $props[($prefix=='set')?'writable':'readable'][] = strtolower(Core\sanitize_underscore(
+                $props[($prefix == 'set') ? 'writable' : 'readable'][] = strtolower(Core\sanitize_underscore(
                     str_replace($prefix, '', $method->getName())
                 ));
+        }
 
         return $this->_cachedProps = new PropsObject($props);
     }
