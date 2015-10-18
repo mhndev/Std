@@ -4,11 +4,11 @@ namespace Poirot\Core;
 class PHPEnvFactory
 {
     protected static $_aliases = [
-        'development'     => 'Poirot\ErrorHandling\Settings\ESDevelopment',
+        'development'     => 'Poirot\Core\PHPEnv\ESDevelopment',
         'dev'             => 'development',
-        'production'      => 'Poirot\ErrorHandling\Settings\ESProduction',
+        'production'      => 'Poirot\Core\PHPEnv\ESProduction',
         'prod'            => 'production',
-        'php-environment' => 'Poirot\ErrorHandling\Settings\ESPhpEnvironment',
+        'php-environment' => 'Poirot\Core\PHPEnv\ESPhpEnvironment',
         'php'             => 'php-environment',
         'default'         => 'php',
     ];
