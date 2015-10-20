@@ -38,8 +38,14 @@ class PHPEnv extends AbstractOptions
                     break;
             }
         }
+
+        $settings->init();
     }
 
+    protected function init()
+    {
+        // specific system wide setting initialize ...
+    }
 
     // ...
 
