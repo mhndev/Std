@@ -206,13 +206,20 @@ class ErrorStack
 
         if (isset($stack['callable']))
             try {
+                $currLevel = self::getLevel();
                 ## call user error handler callable
                 ## exception will passed as errno on exception catch
                 call_user_func($stack['callable'], $errno, $errstr, $errfile, $errline);
             }
             catch (\Exception $e) {
                 ## during handling an error if any exception happen it must handle with parent handler
-                self::handleDone();
+                if (self::getLevel() == $currLevel)
+                    ## close current handler if not, the handleDone may be called from within handler callable
+                    self::handleDone();
+
+                if ($stack['__handle__'] == 'error')
+                    ## Just throw exception, it might handled with exception handlers
+                    throw $e;
 
                 $isHandled = false;
                 while (self::hasHandling()) {
