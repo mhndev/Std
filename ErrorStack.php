@@ -4,7 +4,7 @@ namespace Poirot\Core;
 use ErrorException;
 
 /*
- * 
+ *
 ErrorStack::handleBegin(function($errno, $errstr = '', $errfile = '', $errline = 0) {
     ## this will print error string to output
     var_dump($errstr);
@@ -214,15 +214,21 @@ class ErrorStack
                 ## during handling an error if any exception happen it must handle with parent handler
                 self::handleDone();
 
+                $isHandled = false;
                 while (self::hasHandling()) {
                     $stack = & self::$_STACK[self::getLevel()-1];
                     if ($stack['__handle__'] == 'exception') {
+                        $isHandled = true;
                         self::_handleError($e);
                         break;
                     }
 
                     self::handleDone();
                 }
+
+                if (!$isHandled)
+                    ## throw exception if it not handled
+                    throw $e;
             }
     }
 
