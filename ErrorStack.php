@@ -44,6 +44,9 @@ ErrorStack::handleException(function ($e) {
     throw $e;
 });
 
+## rise Exception
+throw new \Exception;
+
 */
 
 class ErrorStack
