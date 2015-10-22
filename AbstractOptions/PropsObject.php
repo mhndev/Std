@@ -16,7 +16,7 @@ final class PropsObject
         if (array_key_exists('readable', $props))
             $this->readable = $props['readable'];
 
-        if (is_array($this->writable) && is_array($this->writable))
-            $this->complex = array_intersect($this->writable, $this->writable);
+        if (is_array($this->readable) && is_array($this->writable))
+            $this->complex = array_intersect($this->readable, $this->writable);
     }
 }
