@@ -79,16 +79,6 @@ trait OpenOptionsTrait
     }
 
     /**
-     * Get Properties as array
-     *
-     * @return array
-     */
-    function toArray()
-    {
-        return $this->properties;
-    }
-
-    /**
      * Get Options Properties Information
      *
      * @return PropsObject
