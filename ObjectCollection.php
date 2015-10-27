@@ -43,6 +43,10 @@ class ObjectCollection implements iObjectCollection
         $data['etag'] = $this->getETag($object); // so we can search by etag hash
 
         $hash = $this->getETag($object);
+        if (isset($this->_objs[$hash]))
+            ## merge data if object exists
+            $data = array_merge($this->_objs[$hash]['data'], $data);
+
         $this->_objs[$hash] = ['object' => $object, 'data' => $data];
 
         return $hash;
