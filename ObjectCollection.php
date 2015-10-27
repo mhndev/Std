@@ -37,7 +37,7 @@ class ObjectCollection implements iObjectCollection
     {
         $this->_validateObject($object);
 
-        if ($data == array_values($data))
+        if (!empty($data) && $data == array_values($data))
             throw new \InvalidArgumentException('Data tags must be associative array.');
 
         $data['etag'] = $this->getETag($object); // so we can search by etag hash
