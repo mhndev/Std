@@ -194,7 +194,7 @@ class ObjectCollection implements iObjectCollection
     {
         $this->_validateObject($object);
 
-        $hash = md5(serialize($object));
+        $hash = md5(flatten($object));
 
         return $hash;
     }
