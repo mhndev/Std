@@ -194,16 +194,11 @@ class ErrorStack
     {
         $stack = & self::$_STACK[self::getLevel()-1];
 
-        if ($errno instanceof \Exception) {
-            ## catch exception within handle begin
-            $stack['has_error']  = $errno;
-            $stack['__handle__'] = 'exception';
-        }
-        else {
-            $stack['has_error']  = new ErrorException($errstr, 0, $errno, $errfile, $errline);
-            $stack['__handle__'] = 'error';
-        }
+        if (! $errno instanceof \Exception)
+            ## handle errors
+            $errno = new ErrorException($errstr, 0, $errno, $errfile, $errline);
 
+        $stack['has_error'] = $errno;
 
         // ...
 
