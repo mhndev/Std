@@ -179,7 +179,7 @@ namespace Poirot\Core
                 $closureReflection->getStartLine()
             );
         } elseif (is_object($value)) {
-            $value = sprintf('object(%s)', get_class($value));
+            $value = sprintf('%s:object(%s)', spl_object_hash($value), get_class($value));
         } elseif (is_resource($value)) {
             $value = sprintf('resource(%s)', get_resource_type($value));
         } elseif (is_array($value)) {
