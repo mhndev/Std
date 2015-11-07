@@ -6,8 +6,11 @@ class PHPEnvFactory
     protected static $_aliases = [
         'development'     => 'Poirot\Core\PHPEnv\ESDevelopment',
         'dev'             => 'development',
+        'debug'           => 'development',
+
         'production'      => 'Poirot\Core\PHPEnv\ESProduction',
         'prod'            => 'production',
+
         'php-environment' => 'Poirot\Core\PHPEnv\ESPhpEnvironment',
         'php'             => 'php-environment',
         'default'         => 'php',
