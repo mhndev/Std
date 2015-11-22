@@ -33,7 +33,7 @@ class Config extends Entity
             return;
         }
 
-        parent::__setFrom($resource);
+        return parent::__setFrom($resource);
     }
 
     /**

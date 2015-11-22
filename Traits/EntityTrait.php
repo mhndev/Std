@@ -122,8 +122,13 @@ trait EntityTrait
      */
     function from($resource)
     {
+        $this->__validateProps($resource);
+
         $this->_resource = $resource;
-        $this->__setFrom($resource);
+        $resource = $this->__setFrom($resource);
+
+        if (is_array($resource))
+            $this->fromArray($resource);
 
         return $this;
     }
@@ -133,20 +138,17 @@ trait EntityTrait
      *
      * - You can implement this method on subclasses
      *
-     * @param EntityInterface $resource
+     * @param mixed $resource
      *
      * @throws \InvalidArgumentException
-     * @return void
+     * @return array|void
      */
     protected function __setFrom($resource)
     {
-        $this->__validateProps($resource);
-
         if ($resource instanceof iDataSetConveyor)
             $resource = $resource->toArray();
 
-        if (is_array($resource))
-            $this->fromArray($resource);
+        return $resource;
     }
 
     protected function __validateProps($resource)
