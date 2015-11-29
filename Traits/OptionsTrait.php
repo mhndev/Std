@@ -27,7 +27,7 @@ trait OptionsTrait
 
         if (is_array($options))
             $this->fromArray($options);
-        elseif ($options instanceof iOptionImplement)
+        elseif ($options instanceof $this)
             $this->fromSimilar($options);
 
         return $this;
