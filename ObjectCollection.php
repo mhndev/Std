@@ -5,14 +5,23 @@ use Poirot\Core\Interfaces\iObjectCollection;
 
 class ObjectCollection implements iObjectCollection
 {
-    protected $_objs  = [];
+    protected $_objs  = [
+        /*
+        '0xc33223Etag' => [
+            'data' => [
+                'etag'   => '0xc33223Etag',
+                'extra'  => 'This is extra added data',
+            ],
+            'object'     => StoredObject,
+        ],
+        // ...
+        */
+    ];
 
     protected $__cached_obj_tags = [];
 
-    /**
-     * @var string current iterator key
-     */
-    protected $_itr_current;
+    /** @var string current iterator key */
+    protected $_trav__curr_index;
 
     /**
      * Attach Object
@@ -207,7 +216,7 @@ class ObjectCollection implements iObjectCollection
      */
     public function current()
     {
-        $current = $this->_itr_current;
+        $current = $this->_trav__curr_index;
 
         return $this->_objs[$current]['object'];
     }
@@ -219,7 +228,7 @@ class ObjectCollection implements iObjectCollection
     {
         $data = next($this->_objs);
 
-        $this->_itr_current = ($data) ? $data['data']['etag'] : $data;
+        $this->_trav__curr_index = ($data) ? $data['data']['etag'] : false;
     }
 
     /**
@@ -227,7 +236,7 @@ class ObjectCollection implements iObjectCollection
      */
     public function key()
     {
-        $this->_itr_current;
+        return $this->_trav__curr_index;
     }
 
     /**
@@ -236,7 +245,7 @@ class ObjectCollection implements iObjectCollection
      */
     public function valid()
     {
-        return $this->_itr_current;
+        return $this->_trav__curr_index;
     }
 
     /**
@@ -245,7 +254,7 @@ class ObjectCollection implements iObjectCollection
     public function rewind()
     {
         $data = reset($this->_objs);
-        $this->_itr_current = $data['data']['etag'];
+        $this->_trav__curr_index = $data['data']['etag'];
     }
 
 
@@ -258,5 +267,4 @@ class ObjectCollection implements iObjectCollection
     {
         return count($this->_objs);
     }
-
 }
