@@ -33,7 +33,7 @@ namespace Poirot\Core
          * @param bool  $throwException Throw Exception
          *
          * @throws \Exception
-         * @return $this
+         * @return array Remained Options (if not throw exception)
          */
         function setupFromArray(array $setters, $throwException = false)
         {
@@ -63,6 +63,7 @@ namespace Poirot\Core
                 });
             }
 
+            $remained = [];
             foreach($setters as $key => $val) {
                 $setter = 'set' . sanitize_camelcase($key);
                 if (method_exists($this, $setter)) {
@@ -76,9 +77,11 @@ namespace Poirot\Core
                         )
                     );
                 }
+                else
+                    $remained[] = $key;
             }
 
-            return $this;
+            return $remained;
         }
     }
 
