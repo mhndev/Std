@@ -189,7 +189,7 @@ namespace Poirot\Core
             foreach($value as $k => &$v)
                 $v = flatten($v);
 
-            $value = implode(',', $value);
+            $value = 'Array: ['.implode(', ', $value).']';
         } elseif (is_string($value)) {
             $value = sprintf('string(%s)', $value);
         }
