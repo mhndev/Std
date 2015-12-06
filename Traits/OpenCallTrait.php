@@ -68,6 +68,16 @@ trait OpenCallTrait
     }
 
     /**
+     * List Registered Methods
+     *
+     * @return array[string]
+     */
+    function listMethods()
+    {
+        return array_keys($this->_t__methods);
+    }
+
+    /**
      * Proxy Call To Registered Methods
      *
      * @param $methodName
