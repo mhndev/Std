@@ -62,29 +62,29 @@ trait OptionsTrait
      *   methods inside Options Object to get fully coincident copy
      *   of Options Class Object
      *
-     * @param iOptionImplement $options Options Object
+     * @param iOptionImplement $context Options Object
      *
      * @throws \Exception
      * @return $this
      */
-    function fromSimilar(/*iOptionImplement*/ $options)
+    function fromSimilar(/*iOptionImplement*/ $context)
     {
-        if ($options instanceof iOptionImplement) {
-            foreach($options->props()->readable as $key)
-                $this->__set($key, $options->__get($key));
+        if ($context instanceof iOptionImplement) {
+            foreach($context->props()->readable as $key)
+                $this->__set($key, $context->__get($key));
 
             return $this;
         }
 
-        if (!$options instanceof $this)
+        if (!$context instanceof $this)
             // only get same option object
             /*throw new \Exception(sprintf(
                 'Given Options Is Not Same As Provided Class Options. you given "%s".'
                 , get_class($options)
             ));*/
 
-            foreach($options->props()->writable as $key)
-                $this->__set($key, $options->__get($key));
+            foreach($context->props()->writable as $key)
+                $this->__set($key, $context->__get($key));
 
         // call your inherit options actions:
         // maybe you want access protected methods or properties

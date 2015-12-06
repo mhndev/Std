@@ -24,12 +24,12 @@ interface iOptionImplement extends iMagicalFields, iDataSetConveyor
      *   methods inside Options Object to get fully coincident copy
      *   of Options Class Object
      *
-     * @param iOptionImplement $options Options Object
+     * @param iOptionImplement $context Options Object
      *
      * @throws \Exception
      * @return $this
      */
-    function fromSimilar(/*iOptionImplement*/ $options);
+    function fromSimilar(/*iOptionImplement*/ $context);
     // PHP rise Deceleration Fatal Error even on options
     // that is extend iPoirotOptions interface
 
