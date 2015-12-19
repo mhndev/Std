@@ -102,8 +102,7 @@ trait OptionsTrait
      */
     function __set($key, $value)
     {
-        $setter = 'set' . Core\sanitize_camelcase($key);
-        if ($this->isMethodExists($setter))
+        if ($setter = $this->_getSetterIfHas($key))
             $this->$setter($value);
         elseif ($this->__isset($key))
             throw new \Exception(sprintf(
@@ -124,10 +123,9 @@ trait OptionsTrait
      */
     function __get($key)
     {
-        $getter = 'get' . Core\sanitize_camelcase($key);
-        if ($this->isMethodExists($getter))
+        if ($getter = $this->_getGetterIfHas($key))
             return $this->$getter();
-        elseif ($this->isMethodExists('set' . Core\sanitize_camelcase($key)))
+        elseif ($this->_isMethodExists('set' . Core\sanitize_camelcase($key)))
             throw new \Exception(sprintf(
                 'The Property "%s" is writeonly.'
                 , $key
@@ -177,14 +175,12 @@ trait OptionsTrait
         $methods = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
         $props   = [];
         foreach($methods as $i => $method) {
-            if (!in_array($prefix = substr($method->getName(), 0, 3), ['set', 'get']))
-                // this is not property method
-                unset($methods[$i]);
-            else
-                ## set --> props['writable']
-                $props[($prefix == 'set') ? 'writable' : 'readable'][] = strtolower(Core\sanitize_underscore(
-                    str_replace($prefix, '', $method->getName())
-                ));
+            foreach(['set', 'get', 'is'] as $prefix)
+                if (strpos($method->getName(), $prefix) === 0)
+                    ## set --> props['writable']
+                    $props[($prefix == 'set') ? 'writable' : 'readable'][] = strtolower(Core\sanitize_underscore(
+                        str_replace($prefix, '', $method->getName())
+                    ));
         }
 
         return $this->_cachedProps = new PropsObject($props);
@@ -204,6 +200,23 @@ trait OptionsTrait
         return $rArray;
     }
 
+    // ...
+
+    protected function _getGetterIfHas($key, $prefix = 'get')
+    {
+        $getter = $prefix . Core\sanitize_camelcase($key);
+        if (! ( $result = $this->_isMethodExists($getter) ) && $prefix === 'get')
+            return $this->_getGetterIfHas($key, 'is');
+
+        return ($result) ? $getter : false;
+    }
+
+    protected function _getSetterIfHas($key)
+    {
+        $setter = 'set' . Core\sanitize_camelcase($key);
+        return ($this->_isMethodExists($setter)) ? $setter : false;
+    }
+
     /**
      * Is Setter Property Method?
      *
@@ -211,7 +224,7 @@ trait OptionsTrait
      *
      * @return bool
      */
-    protected function isMethodExists($method)
+    protected function _isMethodExists($method)
     {
         $return = method_exists($this, $method);
         if ($return) {

@@ -47,16 +47,24 @@ trait OpenOptionsTrait
      */
     function __call($method, $arguments)
     {
-        // Looking for set | get :
-        $action  = substr($method, 0, 3);
+        $return = null;
+        foreach(['set', 'get', 'is'] as $action)
+            if (strpos($method, $action) === 0) {
+                ## method setter/getter found
+                $return = true;
+                break;
+            }
+
+        if ($return === null)
+            ## nothing to do
+            return $return;
 
         // Option Name:
         $name = $method;
-        $name = substr($name, -(strlen($name)-3)); // 3 for set/get
+        $name = substr($name, -(strlen($name)-strlen($action))); // x for set/get
         $name = strtolower(Core\sanitize_underscore($name));
 
         // Take Action:
-        $return = null;
         switch ($action) {
             case 'set':
                 // init option value:
@@ -67,12 +75,10 @@ trait OpenOptionsTrait
                 $return = $this;
                 break;
 
+            case 'is':
             case 'get':
                 $return = $this->__get($name);
                 break;
-
-            default:
-                // It's not an option, set[MethodName]()
         }
 
         return $return;
@@ -103,8 +109,7 @@ trait OpenOptionsTrait
      */
     function __set($key, $value)
     {
-        $setter = 'set' . Core\sanitize_camelcase($key);
-        if ($this->isMethodExists($setter))
+        if ($setter = $this->_getSetterIfHas($key))
             ## using setter method
             $this->$setter($value);
         else
@@ -119,8 +124,7 @@ trait OpenOptionsTrait
      */
     function __get($key)
     {
-        $getter = 'get' . Core\sanitize_camelcase($key);
-        if ($this->isMethodExists($getter))
+        if ($getter = $this->_getGetterIfHas($key))
             ## get from getter method
             $return = $this->$getter();
         elseif (array_key_exists($key, $this->properties))
@@ -139,8 +143,7 @@ trait OpenOptionsTrait
      */
     function __unset($key)
     {
-        $setter = 'set' . Core\sanitize_camelcase($key);
-        if ($this->isMethodExists($setter))
+        if ($setter = $this->_getSetterIfHas($key))
             $this->__set($key, null);
         else {
             if (array_key_exists($key, $this->properties))
