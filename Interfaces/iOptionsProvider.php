@@ -8,12 +8,12 @@ use Poirot\Core\AbstractOptions;
  * Provide Some Options Configuration
  *
  */
-interface OptionsProviderInterface 
+interface iOptionsProvider
 {
     /**
      * @return AbstractOptions
      */
-    function options();
+    function inOptions();
 
     /**
      * Get An Bare Options Instance
@@ -29,5 +29,5 @@ interface OptionsProviderInterface
      *
      * @return AbstractOptions
      */
-    static function optionsIns();
+    static function newOptions();
 }
