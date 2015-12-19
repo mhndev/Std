@@ -76,6 +76,7 @@ trait OpenOptionsTrait
                 break;
 
             case 'is':
+                // TODO just for boolean values
             case 'get':
                 $return = $this->__get($name);
                 break;
