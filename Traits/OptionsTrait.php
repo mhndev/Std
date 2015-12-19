@@ -8,6 +8,10 @@ use Poirot\Core\Interfaces\iOptionImplement;
 
 trait OptionsTrait
 {
+    protected $_t_options__internal = [
+        ## 'setArguments', this method will ignore as option in prop
+    ];
+
     /**
      * @var PropsObject Cached Props Once Call props()
      */
@@ -176,11 +180,17 @@ trait OptionsTrait
         $props   = [];
         foreach($methods as $i => $method) {
             foreach(['set', 'get', 'is'] as $prefix)
-                if (strpos($method->getName(), $prefix) === 0)
+                if (strpos($method->getName(), $prefix) === 0) {
+                    if (in_array($method->getName(), $this->_t_options__internal))
+                        ## it will use as internal option method
+                        continue;
+
                     ## set --> props['writable']
                     $props[($prefix == 'set') ? 'writable' : 'readable'][] = strtolower(Core\sanitize_underscore(
                         str_replace($prefix, '', $method->getName())
                     ));
+                }
+
         }
 
         return $this->_cachedProps = new PropsObject($props);
@@ -228,11 +238,11 @@ trait OptionsTrait
     {
         $return = method_exists($this, $method);
         if ($return) {
-            $ref = new \ReflectionMethod($this, $method);
+            $ref    = new \ReflectionMethod($this, $method);
             $return = $return && $ref->isPublic();
         }
 
-        return $return;
+        return $return && !in_array($method, $this->_t_options__internal);
     }
 }
  
