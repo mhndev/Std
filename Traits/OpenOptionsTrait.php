@@ -26,6 +26,8 @@ use Poirot\Core\AbstractOptions\PropsObject;
  *
  */
 
+// TODO implement ignored methods
+
 trait OpenOptionsTrait
 {
     use OptionsTrait {
