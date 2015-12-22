@@ -190,8 +190,8 @@ namespace Poirot\Core
                 $v = flatten($v);
 
             $value = 'Array: ['.implode(', ', $value).']';
-        } elseif (is_string($value)) {
-            $value = sprintf('string(%s)', $value);
+        } elseif (is_scalar($value)) {
+            $value = sprintf('%s(%s)',gettype($value), $value);
         }
 
         return $value;
