@@ -33,6 +33,11 @@ trait OptionsTrait
             $this->fromArray($options);
         elseif ($options instanceof $this)
             $this->fromSimilar($options);
+        else
+            throw new \InvalidArgumentException(sprintf(
+                'Can`t create class "%s" with option type(%s).'
+                , get_class($this), Core\flatten($options)
+            ));
 
         return $this;
     }
