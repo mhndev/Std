@@ -26,8 +26,6 @@ use Poirot\Core\AbstractOptions\PropsObject;
  *
  */
 
-// TODO implement ignored methods
-
 trait OpenOptionsTrait
 {
     use OptionsTrait {
@@ -108,15 +106,21 @@ trait OpenOptionsTrait
     /**
      * @param string $key
      * @param mixed $value
-     * @return void
+     * @throws \Exception
      */
     function __set($key, $value)
     {
         if ($setter = $this->_getSetterIfHas($key))
             ## using setter method
             $this->$setter($value);
-        else
-            $this->properties[$key] = $value;
+
+        if (in_array('set'.Core\sanitize_camelcase($key), $this->_t_options__internal))
+            throw new \Exception(sprintf(
+                'The Property "%s" is writeonly.'
+                , $key
+            ));
+
+        $this->properties[$key] = $value;
     }
 
     /**
@@ -130,7 +134,9 @@ trait OpenOptionsTrait
         if ($getter = $this->_getGetterIfHas($key))
             ## get from getter method
             $return = $this->$getter();
-        elseif (array_key_exists($key, $this->properties))
+        elseif (array_key_exists($key, $this->properties)
+            && !in_array('get'.Core\sanitize_camelcase($key), $this->_t_options__internal)
+        )
             $return = $this->properties[$key];
         else throw new \Exception(sprintf(
             'The Property "%s" is not found.'
