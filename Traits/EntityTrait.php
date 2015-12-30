@@ -4,7 +4,6 @@ namespace Poirot\Core\Traits;
 !defined('POIROT_CORE_LOADED') and include_once dirname(__FILE__).'/../Core.php';
 
 use Poirot\Core;
-use Poirot\Core\Interfaces\EntityInterface;
 use Poirot\Core\Interfaces\iDataSetConveyor;
 use Poirot\Core\Interfaces\iPoirotEntity;
 
@@ -64,15 +63,15 @@ trait EntityTrait
 
         // avoid recursive trait call, may conflict on classes that
         // implement in this case has() method
-        if (!array_key_exists($prop, $this->properties)
+        if (!array_key_exists($prop, $this->attainDataArrayObject())
             && $default === self::$__not_set_value__
         )
             throw new \Exception(
                 sprintf('Property "%s" not found in entity.', $prop)
             );
 
-        return (array_key_exists($prop, $this->properties))
-            ? $this->properties[$prop]
+        return (array_key_exists($prop, $this->attainDataArrayObject()))
+            ? $this->attainDataArrayObject()[$prop]
             : $default;
     }
 
@@ -97,7 +96,7 @@ trait EntityTrait
         if ($value === self::$__not_set_value__)
             $value = self::$DEFAULT_NONE_VALUE;
 
-        $this->properties[$prop] = $value;
+        $this->attainDataArrayObject()[$prop] = $value;
 
         return $this;
     }
@@ -188,7 +187,7 @@ trait EntityTrait
         if (!is_string($prop) && !is_numeric($prop))
             $prop = $this->__hashNoneStringProp($prop);
 
-        return array_key_exists($prop, $this->properties);
+        return array_key_exists($prop, $this->attainDataArrayObject());
     }
 
     /**
@@ -198,7 +197,7 @@ trait EntityTrait
      */
     function isEmpty()
     {
-        return empty($this->properties);
+        return empty($this->attainDataArrayObject());
     }
 
     /**
@@ -228,8 +227,8 @@ trait EntityTrait
             unset($this->__mapedPropObjects[$prop]);
         }
 
-        if (array_key_exists($prop, $this->properties))
-            unset($this->properties[$prop]);
+        if (array_key_exists($prop, $this->attainDataArrayObject()))
+            unset($this->attainDataArrayObject()[$prop]);
 
         return $this;
     }
@@ -242,7 +241,7 @@ trait EntityTrait
     function keys()
     {
         $keys = [];
-        foreach(array_keys($this->properties) as $k) {
+        foreach(array_keys($this->attainDataArrayObject()) as $k) {
             if (array_key_exists($k, $this->__mapedPropObjects))
                 $k = $this->__mapedPropObjects[$k];
 
@@ -310,6 +309,13 @@ trait EntityTrait
      */
     function toArray()
     {
+        $properties = $this->attainDataArrayObject();
+        return $properties;
+    }
+
+    protected function &attainDataArrayObject()
+    {
         return $this->properties;
     }
-} 
+}
+
