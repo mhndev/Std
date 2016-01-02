@@ -310,6 +310,9 @@ trait EntityTrait
     function toArray()
     {
         $properties = $this->attainDataArrayObject();
+        if (!$properties)
+            $properties = [];
+        
         return $properties;
     }
 
