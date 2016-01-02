@@ -70,7 +70,7 @@ trait EntityTrait
                 sprintf('Property "%s" not found in entity.', $prop)
             );
 
-        return (array_key_exists($prop, $this->attainDataArrayObject()))
+        return (is_array($this->attainDataArrayObject()) && array_key_exists($prop, $this->attainDataArrayObject()))
             ? $this->attainDataArrayObject()[$prop]
             : $default;
     }
@@ -187,7 +187,7 @@ trait EntityTrait
         if (!is_string($prop) && !is_numeric($prop))
             $prop = $this->__hashNoneStringProp($prop);
 
-        return array_key_exists($prop, $this->attainDataArrayObject());
+        return is_array($this->attainDataArrayObject()) && array_key_exists($prop, $this->attainDataArrayObject());
     }
 
     /**
@@ -227,7 +227,11 @@ trait EntityTrait
             unset($this->__mapedPropObjects[$prop]);
         }
 
-        if (array_key_exists($prop, $this->attainDataArrayObject()))
+
+        if (
+            is_array($this->attainDataArrayObject())
+            && array_key_exists($prop, $this->attainDataArrayObject())
+        )
             unset($this->attainDataArrayObject()[$prop]);
 
         return $this;
@@ -241,7 +245,11 @@ trait EntityTrait
     function keys()
     {
         $keys = [];
-        foreach(array_keys($this->attainDataArrayObject()) as $k) {
+        $data = $this->attainDataArrayObject();
+        if (!$data)
+            return [];
+
+        foreach(array_keys($data) as $k) {
             if (array_key_exists($k, $this->__mapedPropObjects))
                 $k = $this->__mapedPropObjects[$k];
 
@@ -312,7 +320,7 @@ trait EntityTrait
         $properties = $this->attainDataArrayObject();
         if (!$properties)
             $properties = [];
-        
+
         return $properties;
     }
 
@@ -321,4 +329,3 @@ trait EntityTrait
         return $this->properties;
     }
 }
-
