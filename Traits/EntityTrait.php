@@ -70,7 +70,7 @@ trait EntityTrait
                 sprintf('Property "%s" not found in entity.', $prop)
             );
 
-        return (is_array($this->attainDataArrayObject()) && array_key_exists($prop, $this->attainDataArrayObject()))
+        return (array_key_exists($prop, $this->attainDataArrayObject()))
             ? $this->attainDataArrayObject()[$prop]
             : $default;
     }
@@ -187,7 +187,7 @@ trait EntityTrait
         if (!is_string($prop) && !is_numeric($prop))
             $prop = $this->__hashNoneStringProp($prop);
 
-        return is_array($this->attainDataArrayObject()) && array_key_exists($prop, $this->attainDataArrayObject());
+        return array_key_exists($prop, $this->attainDataArrayObject());
     }
 
     /**
@@ -228,10 +228,7 @@ trait EntityTrait
         }
 
 
-        if (
-            is_array($this->attainDataArrayObject())
-            && array_key_exists($prop, $this->attainDataArrayObject())
-        )
+        if ( array_key_exists($prop, $this->attainDataArrayObject()) )
             unset($this->attainDataArrayObject()[$prop]);
 
         return $this;
@@ -324,6 +321,9 @@ trait EntityTrait
         return $properties;
     }
 
+    /**
+     * @return array
+     */
     protected function &attainDataArrayObject()
     {
         return $this->properties;
