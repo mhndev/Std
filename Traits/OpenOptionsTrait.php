@@ -93,12 +93,31 @@ trait OpenOptionsTrait
     function props()
     {
         $methodProps  = (array) $this->_t__props();
-        $methodProps  = ($propKeys = array_keys($this->properties))
-            ? \Poirot\Core\array_merge($methodProps, [
-                'writable' => $propKeys,
-                'readable' => $propKeys
-            ])
-            : $methodProps;
+
+        $writable = [];
+        $readable = [];
+        foreach(array_keys($this->properties) as $key) {
+            $skip = [];
+            foreach(['set', 'get', 'is'] as $prefix) {
+                # check for ignorant
+                $method = $prefix . Core\sanitize_camelcase($key);
+                if (in_array($method, $this->_t_options__internal))
+                    ## it will use as internal option method
+                    $skip[] = $prefix;
+            }
+
+            if (!in_array('get', $skip) && !in_array('is', $skip))
+                $readable[] = $key;
+
+            if (!in_array('set', $skip))
+                $writable[] = $key;
+        }
+
+        $methodProps  = \Poirot\Core\array_merge($methodProps
+            , [
+                'writable' => $writable,
+                'readable' => $readable
+            ]);
 
         return new PropsObject($methodProps);
     }
