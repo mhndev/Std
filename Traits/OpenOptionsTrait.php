@@ -172,7 +172,10 @@ trait OpenOptionsTrait
     function __unset($key)
     {
         if ($setter = $this->_getSetterIfHas($key))
-            $this->__set($key, null);
+            try{
+                ## some times it can be set to null because of argument type definition
+                $this->__set($key, null);
+            } catch (\Exception $e) {}
         else {
             if (array_key_exists($key, $this->properties))
                 unset($this->properties[$key]);
