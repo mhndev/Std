@@ -149,7 +149,7 @@ trait OpenOptionsTrait
      */
     function __isset($key)
     {
-        return (boolean) $this->_getGetterIfHas($key) && array_key_exists($key, $this->properties);
+        return ($this->_getGetterIfHas($key) !== false || array_key_exists($key, $this->properties));
     }
 
     /**
