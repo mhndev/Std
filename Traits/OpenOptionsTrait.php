@@ -92,6 +92,7 @@ trait OpenOptionsTrait
      */
     function props()
     {
+
         $methodProps  = (array) $this->_t__props();
 
         $writable = [];
@@ -140,6 +141,15 @@ trait OpenOptionsTrait
             ));
 
         $this->properties[$key] = $value;
+    }
+
+    /**
+     * @param string $key
+     * @return bool
+     */
+    function __isset($key)
+    {
+        return (boolean) $this->_getGetterIfHas($key) && array_key_exists($key, $this->properties);
     }
 
     /**

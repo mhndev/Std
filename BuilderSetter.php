@@ -21,12 +21,12 @@ class BuilderSetter
     /**
      * Construct
      *
-     * @param array $setter
+     * @param array $realm
      */
-    function __construct(array $setter = null)
+    function __construct(array $realm = null)
     {
-        if ($setter !== null)
-            $this->setupFromArray($setter);
+        if ($realm !== null)
+            $this->setupFromArray($realm);
     }
 }
  

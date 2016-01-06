@@ -151,14 +151,7 @@ trait OptionsTrait
      */
     function __isset($key)
     {
-        try {
-            $this->__get($key);
-        } catch (\Exception $e)
-        {
-            return false;
-        }
-
-        return true;
+        return (boolean) $this->_getGetterIfHas($key);
     }
 
     /**
