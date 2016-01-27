@@ -8,6 +8,7 @@ use Poirot\Core\Interfaces\iOptionImplement;
 
 trait OptionsTrait
 {
+    // TODO use docblock notation to avoid use method as option
     protected $_t_options__internal = [
         ## 'setArguments', this method will ignore as option in prop
     ];
