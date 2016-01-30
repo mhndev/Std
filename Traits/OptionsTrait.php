@@ -186,10 +186,10 @@ trait OptionsTrait
 
                     ## set --> props['writable']
                     $props[($prefix == 'set') ? 'writable' : 'readable'][] = strtolower(Core\sanitize_underscore(
-                        str_replace($prefix, '', $method->getName())
+                        ## getAttributeName -> AttributeName
+                        substr($method->getName(), strlen($prefix))
                     ));
                 }
-
         }
 
         return $this->_cachedProps = new PropsObject($props);
