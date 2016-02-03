@@ -12,6 +12,9 @@ use Poirot\Core\Interfaces\iOptionImplement;
  *
  *  // >>> Plug(Full) Properties >>>>>
  *
+ *  // >>> Not Set Yet By Default And Not List On ToArray >>>>>
+ *  protected $name = VOID;
+ *
  *  protected $fname;
  *
  *  protected $prefix = '';

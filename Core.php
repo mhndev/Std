@@ -5,7 +5,7 @@ namespace {
     !defined('DS') and define('DS', DIRECTORY_SEPARATOR);
 
     # !! don't store this value, void mean everything nothing
-    !defined('VOID') and define('VOID', uniqid('__not_set_value__'));
+    !defined('VOID') and define('VOID', "\0"/*uniqid('__not_set_value__')*/);
 }
 
 namespace Poirot\Core

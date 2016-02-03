@@ -21,19 +21,22 @@ trait OptionsTrait
     /**
      * Set Options
      *
-     * @param array|iOptionImplement $options
+     * - Object instance of this call fromSimilar
+     *
+     * @param array|iOptionImplement|iDataSetConveyor $options
      *
      * @return $this
      */
     function from($options)
     {
+        if ($options instanceof $this)
+            return $this->fromSimilar($options);
+
         if ($options instanceof iDataSetConveyor)
             $options = $options->toArray();
 
         if (is_array($options))
             $this->fromArray($options);
-        elseif ($options instanceof $this)
-            $this->fromSimilar($options);
         else
             throw new \InvalidArgumentException(sprintf(
                 'Can`t create class "%s" with option type(%s).'
@@ -79,31 +82,25 @@ trait OptionsTrait
      */
     function fromSimilar(/*iOptionImplement*/ $context)
     {
-        if ($context instanceof iOptionImplement) {
-            foreach($context->props()->readable as $key)
-                $this->__set($key, $context->__get($key));
-
-            return $this;
-        }
-
         if (!$context instanceof $this)
             // only get same option object
-            /*throw new \Exception(sprintf(
-                'Given Options Is Not Same As Provided Class Options. you given "%s".'
-                , get_class($options)
-            ));*/
+            throw new \Exception(sprintf(
+                'Given Options Is Not Same As Provided Class Options. you given (%s).'
+                , Core\flatten($context)
+            ));
 
-            foreach($context->props()->writable as $key)
-                $this->__set($key, $context->__get($key));
+        foreach($context->props()->readable as $key)
+            $this->__set($key, $context->__get($key));
+
+        return $this;
 
         // call your inherit options actions:
         // maybe you want access protected methods or properties
         // ...
-
-        return $this;
     }
 
     /**
+     * - VOID values will unset attribute
      * @param string $key
      * @param mixed $value
      *
@@ -133,17 +130,22 @@ trait OptionsTrait
      */
     function __get($key)
     {
+        $return = VOID;
         if ($getter = $this->_getGetterIfHas($key))
-            return $this->$getter();
+            $return = $this->$getter();
         elseif ($this->_isMethodExists('set' . Core\sanitize_camelcase($key)))
             throw new \Exception(sprintf(
                 'The Property "%s" is writeonly.'
                 , $key
             ));
-        else throw new \Exception(sprintf(
-            'The Property "%s" is not found.'
-            , $key
-        ));
+
+        if ($return === VOID)
+            throw new \Exception(sprintf(
+                'The Property "%s" is not found.'
+                , $key
+            ));
+
+        return $return;
     }
 
     /**
@@ -152,7 +154,12 @@ trait OptionsTrait
      */
     function __isset($key)
     {
-        return (boolean) $this->_getGetterIfHas($key);
+        $isset = false;
+        try {
+            $isset = ((boolean) $this->_getGetterIfHas($key) && $this->__get($key) !== VOID);
+        } catch(\Exception $e) { }
+
+        return $isset;
     }
 
     /**
@@ -161,7 +168,7 @@ trait OptionsTrait
      */
     function __unset($key)
     {
-        $this->__set($key, null);
+        $this->__set($key, VOID);
     }
 
     /**
@@ -203,8 +210,13 @@ trait OptionsTrait
     function toArray()
     {
         $rArray = [];
-        foreach($this->props()->readable as $p)
-            $rArray[$p] = $this->__get($p);
+        foreach($this->props()->readable as $p) {
+            if (!$this->__isset($p))
+                continue;
+
+            $val = $this->__get($p);
+            $rArray[$p] = $val;
+        }
 
         return $rArray;
     }

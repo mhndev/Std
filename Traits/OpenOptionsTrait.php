@@ -184,7 +184,7 @@ trait OpenOptionsTrait
         if ($setter = $this->_getSetterIfHas($key))
             try{
                 ## some times it can be set to null because of argument type definition
-                $this->__set($key, null);
+                $this->__set($key, VOID);
             } catch (\Exception $e) {}
         else {
             if (array_key_exists($key, $this->properties))
