@@ -86,13 +86,80 @@ trait OpenOptionsTrait
     }
 
     /**
+     * - VOID values will unset attribute
+     * @param string $key
+     * @param mixed $value
+     * @throws \Exception
+     */
+    function __set($key, $value)
+    {
+        if ($setter = $this->_getSetterIfHas($key))
+            ## using setter method
+            $this->$setter($value);
+
+        if (in_array('set'.Core\sanitize_camelcase($key), $this->_t_options__internal))
+            throw new \Exception(sprintf(
+                'The Property "%s" is writeonly.'
+                , $key
+            ));
+
+        if ($value === VOID)
+            unset($this->properties[$key]);
+        else
+            $this->properties[$key] = $value;
+    }
+
+    /**
+     * @param string $key
+     *
+     * @throws \Exception
+     * @return mixed
+     */
+    function __get($key)
+    {
+        $return = VOID;
+        if ($getter = $this->_getGetterIfHas($key))
+            ## get from getter method
+            $return = $this->$getter();
+        elseif (array_key_exists($key, $this->properties)
+            ## not ignored
+            && !in_array('get'.Core\sanitize_camelcase($key), $this->_t_options__internal)
+        )
+            $return = $this->properties[$key];
+
+        if ($return === VOID)
+            throw new \Exception(sprintf(
+                'The Property "%s" is not found.'
+                , $key
+            ));
+
+        return $return;
+    }
+
+    /**
+     * @param string $key
+     * @return void
+     */
+    function __unset($key)
+    {
+        if ($setter = $this->_getSetterIfHas($key))
+            try{
+                ## some times it can be set to null because of argument type definition
+                $this->__set($key, VOID);
+            } catch (\Exception $e) {}
+        else {
+            if (array_key_exists($key, $this->properties))
+                unset($this->properties[$key]);
+        }
+    }
+
+    /**
      * Get Options Properties Information
      *
      * @return PropsObject
      */
     function props()
     {
-
         $methodProps  = (array) $this->_t__props();
 
         $writable = [];
@@ -121,74 +188,5 @@ trait OpenOptionsTrait
             ]);
 
         return new PropsObject($methodProps);
-    }
-
-    /**
-     * @param string $key
-     * @param mixed $value
-     * @throws \Exception
-     */
-    function __set($key, $value)
-    {
-        if ($setter = $this->_getSetterIfHas($key))
-            ## using setter method
-            $this->$setter($value);
-
-        if (in_array('set'.Core\sanitize_camelcase($key), $this->_t_options__internal))
-            throw new \Exception(sprintf(
-                'The Property "%s" is writeonly.'
-                , $key
-            ));
-
-        $this->properties[$key] = $value;
-    }
-
-    /**
-     * @param string $key
-     * @return bool
-     */
-    function __isset($key)
-    {
-        return ($this->_getGetterIfHas($key) !== false || array_key_exists($key, $this->properties));
-    }
-
-    /**
-     * @param string $key
-     *
-     * @throws \Exception
-     * @return mixed
-     */
-    function __get($key)
-    {
-        if ($getter = $this->_getGetterIfHas($key))
-            ## get from getter method
-            $return = $this->$getter();
-        elseif (array_key_exists($key, $this->properties)
-            && !in_array('get'.Core\sanitize_camelcase($key), $this->_t_options__internal)
-        )
-            $return = $this->properties[$key];
-        else throw new \Exception(sprintf(
-            'The Property "%s" is not found.'
-            , $key
-        ));
-
-        return $return;
-    }
-
-    /**
-     * @param string $key
-     * @return void
-     */
-    function __unset($key)
-    {
-        if ($setter = $this->_getSetterIfHas($key))
-            try{
-                ## some times it can be set to null because of argument type definition
-                $this->__set($key, VOID);
-            } catch (\Exception $e) {}
-        else {
-            if (array_key_exists($key, $this->properties))
-                unset($this->properties[$key]);
-        }
     }
 }
