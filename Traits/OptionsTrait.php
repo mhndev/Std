@@ -121,6 +121,8 @@ trait OptionsTrait
     }
 
     /**
+     * !! Be Aware You Cant Use isset() inside getter methods itself
+     *
      * @param string $key
      *
      * @throws \Exception
@@ -147,6 +149,8 @@ trait OptionsTrait
     }
 
     /**
+     * !! Be Aware You Cant Use isset() inside getter methods itself
+     * 
      * @param string $key
      * @return bool
      */
