@@ -27,7 +27,9 @@ interface iOptionsProvider
      *      $class = new Filesystem($opt);
      *   [/php]
      *
+     * @param null|mixed $builder Builder Options as Constructor
+     *
      * @return AbstractOptions
      */
-    static function newOptions();
+    static function newOptions($builder = null);
 }

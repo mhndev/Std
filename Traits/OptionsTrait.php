@@ -89,9 +89,7 @@ trait OptionsTrait
                 , Core\flatten($context)
             ));
 
-        foreach($context->props()->readable as $key)
-            $this->__set($key, $context->__get($key));
-
+        $this->fromArray($context->toArray());
         return $this;
 
         // call your inherit options actions:
