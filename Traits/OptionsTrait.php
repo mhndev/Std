@@ -156,7 +156,7 @@ trait OptionsTrait
     {
         $isset = false;
         try {
-            $isset = ((boolean) $this->_getGetterIfHas($key) && $this->__get($key) !== VOID);
+            $isset = ($this->__get($key) !== VOID);
         } catch(\Exception $e) { }
 
         return $isset;

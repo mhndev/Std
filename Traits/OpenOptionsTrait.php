@@ -76,7 +76,7 @@ trait OpenOptionsTrait
                 break;
 
             case 'is':
-                // TODO just for boolean values
+                // TODO now property can catch with both get[Prop] & is[Prop]
             case 'get':
                 $return = $this->__get($name);
                 break;
