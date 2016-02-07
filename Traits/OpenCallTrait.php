@@ -1,6 +1,22 @@
 <?php
 namespace Poirot\Core\Traits;
 
+/**
+ * TODO Call by reference not working as expected
+ *
+    $changeMe = 'I`m Bad.';
+    $openCall = new OpenCall();
+
+    $_F_make = function(&$changeMe) {
+    $changeMe = 'We make you good.';
+    };
+
+    $openCall->addMethod('makeMe', $_F_make);
+
+    $openCall->makeMe($changeMe);
+ *
+ */
+
 trait OpenCallTrait
 {
     private $_t__methods = [];
@@ -64,7 +80,56 @@ trait OpenCallTrait
      */
     function hasMethod($methodName)
     {
-        return isset($this->_t__methods[$methodName]);
+        if (isset($this->_t__methods[$methodName]))
+            return true;
+
+        # check bind object
+        $return = false;
+
+        $bind = $this->getBindTo();
+        if (!$bind instanceof self) {
+            $return = method_exists($bind, $methodName);
+        }
+
+        return $return;
+    }
+
+    /**
+     * Get Method Closure
+     *
+     * !! if you need args called by reference use get method
+     *
+     * @param string $methodName
+     *
+     * @throws \Exception method not found
+     * @return \Closure
+     */
+    function getMethod($methodName)
+    {
+        if (!$this->hasMethod($methodName))
+            throw new \Exception(sprintf(
+                'Method (%s) not found.'
+                , $methodName
+            ));
+
+        if (isset($this->_t__methods[$methodName])) {
+            ## from bind closure
+            $methodCallable = $this->_t__methods[$methodName];
+        } else {
+            $bindTo = $this->getBindTo();
+            $methodCallable = function() use($methodName, $bindTo) {
+                return call_user_func_array([$bindTo, $methodName], func_get_args());
+            };
+        }
+
+        ## bind it into latest bind object
+        $methodCallable = \Closure::bind(
+            $methodCallable
+            , $this->getBindTo()
+            , get_class($this->getBindTo())
+        );
+
+        return $methodCallable;
     }
 
     /**
@@ -80,6 +145,8 @@ trait OpenCallTrait
     /**
      * Proxy Call To Registered Methods
      *
+     * !! has issue with call by reference args
+     *
      * @param $methodName
      * @param array $args
      *
@@ -87,17 +154,7 @@ trait OpenCallTrait
      */
     function __call($methodName, array $args)
     {
-        if (!$this->hasMethod($methodName))
-            throw new \RunTimeException('There is no method with the given name to call');
-
-        $methodCallable = $this->_t__methods[$methodName];
-        ## bind it into latest bind object
-        $methodCallable = \Closure::bind(
-            $methodCallable
-            , $this->getBindTo()
-            , get_class($this->getBindTo())
-        );
-
+        $methodCallable = $this->getMethod($methodName);
         return call_user_func_array($methodCallable, $args);
     }
 }
