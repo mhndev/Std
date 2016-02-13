@@ -39,4 +39,26 @@ interface iOptionImplement extends iMagicalFields, iDataSetConveyor
      * @return PropsObject
      */
     function props();
+
+    /**
+     * Is Required Property Full Filled?
+     *
+     * @return boolean
+     */
+    function isFulfilled();
+
+    /**
+     * Clear All Property Data
+     *
+     * - value of each property is VOID
+     *
+     * @return void
+     */
+    function clear();
+
+    /**
+     * Has no property defined and is clear?
+     * @return bool
+     */
+    function isEmpty();
 }
