@@ -6,10 +6,33 @@ use Poirot\Core\AbstractOptions\PropsObject;
 use Poirot\Core\Interfaces\iDataSetConveyor;
 use Poirot\Core\Interfaces\iOptionImplement;
 
+/**
+ * TODO:
+ * @method $this setNotOptionMethod($arg) @ignore // ignore this method as option
+ *
+ * // another way of defining properties for just getter/setter or open options
+ * @property string property @required description of property usage
+ *
+ * TODO sanitize property names with callable on toArray export andor fromArray import
+ */
 trait OptionsTrait
 {
     // TODO use docblock notation to avoid use method as option
+    /** @var string|\DateTime @required yyyy-mm-ddThh:mm:ss (1983-08-13) */
+    // protected $birthDate;
+    /** @var string */
+    // protected $mobile;
+    /** @var int @required Gender 1=male|2=female */
+    // protected $gender;
+    /** @var string @required */
+    // protected $passportNo;
+    /** @var int @required description about field */
+    // protected $planCode;
+
+    // TODO this must implemented by related method call that can be set from docblock on construct or something
     protected $_t_options__internal = [
+        'isFulfilled',
+        'isEmpty',
         ## 'setArguments', this method will ignore as option in prop
     ];
 
@@ -95,6 +118,39 @@ trait OptionsTrait
         // call your inherit options actions:
         // maybe you want access protected methods or properties
         // ...
+    }
+
+    /**
+     * Is Required Property Full Filled?
+     *
+     * @return boolean
+     */
+    function isFulfilled()
+    {
+        return true;
+    }
+
+    /**
+     * Clear All Property Data
+     *
+     * - value of each property is VOID
+     *
+     * @return void
+     */
+    function clear()
+    {
+        foreach($this->props()->readable as $p)
+            $this->__unset($p);
+    }
+
+    /**
+     * Has no property defined and is clear?
+     * @return bool
+     */
+    function isEmpty()
+    {
+        $props = $this->toArray();
+        return empty($props);
     }
 
     /**
