@@ -97,7 +97,7 @@ trait OpenOptionsTrait
             ## using setter method
             $this->$setter($value);
 
-        if (in_array('set'.Core\sanitize_camelcase($key), $this->_t_options__internal))
+        if (in_array('set'.Core\sanitize_camelcase($key), $this->doWhichMethodIgnored()))
             throw new \Exception(sprintf(
                 'The Property "%s" is writeonly.'
                 , $key
@@ -123,7 +123,7 @@ trait OpenOptionsTrait
             $return = $this->$getter();
         elseif (array_key_exists($key, $this->properties)
             ## not ignored
-            && !in_array('get'.Core\sanitize_camelcase($key), $this->_t_options__internal)
+            && !in_array('get'.Core\sanitize_camelcase($key), $this->doWhichMethodIgnored())
         )
             $return = $this->properties[$key];
 
@@ -169,7 +169,7 @@ trait OpenOptionsTrait
             foreach(['set', 'get', 'is'] as $prefix) {
                 # check for ignorant
                 $method = $prefix . Core\sanitize_camelcase($key);
-                if (in_array($method, $this->_t_options__internal))
+                if (in_array($method, $this->doWhichMethodIgnored()))
                     ## it will use as internal option method
                     $skip[] = $prefix;
             }
