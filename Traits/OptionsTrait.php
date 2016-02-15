@@ -7,17 +7,17 @@ use Poirot\Core\Interfaces\iDataSetConveyor;
 use Poirot\Core\Interfaces\iOptionImplement;
 
 /**
- * TODO:
+ * ignore:
  * @method $this setNotOptionMethod($arg) @ignore // ignore this method as option
  *
- * // another way of defining properties for just getter/setter or open options
+ * required:
  * @property string property @required description of property usage
  *
  * TODO sanitize property names with callable on toArray export andor fromArray import
  */
 trait OptionsTrait
 {
-    // TODO use docblock notation to avoid use method as option
+    // TODO require: use docblock notation to avoid use method as option
     /** @var string|\DateTime @required yyyy-mm-ddThh:mm:ss (1983-08-13) */
     // protected $birthDate;
     /** @var string */
@@ -29,17 +29,52 @@ trait OptionsTrait
     /** @var int @required description about field */
     // protected $planCode;
 
-    // TODO this must implemented by related method call that can be set from docblock on construct or something
-    protected $_t_options__internal = [
-        'isFulfilled',
-        'isEmpty',
-        ## 'setArguments', this method will ignore as option in prop
-    ];
+    protected $_t_options__ignored = [];
 
     /**
      * @var PropsObject Cached Props Once Call props()
      */
     protected $_cachedProps;
+
+    /**
+     * Ignore Some Method To Considered As Option Property
+     *
+     * ignore('isFulfilled', [$other...])
+     *
+     * @param $methodName
+     * @param null $_
+     *
+     * @return $this
+     */
+    function ignore($methodName, $_ = null)
+    {
+        $ignoredMethods = func_get_args();
+        foreach($ignoredMethods as $im)
+            $this->_t_options__ignored[] = (string) $im;
+
+        return $this;
+    }
+
+    /**
+     * Get List Of Ignored Methods
+     * @return array
+     */
+    protected function doWhichMethodIgnored()
+    {
+        static $init;
+        if (is_null($init)) {
+            ## Detect/Default Ignored
+            ### Detect: by docblock
+            $this->__ignoreFromDocBlock();
+
+            ### Default: isFulfilled and isEmpty is public internal method and not option
+            $x   = &$this->_t_options__ignored;
+            $x[] = 'isFulfilled';
+            $x[] = 'isEmpty';
+        }
+
+        return $this->_t_options__ignored;
+    }
 
     /**
      * Set Options
@@ -123,6 +158,7 @@ trait OptionsTrait
     /**
      * Is Required Property Full Filled?
      *
+     * @ignore
      * @return boolean
      */
     function isFulfilled()
@@ -145,6 +181,8 @@ trait OptionsTrait
 
     /**
      * Has no property defined and is clear?
+     *
+     * @ignore
      * @return bool
      */
     function isEmpty()
@@ -239,13 +277,13 @@ trait OptionsTrait
         if ($this->_cachedProps)
             return $this->_cachedProps;
 
-        $ref     = new \ReflectionClass($this);
+        $ref     = $this->_reflection();
         $methods = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
         $props   = [];
         foreach($methods as $i => $method) {
             foreach(['set', 'get', 'is'] as $prefix)
                 if (strpos($method->getName(), $prefix) === 0) {
-                    if (in_array($method->getName(), $this->_t_options__internal))
+                    if (in_array($method->getName(), $this->doWhichMethodIgnored()))
                         ## it will use as internal option method
                         continue;
 
@@ -297,6 +335,34 @@ trait OptionsTrait
     }
 
     /**
+     * Ignore Methods that Commented as DocBlocks
+     *
+     */
+    protected function __ignoreFromDocBlock()
+    {
+        $ref = $this->_reflection();
+
+        // ignored methods from Class DocComment:
+        $classDocComment = $ref->getDocComment();
+        if (preg_match_all('/.*[\n]?/', $classDocComment, $lines)) {
+            $lines = $lines[0];
+            $regex = /** @lang regex */ '/.+(@method).+((?P<method_name>\b\w+)\(.*\))\s@ignore.+/';
+            foreach($lines as $line) {
+                if (preg_match($regex, $line, $matches))
+                    $this->ignore($matches['method_name']);
+            }
+        }
+
+        // ignored methods from Method DocBlock
+        $methods = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
+        foreach($methods as $m) {
+            $mc = $m->getDocComment();
+            if (preg_match('/@ignore\s/', $mc, $matches))
+                $this->ignore($m->getName());
+        }
+    }
+
+    /**
      * Is Setter Property Method?
      *
      * @param string $method Method Name
@@ -307,11 +373,24 @@ trait OptionsTrait
     {
         $return = method_exists($this, $method);
         if ($return) {
-            $ref    = new \ReflectionMethod($this, $method);
+            ## it must be exists also be public accessible
+            $ref    = $this->_reflection();
+            $ref    = $ref->getMethod($method);
             $return = $return && $ref->isPublic();
         }
 
-        return $return && !in_array($method, $this->_t_options__internal);
+        return $return && !in_array($method, $this->doWhichMethodIgnored());
+    }
+
+    /**
+     * @return \ReflectionClass
+     */
+    protected function _reflection()
+    {
+        static $static;
+        if (is_null($static))
+            $static = new \ReflectionClass($this);
+
+        return $static;
     }
 }
- 
