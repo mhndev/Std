@@ -11,7 +11,7 @@ use Poirot\Core\Interfaces\iOptionImplement;
  * @method $this setNotOptionMethod($arg) @ignore // ignore this method as option
  *
  * required:
- * @property string property @required description of property usage
+ * @property string sanitizedProperty @required description of property usage
  *
  * TODO sanitize property names with callable on toArray export andor fromArray import
  */
@@ -251,6 +251,17 @@ trait OptionsTrait
 
         // ...
 
+        // detect required expected from Class DocBlock:
+        /**
+         * @property string sanitizedProperty @required description of property usage
+         */
+        $classDocComment = $ref->getDocComment();
+        $regex = '/(@property\s*)(?P<expected>[\w\|]+\s*)('.lcfirst(Core\sanitize_camelcase($property_key)).'+\s*)@required/';
+        if ($classDocComment !== false && preg_match($regex, $classDocComment, $matches)) {
+            $expectedValue = $matches['expected'];
+            goto done;
+        }
+
         // detect required expected from Method DocBlock:
         /**
          * @return string|null|object|\Stdclass|void
@@ -309,17 +320,16 @@ done:
             $ext = strtolower(trim($ext));
             if ($ext == '') continue;
 
-            if ($value === VOID && $ext == 'void') {
-                $match = true; break;
-            }
-            elseif ($valueType === $ext && $value != VOID) {
-                $match = true; break;
-            }
+            if ($value === VOID && $ext == 'void')
+                $match = true;
+            elseif ($valueType === $ext && $value != VOID)
+                $match = true;
             elseif ($valueType === 'object') {
-                if (is_a($value, $ext)) {
-                    $match = true; break;
-                }
+                if (is_a($value, $ext))
+                    $match = true;
             }
+
+            if ($match) break;
         }
 
         return $match;
