@@ -209,6 +209,8 @@ trait OptionsTrait
      * Is Required Property Full Filled?
      * @ignore
      *
+     * !! this method can override on classes that extend this
+     *
      * @param null|string $property_key
      *
      * @return bool
@@ -231,108 +233,6 @@ trait OptionsTrait
         }
 
         return (boolean) $fulFilled;
-    }
-
-    function __extractValueAndExpectedMatchExpression($property_key)
-    {
-        $ref = $this->_reflection();
-
-
-        // ...
-
-        $expectedValue = null;
-
-        try{
-            $currentValue  = $this->__get($property_key);
-        } catch(\Exception $e) {
-            ## not set so consider as void
-            $currentValue = VOID;
-        }
-
-        // ...
-
-        // detect required expected from Class DocBlock:
-        /**
-         * @property string sanitizedProperty @required description of property usage
-         */
-        $classDocComment = $ref->getDocComment();
-        $regex = '/(@property\s*)(?P<expected>[\w\|]+\s*)('.lcfirst(Core\sanitize_camelcase($property_key)).'+\s*)@required/';
-        if ($classDocComment !== false && preg_match($regex, $classDocComment, $matches)) {
-            $expectedValue = $matches['expected'];
-            goto done;
-        }
-
-        // detect required expected from Method DocBlock:
-        /**
-         * @return string|null|object|\Stdclass|void
-         */
-        $methodName    = $this->_getGetterIfHas($property_key);
-        if ($methodName) {
-            $methodRefl    = $ref->getMethod($methodName);
-            $methodComment = $methodRefl->getDocComment();
-
-            $regex = '/(@required\s)(.*\s+|)+(@return\s(?P<expected>[\w\s\|]*))/';
-            if ($methodComment !== false && preg_match($regex, $methodComment, $matches)) {
-                $expectedValue = $matches['expected'];
-                goto done;
-            }
-        }
-
-        // detect required expected from Class Field DocBlock:
-        /**
-         * @var string|null|object|\Stdclass|void @required
-         */
-        try {
-            $propRef     = $ref->getProperty(lcfirst(Core\sanitize_camelcase($property_key)));
-            $propComment = $propRef->getDocComment();
-            $regex = '/(@var\s+)(?P<expected>[\w\s\|]*)(@required)/';
-            if ($propComment !== false && preg_match($regex, $propComment, $matches)) {
-                $expectedValue = $matches['expected'];
-                goto done;
-            }
-        } catch(\Exception $e) {}
-
-done:
-        return [$currentValue, $expectedValue];
-    }
-
-    /**
-     * Match a value against expected docblock comment
-     * @param mixed  $value
-     * @param string $expectedString
-     * @return bool
-     */
-    protected function __isValueMatchAsExpected($value, $expectedString)
-    {
-        $match = false;
-        if ($expectedString == null)
-            ## undefined expected values must not be VOID
-            ## except when it write down on docblock "@return void"
-            return $value !== VOID;
-
-        $valueType = strtolower(gettype($value));
-
-        /**
-         * @return string|null|object|\Stdclass|void
-         */
-        $expectedString = explode('|', $expectedString);
-        foreach($expectedString as $ext) {
-            $ext = strtolower(trim($ext));
-            if ($ext == '') continue;
-
-            if ($value === VOID && $ext == 'void')
-                $match = true;
-            elseif ($valueType === $ext && $value != VOID)
-                $match = true;
-            elseif ($valueType === 'object') {
-                if (is_a($value, $ext))
-                    $match = true;
-            }
-
-            if ($match) break;
-        }
-
-        return $match;
     }
 
     /**
@@ -452,6 +352,109 @@ done:
     {
         $setter = 'set' . Core\sanitize_camelcase($key);
         return ($this->_isMethodExists($setter)) ? $setter : false;
+    }
+
+
+    protected function __extractValueAndExpectedMatchExpression($property_key)
+    {
+        $ref = $this->_reflection();
+
+
+        // ...
+
+        $expectedValue = null;
+
+        try{
+            $currentValue  = $this->__get($property_key);
+        } catch(\Exception $e) {
+            ## not set so consider as void
+            $currentValue = VOID;
+        }
+
+        // ...
+
+        // detect required expected from Class DocBlock:
+        /**
+         * @property string sanitizedProperty @required description of property usage
+         */
+        $classDocComment = $ref->getDocComment();
+        $regex = '/(@property\s*)(?P<expected>[\w\|]+\s*)('.lcfirst(Core\sanitize_camelcase($property_key)).'+\s*)@required/';
+        if ($classDocComment !== false && preg_match($regex, $classDocComment, $matches)) {
+            $expectedValue = $matches['expected'];
+            goto done;
+        }
+
+        // detect required expected from Method DocBlock:
+        /**
+         * @return string|null|object|\Stdclass|void
+         */
+        $methodName    = $this->_getGetterIfHas($property_key);
+        if ($methodName) {
+            $methodRefl    = $ref->getMethod($methodName);
+            $methodComment = $methodRefl->getDocComment();
+
+            $regex = '/(@required\s)(.*\s+|)+(@return\s(?P<expected>[\w\s\|]*))/';
+            if ($methodComment !== false && preg_match($regex, $methodComment, $matches)) {
+                $expectedValue = $matches['expected'];
+                goto done;
+            }
+        }
+
+        // detect required expected from Class Field DocBlock:
+        /**
+         * @var string|null|object|\Stdclass|void @required
+         */
+        try {
+            $propRef     = $ref->getProperty(lcfirst(Core\sanitize_camelcase($property_key)));
+            $propComment = $propRef->getDocComment();
+            $regex = '/(@var\s+)(?P<expected>[\w\s\|]*)(@required)/';
+            if ($propComment !== false && preg_match($regex, $propComment, $matches)) {
+                $expectedValue = $matches['expected'];
+                goto done;
+            }
+        } catch(\Exception $e) {}
+
+        done:
+        return [$currentValue, $expectedValue];
+    }
+
+    /**
+     * Match a value against expected docblock comment
+     * @param mixed  $value
+     * @param string $expectedString
+     * @return bool
+     */
+    protected function __isValueMatchAsExpected($value, $expectedString)
+    {
+        $match = false;
+        if ($expectedString == null)
+            ## undefined expected values must not be VOID
+            ## except when it write down on docblock "@return void"
+            return $value !== VOID;
+
+        $valueType = strtolower(gettype($value));
+
+        /**
+         * @return string|null|object|\Stdclass|void
+         */
+        $expectedString = explode('|', $expectedString);
+        foreach($expectedString as $ext) {
+            $ext = strtolower(trim($ext));
+            if ($ext == '') continue;
+
+            if ($value === VOID && $ext == 'void')
+                $match = true;
+            elseif ($valueType === $ext && $value != VOID)
+                $match = true;
+            elseif ($valueType === 'object') {
+                if (is_a($value, $ext))
+                    $match = true;
+            }
+
+            if ($match) break;
+        }
+
+        return $match;
     }
 
     /**
