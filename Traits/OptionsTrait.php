@@ -36,45 +36,6 @@ trait OptionsTrait
      */
     protected $_cachedProps;
 
-    /**
-     * Ignore Some Method To Considered As Option Property
-     *
-     * ignore('isFulfilled', [$other...])
-     *
-     * @param $methodName
-     * @param null $_
-     *
-     * @return $this
-     */
-    function ignore($methodName, $_ = null)
-    {
-        $ignoredMethods = func_get_args();
-        foreach($ignoredMethods as $im)
-            $this->_t_options__ignored[] = (string) $im;
-
-        return $this;
-    }
-
-    /**
-     * Get List Of Ignored Methods
-     * @return array
-     */
-    protected function doWhichMethodIgnored()
-    {
-        static $init;
-        if (is_null($init)) {
-            ## Detect/Default Ignored
-            ### Detect: by docblock
-            $this->__ignoreFromDocBlock();
-
-            ### Default: isFulfilled and isEmpty is public internal method and not option
-            $x   = &$this->_t_options__ignored;
-            $x[] = 'isFulfilled';
-            $x[] = 'isEmpty';
-        }
-
-        return $this->_t_options__ignored;
-    }
 
     /**
      * Set Options
@@ -156,14 +117,213 @@ trait OptionsTrait
     }
 
     /**
-     * Is Required Property Full Filled?
+     * Get Options Properties Information
      *
-     * @ignore
-     * @return boolean
+     * @return PropsObject
      */
-    function isFulfilled()
+    function props()
     {
-        return true;
+        if ($this->_cachedProps)
+            return $this->_cachedProps;
+
+        $ref     = $this->_reflection();
+        $methods = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
+        $props   = [];
+        foreach($methods as $i => $method) {
+            foreach(['set', 'get', 'is'] as $prefix)
+                if (strpos($method->getName(), $prefix) === 0) {
+                    if (in_array($method->getName(), $this->doWhichMethodIgnored()))
+                        ## it will use as internal option method
+                        continue;
+
+                    ## set --> props['writable']
+                    $props[($prefix == 'set') ? 'writable' : 'readable'][] = strtolower(Core\sanitize_underscore(
+                    ## getAttributeName -> AttributeName
+                        substr($method->getName(), strlen($prefix))
+                    ));
+                }
+        }
+
+        return $this->_cachedProps = new PropsObject($props);
+    }
+
+    /**
+     * Ignore Some Method To Considered As Option Property
+     *
+     * ignore('isFulfilled', [$other...])
+     *
+     * @param $methodName
+     * @param null $_
+     *
+     * @return $this
+     */
+    function ignore($methodName, $_ = null)
+    {
+        $ignoredMethods = func_get_args();
+        foreach($ignoredMethods as $im)
+            $this->_t_options__ignored[] = (string) $im;
+
+        return $this;
+    }
+
+    /**
+     * Get List Of Ignored Methods
+     * @return array
+     */
+    protected function doWhichMethodIgnored()
+    {
+        static $init;
+        if (is_null($init)) {
+            ## Detect/Default Ignored
+            ### Detect: by docblock
+            $this->__ignoreFromDocBlock();
+
+            ### Default: isFulfilled and isEmpty is public internal method and not option
+            $x   = &$this->_t_options__ignored;
+            $x[] = 'isFulfilled';
+            $x[] = 'isEmpty';
+        }
+
+        return $this->_t_options__ignored;
+    }
+
+    /**
+     * Get Properties as array
+     *
+     * @return array
+     */
+    function toArray()
+    {
+        $rArray = [];
+        foreach($this->props()->readable as $p) {
+            if (!$this->__isset($p))
+                continue;
+
+            $val = $this->__get($p);
+            $rArray[$p] = $val;
+        }
+
+        return $rArray;
+    }
+
+    /**
+     * Is Required Property Full Filled?
+     * @ignore
+     *
+     * @param null|string $property_key
+     *
+     * @return bool
+     */
+    function isFulfilled($property_key = null)
+    {
+        $fulFilled = true;
+
+        if ($property_key !== null)
+            $props = [(string)$property_key];
+        else
+            $props = $this->props()->readable;
+
+        foreach($props as $propName) {
+            list($value, $expected) = $this->__extractValueAndExpectedMatchExpression($propName);
+            $fulFilled &= $this->__isValueMatchAsExpected($value, $expected);
+
+            if (!$fulFilled)
+                break; ## no more iteration
+        }
+
+        return (boolean) $fulFilled;
+    }
+
+    function __extractValueAndExpectedMatchExpression($property_key)
+    {
+        $ref = $this->_reflection();
+
+
+        // ...
+
+        $expectedValue = null;
+
+        try{
+            $currentValue  = $this->__get($property_key);
+        } catch(\Exception $e) {
+            ## not set so consider as void
+            $currentValue = VOID;
+        }
+
+        // ...
+
+        // detect required expected from Method DocBlock:
+        /**
+         * @return string|null|object|\Stdclass|void
+         */
+        $methodName    = $this->_getGetterIfHas($property_key);
+        if ($methodName) {
+            $methodRefl    = $ref->getMethod($methodName);
+            $methodComment = $methodRefl->getDocComment();
+
+            $regex = '/(@required\s)(.*\s+|)+(@return\s(?P<expected>[\w\s\|]*))/';
+            if ($methodComment !== false && preg_match($regex, $methodComment, $matches)) {
+                $expectedValue = $matches['expected'];
+                goto done;
+            }
+        }
+
+        // detect required expected from Class Field DocBlock:
+        /**
+         * @var string|null|object|\Stdclass|void @required
+         */
+        try {
+            $propRef     = $ref->getProperty(lcfirst(Core\sanitize_camelcase($property_key)));
+            $propComment = $propRef->getDocComment();
+            $regex = '/(@var\s+)(?P<expected>[\w\s\|]*)(@required)/';
+            if ($propComment !== false && preg_match($regex, $propComment, $matches)) {
+                $expectedValue = $matches['expected'];
+                goto done;
+            }
+        } catch(\Exception $e) {}
+
+done:
+        return [$currentValue, $expectedValue];
+    }
+
+    /**
+     * Match a value against expected docblock comment
+     * @param mixed  $value
+     * @param string $expectedString
+     * @return bool
+     */
+    protected function __isValueMatchAsExpected($value, $expectedString)
+    {
+        $match = false;
+        if ($expectedString == null)
+            ## undefined expected values must not be VOID
+            ## except when it write down on docblock "@return void"
+            return $value !== VOID;
+
+        $valueType = strtolower(gettype($value));
+
+        /**
+         * @return string|null|object|\Stdclass|void
+         */
+        $expectedString = explode('|', $expectedString);
+        foreach($expectedString as $ext) {
+            $ext = strtolower(trim($ext));
+            if ($ext == '') continue;
+
+            if ($value === VOID && $ext == 'void') {
+                $match = true; break;
+            }
+            elseif ($valueType === $ext && $value != VOID) {
+                $match = true; break;
+            }
+            elseif ($valueType === 'object') {
+                if (is_a($value, $ext)) {
+                    $match = true; break;
+                }
+            }
+        }
+
+        return $match;
     }
 
     /**
@@ -267,55 +427,6 @@ trait OptionsTrait
         $this->__set($key, VOID);
     }
 
-    /**
-     * Get Options Properties Information
-     *
-     * @return PropsObject
-     */
-    function props()
-    {
-        if ($this->_cachedProps)
-            return $this->_cachedProps;
-
-        $ref     = $this->_reflection();
-        $methods = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
-        $props   = [];
-        foreach($methods as $i => $method) {
-            foreach(['set', 'get', 'is'] as $prefix)
-                if (strpos($method->getName(), $prefix) === 0) {
-                    if (in_array($method->getName(), $this->doWhichMethodIgnored()))
-                        ## it will use as internal option method
-                        continue;
-
-                    ## set --> props['writable']
-                    $props[($prefix == 'set') ? 'writable' : 'readable'][] = strtolower(Core\sanitize_underscore(
-                        ## getAttributeName -> AttributeName
-                        substr($method->getName(), strlen($prefix))
-                    ));
-                }
-        }
-
-        return $this->_cachedProps = new PropsObject($props);
-    }
-
-    /**
-     * Get Properties as array
-     *
-     * @return array
-     */
-    function toArray()
-    {
-        $rArray = [];
-        foreach($this->props()->readable as $p) {
-            if (!$this->__isset($p))
-                continue;
-
-            $val = $this->__get($p);
-            $rArray[$p] = $val;
-        }
-
-        return $rArray;
-    }
 
     // ...
 
@@ -346,7 +457,7 @@ trait OptionsTrait
         $classDocComment = $ref->getDocComment();
         if (preg_match_all('/.*[\n]?/', $classDocComment, $lines)) {
             $lines = $lines[0];
-            $regex = /** @lang regex */ '/.+(@method).+((?P<method_name>\b\w+)\(.*\))\s@ignore\s/';
+            $regex = '/.+(@method).+((?P<method_name>\b\w+)\(.*\))\s@ignore\s/';
             foreach($lines as $line) {
                 if (preg_match($regex, $line, $matches))
                     $this->ignore($matches['method_name']);

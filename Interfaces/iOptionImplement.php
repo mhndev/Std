@@ -43,9 +43,11 @@ interface iOptionImplement extends iMagicalFields, iDataSetConveyor
     /**
      * Is Required Property Full Filled?
      *
+     * @param null|string $property_key
+     *
      * @return boolean
      */
-    function isFulfilled();
+    function isFulfilled($property_key = null);
 
     /**
      * Clear All Property Data
