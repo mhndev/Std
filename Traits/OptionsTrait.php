@@ -17,7 +17,6 @@ use Poirot\Core\Interfaces\iOptionImplement;
  */
 trait OptionsTrait
 {
-    // TODO require: use docblock notation to avoid use method as option
     /** @var string|\DateTime @required yyyy-mm-ddThh:mm:ss (1983-08-13) */
     // protected $birthDate;
     /** @var string */
