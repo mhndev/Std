@@ -346,7 +346,7 @@ trait OptionsTrait
         $classDocComment = $ref->getDocComment();
         if (preg_match_all('/.*[\n]?/', $classDocComment, $lines)) {
             $lines = $lines[0];
-            $regex = /** @lang regex */ '/.+(@method).+((?P<method_name>\b\w+)\(.*\))\s@ignore.+/';
+            $regex = /** @lang regex */ '/.+(@method).+((?P<method_name>\b\w+)\(.*\))\s@ignore\s/';
             foreach($lines as $line) {
                 if (preg_match($regex, $line, $matches))
                     $this->ignore($matches['method_name']);
