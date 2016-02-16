@@ -8,12 +8,10 @@ use Poirot\Core\Interfaces\iOptionImplement;
 
 /**
  * ignore:
- * @method $this setNotOptionMethod($arg) @ignore // ignore this method as option
+ * @method $this setPropKeyNormalizer(callable $callable) @ignore // ignore this method as option
  *
  * required:
  * @property string sanitizedProperty @required description of property usage
- *
- * TODO sanitize property names with callable on toArray export andor fromArray import
  */
 trait OptionsTrait
 {
@@ -29,6 +27,9 @@ trait OptionsTrait
     // protected $planCode;
 
     protected $_t_options__ignored = [];
+
+    /** @var \Closure Property keys normalizer */
+    protected $normalizer;
 
     /**
      * @var PropsObject Cached Props Once Call props()
@@ -136,10 +137,11 @@ trait OptionsTrait
                         continue;
 
                     ## set --> props['writable']
-                    $props[($prefix == 'set') ? 'writable' : 'readable'][] = strtolower(Core\sanitize_underscore(
-                    ## getAttributeName -> AttributeName
+                    $props[($prefix == 'set') ? 'writable' : 'readable'][] = $this->__normalize(
+                        ## getAttributeName -> AttributeName
                         substr($method->getName(), strlen($prefix))
-                    ));
+                        , 'external'
+                    );
                 }
         }
 
@@ -189,9 +191,12 @@ trait OptionsTrait
     /**
      * Get Properties as array
      *
+     * @param \Closure|null $normalizer Normalize Keys string func(string $key)
+     *
+     * @throws \Exception
      * @return array
      */
-    function toArray()
+    function toArray(\Closure $normalizer = null)
     {
         $rArray = [];
         foreach($this->props()->readable as $p) {
@@ -199,6 +204,7 @@ trait OptionsTrait
                 continue;
 
             $val = $this->__get($p);
+            ($normalizer === null) ?: $p = $normalizer($p);
             $rArray[$p] = $val;
         }
 
@@ -296,7 +302,7 @@ trait OptionsTrait
         $return = VOID;
         if ($getter = $this->_getGetterIfHas($key))
             $return = $this->$getter();
-        elseif ($this->_isMethodExists('set' . Core\sanitize_camelcase($key)))
+        elseif ($this->_isMethodExists('set' . $this->__normalize($key, 'internal')))
             throw new \Exception(sprintf(
                 'The Property "%s" is writeonly.'
                 , $key
@@ -341,7 +347,7 @@ trait OptionsTrait
 
     protected function _getGetterIfHas($key, $prefix = 'get')
     {
-        $getter = $prefix . Core\sanitize_camelcase($key);
+        $getter = $prefix . $this->__normalize($key, 'internal');
         if (! ( $result = $this->_isMethodExists($getter) ) && $prefix === 'get')
             return $this->_getGetterIfHas($key, 'is');
 
@@ -350,10 +356,38 @@ trait OptionsTrait
 
     protected function _getSetterIfHas($key)
     {
-        $setter = 'set' . Core\sanitize_camelcase($key);
+        $setter = 'set' . $this->__normalize($key, 'internal');
         return ($this->_isMethodExists($setter)) ? $setter : false;
     }
 
+    /**
+     * Property Key Normalizer
+     * @param string $key
+     * @param string $type internal|external
+     * @return string
+     */
+    protected function __normalize($key, $type)
+    {
+        $type = strtolower($type);
+
+        if ($type !== 'external' && $type !== 'internal')
+            throw new \InvalidArgumentException;
+
+        if (!isset($this->normalizer['internal']))
+            $this->normalizer['internal'] = function($key) {
+                return Core\sanitize_camelCase($key);
+            };
+
+        if (!isset($this->normalizer['external']))
+            $this->normalizer['external'] = function($key) {
+                return strtolower(Core\sanitize_under_score($key));
+            };
+
+
+        $return = $this->normalizer[$type];
+        $return = call_user_func($return, $key);
+        return $return;
+    }
 
     protected function __extractValueAndExpectedMatchExpression($property_key)
     {
@@ -378,7 +412,7 @@ trait OptionsTrait
          * @property string sanitizedProperty @required description of property usage
          */
         $classDocComment = $ref->getDocComment();
-        $regex = '/(@property\s*)(?P<expected>[\w\|]+\s*)('.lcfirst(Core\sanitize_camelcase($property_key)).'+\s*)@required/';
+        $regex = '/(@property\s*)(?P<expected>[\w\|]+\s*)('.$this->__normalize($property_key, 'internal').'+\s*)@required/';
         if ($classDocComment !== false && preg_match($regex, $classDocComment, $matches)) {
             $expectedValue = $matches['expected'];
             goto done;
@@ -405,7 +439,7 @@ trait OptionsTrait
          * @var string|null|object|\Stdclass|void @required
          */
         try {
-            $propRef     = $ref->getProperty(lcfirst(Core\sanitize_camelcase($property_key)));
+            $propRef     = $ref->getProperty($this->__normalize($property_key, 'internal'));
             $propComment = $propRef->getDocComment();
             $regex = '/(@var\s+)(?P<expected>[\w\s\|]*)(@required)/';
             if ($propComment !== false && preg_match($regex, $propComment, $matches)) {

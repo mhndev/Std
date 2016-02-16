@@ -62,7 +62,7 @@ trait OpenOptionsTrait
         // Option Name:
         $name = $method;
         $name = substr($name, -(strlen($name)-strlen($action))); // x for set/get
-        $name = strtolower(Core\sanitize_underscore($name));
+        $name = $this->__normalize($name, 'external');
 
         // Take Action:
         switch ($action) {
@@ -97,7 +97,7 @@ trait OpenOptionsTrait
             ## using setter method
             $this->$setter($value);
 
-        if (in_array('set'.Core\sanitize_camelcase($key), $this->doWhichMethodIgnored()))
+        if (in_array('set'.$this->__normalize($key, 'internal'), $this->doWhichMethodIgnored()))
             throw new \Exception(sprintf(
                 'The Property "%s" is writeonly.'
                 , $key
@@ -123,7 +123,7 @@ trait OpenOptionsTrait
             $return = $this->$getter();
         elseif (array_key_exists($key, $this->properties)
             ## not ignored
-            && !in_array('get'.Core\sanitize_camelcase($key), $this->doWhichMethodIgnored())
+            && !in_array('get'.$this->__normalize($key, 'internal'), $this->doWhichMethodIgnored())
         )
             $return = $this->properties[$key];
 
@@ -168,7 +168,7 @@ trait OpenOptionsTrait
             $skip = [];
             foreach(['set', 'get', 'is'] as $prefix) {
                 # check for ignorant
-                $method = $prefix . Core\sanitize_camelcase($key);
+                $method = $prefix . $this->__normalize($key, 'internal');
                 if (in_array($method, $this->doWhichMethodIgnored()))
                     ## it will use as internal option method
                     $skip[] = $prefix;
