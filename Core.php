@@ -65,7 +65,7 @@ namespace Poirot\Core
 
             $remained = [];
             foreach($setters as $key => $val) {
-                $setter = 'set' . sanitize_camelcase($key);
+                $setter = 'set' . sanitize_camelCase($key);
                 if (method_exists($this, $setter)) {
                     // check for methods
                     $this->{$setter}($val);
@@ -197,6 +197,8 @@ namespace Poirot\Core
         return $value;
     }
 
+    // TODO move to string nStd type
+
     /**
      * Sanitize Underscore To Camelcase
      *
@@ -204,7 +206,19 @@ namespace Poirot\Core
      *
      * @return string
      */
-    function sanitize_camelcase($key)
+    function sanitize_camelCase($key)
+    {
+        return lcfirst(sanitize_PascalCase($key));
+    }
+
+    /**
+     * Sanitize Underscore To Camelcase
+     *
+     * @param string $key Key
+     *
+     * @return string
+     */
+    function sanitize_PascalCase($key)
     {
         return str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
     }
@@ -216,11 +230,11 @@ namespace Poirot\Core
      *
      * @return string
      */
-    function sanitize_underscore($key)
+    function sanitize_under_score($key)
     {
         $pattern     = array('#(?<=(?:[A-Z]))([A-Z]+)([A-Z][A-z])#', '#(?<=(?:[a-z0-9]))([A-Z])#');
         $replacement = array('\1_\2', '_\1');
 
-        return preg_replace($pattern, $replacement, $key);
+        return strtolower(preg_replace($pattern, $replacement, $key));
     }
 }
