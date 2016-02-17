@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Std\Environment;
 
-use Poirot\Std\AbstractOptions;
+use Poirot\Std\Struct\AbstractOptions;
 
 /*
 

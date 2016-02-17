@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Std\Struct;
 
-use Poirot\Std\Interfaces\ipOptions;
+use Poirot\Std\Interfaces\Struct\iOptionStruct;
 use Poirot\Std\Struct\Traits\OpenOptionsTrait;
 
 /*
@@ -25,14 +25,14 @@ use Poirot\Std\Struct\Traits\OpenOptionsTrait;
  *
  */
 
-class OpenOptions implements ipOptions
+class OpenOptions implements iOptionStruct
 {
     use OpenOptionsTrait;
 
     /**
      * Construct
      *
-     * @param array|ipOptions $options Options
+     * @param array|iOptionStruct $options Options
      */
     function __construct($options = null)
     {

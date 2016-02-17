@@ -203,7 +203,7 @@ class ObjectCollection implements iObjectCollection
     {
         $this->_validateObject($object);
 
-        $hash = md5(flatten($object));
+        $hash = md5(\Poirot\Std\flatten($object));
 
         return $hash;
     }

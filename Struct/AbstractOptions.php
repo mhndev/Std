@@ -2,7 +2,6 @@
 namespace Poirot\Std\Struct;
 
 use Poirot\Std;
-use Poirot\Std\Interfaces\ipOptions;
 use Poirot\Std\Interfaces\Struct\iOptionStruct;
 
 /**
@@ -68,7 +67,7 @@ use Poirot\Std\Interfaces\Struct\iOptionStruct;
  *
  */
 abstract class AbstractOptions
-    implements ipOptions
+    implements iOptionStruct
 {
     use Std\Struct\Traits\OptionsTrait;
 

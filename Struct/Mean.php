@@ -14,7 +14,7 @@ var_dump($test);            // array(1) { [0]=> string(11) "insert item" }
 var_dump($dataField->test); // array(1) { [0]=> string(11) "insert item" }
 */
 
-class MeanStruct implements iMeanStruct
+class Mean implements iMeanStruct
 {
     protected $properties = [];
 
