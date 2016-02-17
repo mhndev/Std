@@ -1,6 +1,8 @@
 <?php
 namespace Poirot\Std\Interfaces;
 
+use Poirot\Std\Interfaces\Struct\iOptionStruct;
+
 interface ipOptions extends iOptionStruct
 {
     /**
