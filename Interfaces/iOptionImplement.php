@@ -1,9 +1,11 @@
 <?php
 namespace Poirot\Std\Interfaces;
 
+use Poirot\Std\Interfaces\Struct\iMeanStruct;
+use Poirot\Std\Interfaces\Struct\iStructDataConveyor;
 use Poirot\Std\AbstractOptions\PropsObject;
 
-interface iOptionImplement extends iMagicalFields, iDataSetConveyor
+interface iOptionImplement extends iMeanStruct, iStructDataConveyor
 {
     /**
      * Set Options

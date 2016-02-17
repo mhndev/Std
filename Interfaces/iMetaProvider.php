@@ -4,7 +4,7 @@ namespace Poirot\Std\Interfaces;
 interface iMetaProvider
 {
     /**
-     * @return iDataField
+     * @return iMeanStruct
      */
     function meta();
 }

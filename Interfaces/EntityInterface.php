@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Std\Interfaces;
 
-interface EntityInterface extends iDataSetConveyor
+interface EntityInterface extends iStructDataConveyor
 {
     /**
      * Set Entity From A Given Resource

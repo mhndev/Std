@@ -1,7 +1,7 @@
 <?php
-namespace Poirot\Std;
+namespace Poirot\Std\Struct;
 
-use Poirot\Std\Interfaces\iDataField;
+use Poirot\Std\Interfaces\Struct\iMeanStruct;
 
 /*
 $dataField = new DataField();
@@ -14,7 +14,7 @@ var_dump($test);            // array(1) { [0]=> string(11) "insert item" }
 var_dump($dataField->test); // array(1) { [0]=> string(11) "insert item" }
 */
 
-class DataField implements iDataField
+class MeanStruct implements iMeanStruct
 {
     protected $properties = [];
 

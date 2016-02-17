@@ -1,7 +1,7 @@
 <?php
-namespace Poirot\Std;
+namespace Poirot\Std\Struct;
 
-use Poirot\Std\Interfaces\iObjectCollection;
+use Poirot\Std\Interfaces\Struct\iObjectCollection;
 
 class ObjectCollection implements iObjectCollection
 {

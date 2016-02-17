@@ -1,5 +1,5 @@
 <?php
-namespace Poirot\Std\Interfaces;
+namespace Poirot\Std\Interfaces\Struct;
 
 interface iObjectCollection extends \Iterator, \Countable
 {

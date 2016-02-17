@@ -1,7 +1,7 @@
 <?php
-namespace Poirot\Std;
+namespace Poirot\Std\Struct;
 
-class SplPriorityQueue extends \SplPriorityQueue
+class PriorityQueue extends \SplPriorityQueue
 {
     protected $__sdec = PHP_INT_MAX;
 
@@ -72,12 +72,11 @@ class SplPriorityQueue extends \SplPriorityQueue
      */
     function removeAll()
     {
-        foreach($this as $i) {
+        foreach($this as $i)
             // Just Iterate Over Entities will delete items
-        }
+            VOID;
 
         $this->__mapped_items = [];
-
         return $this;
     }
 

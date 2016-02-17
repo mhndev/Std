@@ -1,7 +1,17 @@
 <?php
-namespace Poirot\Std\Interfaces;
+namespace Poirot\Std\Interfaces\Struct;
 
-interface iMagicalFields
+/**
+ * class DataField()
+ * {
+ *    public $field;
+ *
+ * }
+ *
+ * DataField->field = 1;
+ *
+ */
+interface iMeanStruct
 {
     /**
      * @param string $key

@@ -4,7 +4,7 @@ namespace Poirot\Std\Traits;
 !defined('POIROT_CORE_LOADED') and include_once dirname(__FILE__).'/../Core.php';
 
 use Poirot\Std;
-use Poirot\Std\Interfaces\iDataSetConveyor;
+use Poirot\Std\Interfaces\Struct\iStructDataConveyor;
 use Poirot\Std\Interfaces\iPoirotEntity;
 
 trait EntityTrait
@@ -144,7 +144,7 @@ trait EntityTrait
      */
     protected function __setFrom($resource)
     {
-        if ($resource instanceof iDataSetConveyor)
+        if ($resource instanceof iStructDataConveyor)
             $resource = $resource->toArray();
 
         return $resource;
@@ -152,7 +152,7 @@ trait EntityTrait
 
     protected function __validateProps($resource)
     {
-        if (!$resource instanceof iDataSetConveyor && !is_array($resource))
+        if (!$resource instanceof iStructDataConveyor && !is_array($resource))
             throw new \InvalidArgumentException(sprintf(
                 'Resource must be instance of EntityInterface or array but "%s" given.'
                 , is_object($resource) ? get_class($resource) : gettype($resource)
