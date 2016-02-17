@@ -1,10 +1,10 @@
 <?php
-namespace Poirot\Std\Traits;
+namespace Poirot\Std\Struct\Traits;
 
 use Poirot\Std;
-use Poirot\Std\AbstractOptions\PropsObject;
+use Poirot\Std\Interfaces\Struct\iOptionStruct;
 use Poirot\Std\Interfaces\Struct\iStructDataConveyor;
-use Poirot\Std\Interfaces\iOptionImplement;
+use Poirot\Std\Struct\AbstractOptions\PropsObject;
 
 /**
  * ignore:
@@ -42,7 +42,7 @@ trait OptionsTrait
      *
      * - Object instance of this call fromSimilar
      *
-     * @param array|iOptionImplement|iStructDataConveyor $options
+     * @param array|iOptionStruct|iStructDataConveyor $options
      *
      * @return $this
      */
@@ -94,7 +94,7 @@ trait OptionsTrait
      *   methods inside Options Object to get fully coincident copy
      *   of Options Class Object
      *
-     * @param iOptionImplement $context Options Object
+     * @param iOptionStruct $context Options Object
      *
      * @throws \Exception
      * @return $this

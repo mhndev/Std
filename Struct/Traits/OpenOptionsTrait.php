@@ -1,8 +1,8 @@
 <?php
-namespace Poirot\Std\Traits;
+namespace Poirot\Std\Struct\Traits;
 
 use Poirot\Std;
-use Poirot\Std\AbstractOptions\PropsObject;
+use Poirot\Std\Struct\AbstractOptions\PropsObject;
 
 /*
  * $openOption = new class OpenOptions {

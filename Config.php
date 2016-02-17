@@ -1,7 +1,8 @@
 <?php
 namespace Poirot\Std;
 
-use Poirot\Std\Interfaces\EntityInterface;
+use Poirot\Std\Interfaces\iEntity;
+use Poirot\Std\Struct\Entity;
 
 class Config extends Entity
 {
@@ -10,7 +11,7 @@ class Config extends Entity
      *
      * - You can implement this method on subclasses
      *
-     * @param EntityInterface $resource
+     * @param iEntity $resource
      *
      * @throws \InvalidArgumentException
      * @return array

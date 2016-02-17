@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Std\Interfaces;
 
-interface iInvokable 
+interface ipInvokable
 {
     function __invoke(/*..*/$argument = null);
 }

@@ -1,8 +1,9 @@
 <?php
-namespace Poirot\Std;
+namespace Poirot\Std\Struct;
 
 use Poirot\Std;
-use Poirot\Std\Interfaces\iOptionImplement;
+use Poirot\Std\Interfaces\ipOptions;
+use Poirot\Std\Interfaces\Struct\iOptionStruct;
 
 /**
  * Here is a simple optionsClass example:
@@ -67,14 +68,14 @@ use Poirot\Std\Interfaces\iOptionImplement;
  *
  */
 abstract class AbstractOptions
-    implements Interfaces\iPoirotOptions
+    implements ipOptions
 {
-    use Std\Traits\OptionsTrait;
+    use Std\Struct\Traits\OptionsTrait;
 
     /**
      * Construct
      *
-     * @param array|iOptionImplement $options Options
+     * @param array|iOptionStruct $options Options
      */
     function __construct($options = null)
     {

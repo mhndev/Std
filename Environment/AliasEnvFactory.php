@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Std\Environment;
 
-use poirot\std\Poirot\Std\Interfaces\Pact\iFactoryPact;
+use poirot\std\Poirot\Std\Interfaces\Pact\ipFactory;
 
 /*
 
@@ -13,7 +13,7 @@ $EnvSettings::setupSystemWide();
 
 */
 
-class AliasEnvFactory implements iFactoryPact
+class AliasEnvFactory implements ipFactory
 {
     protected static $_aliases = [
         'development'     => \Poirot\Std\Environment\DevelopmentEnv::class,

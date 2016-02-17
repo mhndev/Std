@@ -1,16 +1,15 @@
 <?php
-namespace Poirot\Std\Interfaces;
+namespace Poirot\Std\Interfaces\Struct;
 
-use Poirot\Std\Interfaces\Struct\iMeanStruct;
-use Poirot\Std\Interfaces\Struct\iStructDataConveyor;
 use Poirot\Std\AbstractOptions\PropsObject;
+use Poirot\Std\Interfaces\ipOptions;
 
-interface iOptionImplement extends iMeanStruct, iStructDataConveyor
+interface iOptionStruct extends iStructDataConveyor
 {
     /**
      * Set Options
      *
-     * @param array|iPoirotOptions|mixed $options
+     * @param array|ipOptions|mixed $options
      *
      * @return $this
      */
@@ -26,7 +25,7 @@ interface iOptionImplement extends iMeanStruct, iStructDataConveyor
      *   methods inside Options Object to get fully coincident copy
      *   of Options Class Object
      *
-     * @param iOptionImplement $context Options Object
+     * @param iOptionStruct $context Options Object
      *
      * @throws \Exception
      * @return $this

@@ -1,11 +1,11 @@
 <?php
-namespace Poirot\Std\Traits;
+namespace Poirot\Std\Struct\Traits;
 
-!defined('POIROT_CORE_LOADED') and include_once dirname(__FILE__).'/../Core.php';
+!defined('POIROT_CORE_LOADED') and include_once dirname(__FILE__) . '/../functions.php';
 
 use Poirot\Std;
 use Poirot\Std\Interfaces\Struct\iStructDataConveyor;
-use Poirot\Std\Interfaces\iPoirotEntity;
+use Poirot\Std\Interfaces\ipEntity;
 
 trait EntityTrait
 {
@@ -35,7 +35,7 @@ trait EntityTrait
     /**
      * Construct
      *
-     * @param array|iPoirotEntity $props Properties
+     * @param array|ipEntity $props Properties
      *
      * @throws \Exception
      */
@@ -259,11 +259,11 @@ trait EntityTrait
     /**
      * Get a copy of properties as hydrate structure
      *
-     * @param iPoirotEntity $entity Entity
+     * @param ipEntity $entity Entity
      *
-     * @return iPoirotEntity
+     * @return ipEntity
      */
-    function getAs(iPoirotEntity $entity)
+    function getAs(ipEntity $entity)
     {
         return $entity->from($this)
             ->borrow();

@@ -1,12 +1,12 @@
 <?php
 namespace Poirot\Std\Interfaces;
 
-interface iPoirotOptions extends iOptionImplement
+interface ipOptions extends iOptionStruct
 {
     /**
      * Construct
      *
-     * @param array|iOptionImplement|mixed $options Options
+     * @param array|iOptionStruct|mixed $options Options
      */
     function __construct($options = null);
 }

@@ -1,7 +1,8 @@
 <?php
-namespace Poirot\Std;
+namespace Poirot\Std\Struct;
 
-use Poirot\Std\Traits\OpenOptionsTrait;
+use Poirot\Std\Interfaces\ipOptions;
+use Poirot\Std\Struct\Traits\OpenOptionsTrait;
 
 /*
  * $openOption = new class AnonymOptions extends OpenOptions
@@ -24,14 +25,14 @@ use Poirot\Std\Traits\OpenOptionsTrait;
  *
  */
 
-class OpenOptions implements Interfaces\iPoirotOptions
+class OpenOptions implements ipOptions
 {
     use OpenOptionsTrait;
 
     /**
      * Construct
      *
-     * @param array|Interfaces\iPoirotOptions $options Options
+     * @param array|ipOptions $options Options
      */
     function __construct($options = null)
     {

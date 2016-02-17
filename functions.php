@@ -10,7 +10,7 @@ namespace {
 
 namespace Poirot\Std
 {
-    trait BuilderSetterTrait
+    trait SetterBuilderTrait
     {
         /**
          * @var array List Setters By Priority

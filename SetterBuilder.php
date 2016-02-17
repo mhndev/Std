@@ -1,9 +1,9 @@
 <?php
 namespace Poirot\Std;
 
-class BuilderSetter 
+class SetterBuilder
 {
-    use BuilderSetterTrait;
+    use SetterBuilderTrait;
 
     /**
      * @var array List Setters By Priority
@@ -29,4 +29,3 @@ class BuilderSetter
             $this->setupFromArray($realm);
     }
 }
- 

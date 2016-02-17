@@ -1,14 +1,14 @@
 <?php
 namespace Poirot\Std\Interfaces;
 
-use Poirot\Std\AbstractOptions;
+use Poirot\Std\Struct\AbstractOptions;
 
 /**
  * The Class That Implement This Interface
  * Provide Some Options Configuration
  *
  */
-interface iOptionsProvider
+interface ipOptionsProvider
 {
     /**
      * @return AbstractOptions

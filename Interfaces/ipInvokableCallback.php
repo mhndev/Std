@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Std\Interfaces;
 
-interface iInvokableCallback extends iInvokable
+interface ipInvokableCallback extends ipInvokable
 {
     /**
      * Set Callable Closure For __invoke

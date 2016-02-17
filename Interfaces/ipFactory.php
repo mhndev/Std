@@ -1,7 +1,7 @@
 <?php
-namespace poirot\std\Poirot\Std\Interfaces\Pact;
+namespace poirot\std\Poirot\Std\Interfaces;
 
-interface iFactoryPact
+interface ipFactory
 {
     /**
      * Factory With Valuable Parameter
