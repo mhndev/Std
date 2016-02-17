@@ -1,5 +1,5 @@
 <?php
-namespace Poirot\Core\AbstractOptions;
+namespace Poirot\Std\AbstractOptions;
 
 final class PropsObject
 {

@@ -1,7 +1,7 @@
 <?php
-namespace Poirot\Core\Interfaces;
+namespace Poirot\Std\Interfaces;
 
-use Poirot\Core\AbstractOptions;
+use Poirot\Std\AbstractOptions;
 
 /**
  * The Class That Implement This Interface

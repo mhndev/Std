@@ -1,7 +1,7 @@
 <?php
-namespace Poirot\Core;
+namespace Poirot\Std;
 
-use Poirot\Core\Interfaces\iDataField;
+use Poirot\Std\Interfaces\iDataField;
 
 /*
 $dataField = new DataField();

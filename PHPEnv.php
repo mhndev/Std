@@ -1,7 +1,7 @@
 <?php
-namespace Poirot\Core;
+namespace Poirot\Std;
 
-use Poirot\Core\AbstractOptions;
+use Poirot\Std\AbstractOptions;
 
 /*
 

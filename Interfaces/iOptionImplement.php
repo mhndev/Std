@@ -1,7 +1,7 @@
 <?php
-namespace Poirot\Core\Interfaces;
+namespace Poirot\Std\Interfaces;
 
-use Poirot\Core\AbstractOptions\PropsObject;
+use Poirot\Std\AbstractOptions\PropsObject;
 
 interface iOptionImplement extends iMagicalFields, iDataSetConveyor
 {

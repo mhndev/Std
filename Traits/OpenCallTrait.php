@@ -1,5 +1,5 @@
 <?php
-namespace Poirot\Core\Traits;
+namespace Poirot\Std\Traits;
 
 /**
  * TODO Call by reference not working as expected
@@ -35,7 +35,7 @@ trait OpenCallTrait
         if (!is_object($class))
             throw new \Exception(sprintf(
                 'Given class must be an object (%s) given.'
-                , \Poirot\Core\flatten($class)
+                , \Poirot\Std\flatten($class)
             ));
 
         $this->_t__bindTo = $class;

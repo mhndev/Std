@@ -1,7 +1,7 @@
 <?php
-namespace Poirot\Core;
+namespace Poirot\Std;
 
-use Poirot\Core\Interfaces\EntityInterface;
+use Poirot\Std\Interfaces\EntityInterface;
 
 class Config extends Entity
 {

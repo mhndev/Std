@@ -1,7 +1,7 @@
 <?php
-namespace Poirot\Core;
+namespace Poirot\Std;
 
-use Poirot\Core\Traits\OpenCallTrait;
+use Poirot\Std\Traits\OpenCallTrait;
 
 class OpenCall
 {
@@ -20,7 +20,7 @@ class OpenCall
         if (!is_object($bindTo) && $bindTo !== null)
             throw new \InvalidArgumentException(sprintf(
                 'Invalid argument BindTo for OpenCall Construct, must given Object instead "%s" given.'
-                , \Poirot\Core\flatten($bindTo)
+                , \Poirot\Std\flatten($bindTo)
             ));
 
         if ($bindTo)

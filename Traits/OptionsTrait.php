@@ -1,10 +1,10 @@
 <?php
-namespace Poirot\Core\Traits;
+namespace Poirot\Std\Traits;
 
-use Poirot\Core;
-use Poirot\Core\AbstractOptions\PropsObject;
-use Poirot\Core\Interfaces\iDataSetConveyor;
-use Poirot\Core\Interfaces\iOptionImplement;
+use Poirot\Std;
+use Poirot\Std\AbstractOptions\PropsObject;
+use Poirot\Std\Interfaces\iDataSetConveyor;
+use Poirot\Std\Interfaces\iOptionImplement;
 
 /**
  * ignore:
@@ -59,7 +59,7 @@ trait OptionsTrait
         else
             throw new \InvalidArgumentException(sprintf(
                 'Can`t create class "%s" with option type(%s).'
-                , get_class($this), Core\flatten($options)
+                , get_class($this), Std\flatten($options)
             ));
 
         return $this;
@@ -105,7 +105,7 @@ trait OptionsTrait
             // only get same option object
             throw new \Exception(sprintf(
                 'Given Options Is Not Same As Provided Class Options. you given (%s).'
-                , Core\flatten($context)
+                , Std\flatten($context)
             ));
 
         $this->fromArray($context->toArray());
@@ -375,12 +375,12 @@ trait OptionsTrait
 
         if (!isset($this->normalizer['internal']))
             $this->normalizer['internal'] = function($key) {
-                return Core\sanitize_camelCase($key);
+                return Std\sanitize_camelCase($key);
             };
 
         if (!isset($this->normalizer['external']))
             $this->normalizer['external'] = function($key) {
-                return strtolower(Core\sanitize_under_score($key));
+                return strtolower(Std\sanitize_under_score($key));
             };
 
 

@@ -1,7 +1,7 @@
 <?php
-namespace Poirot\Core\PHPEnv;
+namespace Poirot\Std\PHPEnv;
 
-use Poirot\Core\PHPEnv;
+use Poirot\Std\PHPEnv;
 
 /**
  * - Enabling E_NOTICE, E_STRICT Error Messages

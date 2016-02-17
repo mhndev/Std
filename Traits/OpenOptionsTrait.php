@@ -1,8 +1,8 @@
 <?php
-namespace Poirot\Core\Traits;
+namespace Poirot\Std\Traits;
 
-use Poirot\Core;
-use Poirot\Core\AbstractOptions\PropsObject;
+use Poirot\Std;
+use Poirot\Std\AbstractOptions\PropsObject;
 
 /*
  * $openOption = new class OpenOptions {
@@ -181,7 +181,7 @@ trait OpenOptionsTrait
                 $writable[] = $key;
         }
 
-        $methodProps  = \Poirot\Core\array_merge($methodProps
+        $methodProps  = \Poirot\Std\array_merge($methodProps
             , [
                 'writable' => $writable,
                 'readable' => $readable

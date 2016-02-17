@@ -8,7 +8,7 @@ namespace {
     !defined('VOID') and define('VOID', "\0"/*uniqid('__not_set_value__')*/);
 }
 
-namespace Poirot\Core
+namespace Poirot\Std
 {
     trait BuilderSetterTrait
     {
@@ -126,7 +126,7 @@ namespace Poirot\Core
                         $a[] = $value;
                 }
                 elseif (is_array($value) && is_array($a[$key]))
-                    $a[$key] = \Poirot\Core\array_merge($a[$key], $value);
+                    $a[$key] = \Poirot\Std\array_merge($a[$key], $value);
                 else
                     $a[$key] = $value;
             } else
@@ -151,7 +151,7 @@ namespace Poirot\Core
                         $a[] = $value;
                 }
                 elseif (is_array($value) && is_array($a[$key]))
-                    $a[$key] = \Poirot\Core\array_merge_recursive($a[$key], $value);
+                    $a[$key] = \Poirot\Std\array_merge_recursive($a[$key], $value);
                 else {
                     $cv = $a[$key];
                     $a[$key] = [];
@@ -184,7 +184,7 @@ namespace Poirot\Core
         } elseif (is_object($value)) {
             $value = sprintf('%s:object(%s)', spl_object_hash($value), get_class($value));
         } elseif (is_resource($value)) {
-            $value = sprintf('resource(%s)', get_resource_type($value));
+            $value = sprintf('resource(%s-%s)', get_resource_type($value), $value);
         } elseif (is_array($value)) {
             foreach($value as $k => &$v)
                 $v = flatten($v);

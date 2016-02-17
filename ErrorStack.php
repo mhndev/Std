@@ -1,5 +1,5 @@
 <?php
-namespace Poirot\Core;
+namespace Poirot\Std;
 
 use ErrorException;
 

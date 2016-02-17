@@ -1,7 +1,7 @@
 <?php
-namespace Poirot\Core\PHPEnv;
+namespace Poirot\Std\PHPEnv;
 
-use Poirot\Core\PHPEnv;
+use Poirot\Std\PHPEnv;
 
 class ESPhpEnvironment extends PHPEnv
 {

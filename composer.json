@@ -1,6 +1,6 @@
 {
-    "name": "poirot/core",
-    "description": "Poirot Base Functionalities",
+    "name": "poirot/std",
+    "description": "Poirot Standard Libraries and Base Functionality.",
     "type"       : "library",
     "authors": [
         {
@@ -9,13 +9,13 @@
             "role": "Developer"
         }
     ],
-    "target-dir": "Poirot/Core",
+    "target-dir": "Poirot/Std",
     "autoload"  : {
         "psr-0": {
-            "Poirot\\Core": "."
+            "Poirot\\Std": "."
         },
         "files": [
-            "Core.php"
+            "functions.php"
         ]
     }
 }

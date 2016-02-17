@@ -1,5 +1,5 @@
 <?php
-namespace Poirot\Core\Interfaces;
+namespace Poirot\Std\Interfaces;
 
 /**
  * class DataField()

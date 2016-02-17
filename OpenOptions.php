@@ -1,7 +1,7 @@
 <?php
-namespace Poirot\Core;
+namespace Poirot\Std;
 
-use Poirot\Core\Traits\OpenOptionsTrait;
+use Poirot\Std\Traits\OpenOptionsTrait;
 
 /*
  * $openOption = new class AnonymOptions extends OpenOptions

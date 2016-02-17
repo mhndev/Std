@@ -1,6 +1,6 @@
 <?php
-namespace Poirot\Core\PHPEnv;
-use Poirot\Core\PHPEnv;
+namespace Poirot\Std\PHPEnv;
+use Poirot\Std\PHPEnv;
 
 /**
  * - Display Errors Off

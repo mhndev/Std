@@ -1,5 +1,5 @@
 <?php
-namespace Poirot\Core\Traits;
+namespace Poirot\Std\Traits;
 
 trait CloneTrait
 {

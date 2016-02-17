@@ -1,11 +1,11 @@
 <?php
-namespace Poirot\Core\Traits;
+namespace Poirot\Std\Traits;
 
 !defined('POIROT_CORE_LOADED') and include_once dirname(__FILE__).'/../Core.php';
 
-use Poirot\Core;
-use Poirot\Core\Interfaces\iDataSetConveyor;
-use Poirot\Core\Interfaces\iPoirotEntity;
+use Poirot\Std;
+use Poirot\Std\Interfaces\iDataSetConveyor;
+use Poirot\Std\Interfaces\iPoirotEntity;
 
 trait EntityTrait
 {
