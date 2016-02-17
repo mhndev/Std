@@ -26,13 +26,6 @@ trait EntityTrait
     ];
 
     /**
-     * SetFrom Resource
-     *
-     * @var mixed|$this
-     */
-    protected $_resource;
-
-    /**
      * Construct
      *
      * @param array|ipEntity $props Properties
@@ -123,7 +116,6 @@ trait EntityTrait
     {
         $this->__validateProps($resource);
 
-        $this->_resource = $resource;
         $resource = $this->__setFrom($resource);
 
         if (is_array($resource))
@@ -157,22 +149,6 @@ trait EntityTrait
                 'Resource must be instance of EntityInterface or array but "%s" given.'
                 , is_object($resource) ? get_class($resource) : gettype($resource)
             ));
-    }
-
-    /**
-     * Get Resource Data
-     *
-     * - if no resource data was set on from(method)
-     *   return $this
-     *
-     * @return mixed|$this
-     */
-    function getResource()
-    {
-        if (!$this->_resource)
-            $this->_resource = $this;
-
-        return $this->_resource;
     }
 
     /**

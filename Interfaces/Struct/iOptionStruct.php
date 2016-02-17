@@ -1,38 +1,24 @@
 <?php
 namespace Poirot\Std\Interfaces\Struct;
 
-use Poirot\Std\AbstractOptions\PropsObject;
-use Poirot\Std\Interfaces\ipOptions;
+use Poirot\Std\Struct\AbstractOptions\PropsObject;
 
 interface iOptionStruct extends iStructDataConveyor
 {
     /**
      * Set Options
      *
-     * @param array|ipOptions|mixed $options
+     * !! set options from same(instance of this) option object
+     *    so we can check for private and write_only methods
+     *    inside Options Object to get fully coincident copy
+     *    of Options Class Object
+     *
+     *
+     * @param array|iOptionStruct|mixed $options
      *
      * @return $this
      */
     function from($options);
-
-    /**
-     * Set Options From Same Option Object
-     *
-     * note: it will take an option object instance of $this
-     *       OpenOptions only take OpenOptions as argument
-     *
-     * - also you can check for private and write_only
-     *   methods inside Options Object to get fully coincident copy
-     *   of Options Class Object
-     *
-     * @param iOptionStruct $context Options Object
-     *
-     * @throws \Exception
-     * @return $this
-     */
-    function fromSimilar(/*iOptionImplement*/ $context);
-    // PHP rise Deceleration Fatal Error even on options
-    // that is extend iPoirotOptions interface
 
     /**
      * Get Options Properties Information

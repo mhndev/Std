@@ -6,7 +6,7 @@ use Poirot\Std\Interfaces\Struct\iEntity;
 interface ipEntity extends iEntity
 {
     /**
-     * Get a copy of properties as hydrate structure
+     * Get a copy of properties as hydrate given entity struct
      *
      * @param ipEntity $entity Entity
      *

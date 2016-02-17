@@ -16,16 +16,6 @@ interface iEntity extends iStructDataConveyor
     function from($resource);
 
     /**
-     * Get Resource Data
-     *
-     * - if no resource data was set on from(method)
-     *   return $this
-     *
-     * @return mixed|$this
-     */
-    function getResource();
-
-    /**
      * Set Entity
      *
      * @param string $key   Entity Key
