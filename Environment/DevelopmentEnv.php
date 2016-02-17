@@ -1,14 +1,12 @@
 <?php
-namespace Poirot\Std\PHPEnv;
-
-use Poirot\Std\PHPEnv;
+namespace Poirot\Std\Environment;
 
 /**
  * - Enabling E_NOTICE, E_STRICT Error Messages
  *
  */
 
-class ESDevelopment extends PHPEnv
+class DevelopmentEnv extends BaseEnv
 {
     /** PHP 5.3 or later, the default value is E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED */
     protected $errorReporting;

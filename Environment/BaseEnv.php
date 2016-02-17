@@ -1,5 +1,5 @@
 <?php
-namespace Poirot\Std;
+namespace Poirot\Std\Environment;
 
 use Poirot\Std\AbstractOptions;
 
@@ -11,7 +11,7 @@ echo $not_defined_variable;
 
 */
 
-class PHPEnv extends AbstractOptions
+class BaseEnv extends AbstractOptions
 {
     protected $displayErrors;
     protected $errorReporting;
@@ -21,9 +21,9 @@ class PHPEnv extends AbstractOptions
     /**
      * Setup Php Environment With Given Settings
      *
-     * @param PHPEnv $settings
+     * @param BaseEnv $settings
      */
-    static function setupSystemWide(PHPEnv $settings = null)
+    static function setupSystemWide(BaseEnv $settings = null)
     {
         if ($settings === null)
             $settings = new static;

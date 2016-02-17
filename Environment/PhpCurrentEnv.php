@@ -1,9 +1,7 @@
 <?php
-namespace Poirot\Std\PHPEnv;
+namespace Poirot\Std\Environment;
 
-use Poirot\Std\PHPEnv;
-
-class ESPhpEnvironment extends PHPEnv
+class PhpCurrentEnv extends BaseEnv
 {
     /**
      * @return mixed

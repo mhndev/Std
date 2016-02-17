@@ -1,6 +1,5 @@
 <?php
-namespace Poirot\Std\PHPEnv;
-use Poirot\Std\PHPEnv;
+namespace Poirot\Std\Environment;
 
 /**
  * - Display Errors Off
@@ -8,7 +7,7 @@ use Poirot\Std\PHPEnv;
  *
  */
 
-class ESProduction extends PHPEnv
+class ProductionEnv extends BaseEnv
 {
     /**
      * @return mixed
