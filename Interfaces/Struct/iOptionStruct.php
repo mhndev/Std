@@ -3,7 +3,7 @@ namespace Poirot\Std\Interfaces\Struct;
 
 use Poirot\Std\Struct\AbstractOptions\PropsObject;
 
-interface iOptionStruct extends iStruct
+interface iOptionDataStruct extends iDataStruct
 {
     /**
      * Set Options
@@ -14,7 +14,7 @@ interface iOptionStruct extends iStruct
      *    of Options Class Object
      *
      *
-     * @param array|iOptionStruct|mixed $data
+     * @param array|iOptionDataStruct|mixed $data
      *
      * @return $this
      */

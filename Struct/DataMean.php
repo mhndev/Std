@@ -16,7 +16,7 @@ var_dump($test);            // array(1) { [0]=> string(11) "insert item" }
 var_dump($mean->test); // array(1) { [0]=> string(11) "insert item" }
 */
 
-class Mean extends AbstractStruct
+class DataMean extends AbstractDataStruct
 {
     protected $properties = [];
 
@@ -93,5 +93,19 @@ class Mean extends AbstractStruct
     {
         if ($this->__isset($key))
             unset($this->properties[$key]);
+    }
+
+    /**
+     * Count elements of an object
+     * @link http://php.net/manual/en/countable.count.php
+     * @return int The custom count as an integer.
+     * </p>
+     * <p>
+     * The return value is cast to an integer.
+     * @since 5.1.0
+     */
+    public function count()
+    {
+        return count($this->properties);
     }
 }

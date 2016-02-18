@@ -9,7 +9,7 @@ namespace Poirot\Std\Interfaces\Struct;
  *
  * ! iterator_to_array
  */
-interface iStruct extends \IteratorAggregate
+interface iDataStruct extends \IteratorAggregate, \Countable
 {
     /**
      * Set Struct Data From Array
@@ -33,6 +33,20 @@ interface iStruct extends \IteratorAggregate
      * @return bool
      */
     function isEmpty();
+
+    /**
+     * Proxy to __isset
+     * @param mixed $key
+     * @return bool
+     */
+    function has($key);
+
+    /**
+     * Proxy to __unset
+     * @param mixed $key
+     * @return $this
+     */
+    function del($key);
 
     // ...
 

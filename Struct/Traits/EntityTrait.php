@@ -4,7 +4,7 @@ namespace Poirot\Std\Struct\Traits;
 !defined('POIROT_CORE_LOADED') and include_once dirname(__FILE__) . '/../functions.php';
 
 use Poirot\Std;
-use Poirot\Std\Interfaces\Struct\iStruct;
+use Poirot\Std\Interfaces\Struct\iDataStruct;
 use Poirot\Std\Interfaces\ipEntity;
 
 trait EntityTrait
@@ -61,7 +61,7 @@ trait EntityTrait
      */
     protected function __setFrom($resource)
     {
-        if ($resource instanceof iStruct)
+        if ($resource instanceof iDataStruct)
             $resource = $resource->toArray();
 
         return $resource;
@@ -69,7 +69,7 @@ trait EntityTrait
 
     protected function __validateProps($resource)
     {
-        if (!$resource instanceof iStruct && !is_array($resource))
+        if (!$resource instanceof iDataStruct && !is_array($resource))
             throw new \InvalidArgumentException(sprintf(
                 'Resource must be instance of EntityInterface or array but "%s" given.'
                 , is_object($resource) ? get_class($resource) : gettype($resource)

@@ -1,10 +1,10 @@
 <?php
 namespace Poirot\Std\Struct;
 
-use Poirot\Std\Interfaces\Struct\iStruct;
+use Poirot\Std\Interfaces\Struct\iDataStruct;
 use Traversable;
 
-abstract class AbstractStruct implements iStruct
+abstract class AbstractDataStruct implements iDataStruct
 {
     /**
      * AbstractStruct constructor.
@@ -63,6 +63,27 @@ abstract class AbstractStruct implements iStruct
         }
 
         return $isEmpty;
+    }
+
+    /**
+     * Proxy to __isset
+     * @param mixed $key
+     * @return bool
+     */
+    function has($key)
+    {
+        return $this->__isset($key);
+    }
+
+    /**
+     * Proxy to __unset
+     * @param mixed $key
+     * @return $this
+     */
+    function del($key)
+    {
+        $this->__unset($key);
+        return $this;
     }
 
     /**

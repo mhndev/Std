@@ -2,7 +2,7 @@
 namespace Poirot\Std\Struct;
 
 use Poirot\Std;
-use Poirot\Std\Interfaces\Struct\iOptionStruct;
+use Poirot\Std\Interfaces\Struct\iOptionDataStruct;
 
 /**
  * Here is a simple optionsClass example:
@@ -67,14 +67,14 @@ use Poirot\Std\Interfaces\Struct\iOptionStruct;
  *
  */
 abstract class AbstractOptions
-    implements iOptionStruct
+    implements iOptionDataStruct
 {
     use Std\Struct\Traits\OptionsTrait;
 
     /**
      * Construct
      *
-     * @param array|iOptionStruct $options Options
+     * @param array|iOptionDataStruct $options Options
      */
     function __construct($options = null)
     {

@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Std\Interfaces\Struct;
 
-interface iObjectCollection extends \Iterator, \Countable
+interface iObjectCollection extends iCollection
 {
     /**
      * Attach Object
@@ -22,16 +22,7 @@ interface iObjectCollection extends \Iterator, \Countable
      * @throws \InvalidArgumentException Object Type Mismatch
      * @return string ETag Hash Identifier of object
      */
-    function attach($object, array $data = []);
-
-    /**
-     * Detach By ETag Hash Or Object Match
-     *
-     * @param string|object $hashOrObject
-     *
-     * @return boolean Return true on detach match otherwise false
-     */
-    function detach($hashOrObject);
+    function insert($object, array $data = []);
 
     /**
      * Checks if the storage contains a specific object
@@ -43,13 +34,24 @@ interface iObjectCollection extends \Iterator, \Countable
     function has($hashOrObject);
 
     /**
+     * Detach By ETag Hash Or Object Match
+     *
+     * @param string|object $hashOrObject
+     *
+     * @return boolean Return true on detach match otherwise false
+     */
+    function del($hashOrObject);
+
+    // ...
+
+    /**
      * Search for first object that match accurate data
      *
      * @param array $data
      *
-     * @return array[object]
+     * @return \Traversable|\Generator
      */
-    function search(array $data);
+    function find(array $data);
 
     /**
      * Get Tag Data Of Specific Object
@@ -85,5 +87,5 @@ interface iObjectCollection extends \Iterator, \Countable
      *
      * @return string
      */
-    function getETag($object);
+    function genETag($object);
 }

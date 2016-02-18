@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Std\Struct;
 
-use Poirot\Std\Interfaces\Struct\iOptionStruct;
+use Poirot\Std\Interfaces\Struct\iOptionDataStruct;
 use Poirot\Std\Struct\Traits\OpenOptionsTrait;
 
 /*
@@ -25,14 +25,14 @@ use Poirot\Std\Struct\Traits\OpenOptionsTrait;
  *
  */
 
-class OpenOptions implements iOptionStruct
+class OpenOptions implements iOptionDataStruct
 {
     use OpenOptionsTrait;
 
     /**
      * Construct
      *
-     * @param array|iOptionStruct $options Options
+     * @param array|iOptionDataStruct $options Options
      */
     function __construct($options = null)
     {

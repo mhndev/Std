@@ -1,9 +1,9 @@
 <?php
 namespace Poirot\Std\Interfaces;
 
-use Poirot\Std\Interfaces\Struct\iEntity;
+use Poirot\Std\Interfaces\Struct\iDataEntity;
 
-interface ipEntity extends iEntity
+interface ipEntity extends iDataEntity
 {
     /**
      * Get a copy of properties as hydrate given entity struct

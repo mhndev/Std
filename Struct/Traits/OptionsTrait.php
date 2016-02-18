@@ -2,8 +2,8 @@
 namespace Poirot\Std\Struct\Traits;
 
 use Poirot\Std;
-use Poirot\Std\Interfaces\Struct\iOptionStruct;
-use Poirot\Std\Interfaces\Struct\iStruct;
+use Poirot\Std\Interfaces\Struct\iOptionDataStruct;
+use Poirot\Std\Interfaces\Struct\iDataStruct;
 use Poirot\Std\Struct\AbstractOptions\PropsObject;
 
 /**
@@ -42,7 +42,7 @@ trait OptionsTrait
      *
      * - Object instance of this call fromSimilar
      *
-     * @param array|iOptionStruct|iStruct $options
+     * @param array|iOptionDataStruct|iDataStruct $options
      *
      * @return $this
      */
@@ -51,7 +51,7 @@ trait OptionsTrait
         if ($options instanceof $this)
             return $this->fromSimilar($options);
 
-        if ($options instanceof iStruct)
+        if ($options instanceof iDataStruct)
             $options = $options->toArray();
 
         if (is_array($options))
@@ -94,7 +94,7 @@ trait OptionsTrait
      *   methods inside Options Object to get fully coincident copy
      *   of Options Class Object
      *
-     * @param iOptionStruct $context Options Object
+     * @param iOptionDataStruct $context Options Object
      *
      * @throws \Exception
      * @return $this

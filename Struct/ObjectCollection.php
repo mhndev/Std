@@ -3,7 +3,7 @@ namespace Poirot\Std\Struct;
 
 use Poirot\Std\Interfaces\Struct\iObjectCollection;
 
-class ObjectCollection implements iObjectCollection
+class ObjectCollection implements iObjectCollection, \Iterator
 {
     protected $_objs  = [
         /*
@@ -42,16 +42,16 @@ class ObjectCollection implements iObjectCollection
      * @throws \InvalidArgumentException Object Type Mismatch
      * @return string ETag Hash Identifier of object
      */
-    function attach($object, array $data = [])
+    function insert($object, array $data = [])
     {
-        $this->_validateObject($object);
+        $this->doValidateObject($object);
 
         if (!empty($data) && $data == array_values($data))
             throw new \InvalidArgumentException('Data tags must be associative array.');
 
-        $data['etag'] = $this->getETag($object); // so we can search by etag hash
+        $data['etag'] = $this->genETag($object); // so we can search by etag hash
 
-        $hash = $this->getETag($object);
+        $hash = $this->genETag($object);
         if (isset($this->_objs[$hash]))
             ## merge data if object exists
             $data = array_merge($this->_objs[$hash]['data'], $data);
@@ -66,34 +66,13 @@ class ObjectCollection implements iObjectCollection
      *
      * @throws \InvalidArgumentException
      */
-    protected function _validateObject($object)
+    protected function doValidateObject($object)
     {
-        if (!is_object($object))
+        if ($object === null || (empty($object) && $object !==0 && $object !=='0') )
             throw new \InvalidArgumentException(sprintf(
-                'Object must be an object interface, "%s" given.'
-                , is_object($object) ? get_class($object) : gettype($object)
+                'Object can`t be empty, given: (%s).'
+                , \Poirot\Std\flatten($object)
             ));
-    }
-
-    /**
-     * Detach By ETag Hash Or Object Match
-     *
-     * @param string|object $hashOrObject
-     *
-     * @return boolean Return true on detach match otherwise false
-     */
-    function detach($hashOrObject)
-    {
-        $hash = $hashOrObject;
-        if (is_object($hashOrObject))
-            $hash = $this->getETag($hashOrObject);
-
-        if (!array_key_exists($hash, $this->_objs))
-            return false;
-
-        unset($this->_objs[$hash]);
-
-        return true;
     }
 
     /**
@@ -107,41 +86,77 @@ class ObjectCollection implements iObjectCollection
     {
         $hash = $hashOrObject;
         if (is_object($hashOrObject))
-            $hash = $this->getETag($hashOrObject);
+            $hash = $this->genETag($hashOrObject);
 
         return (array_key_exists($hash, $this->_objs));
     }
 
     /**
+     * Detach By ETag Hash Or Object Match
+     *
+     * @param string|object $hashOrObject
+     *
+     * @return boolean Return true on detach match otherwise false
+     */
+    function del($hashOrObject)
+    {
+        $hash = $hashOrObject;
+        if (is_object($hashOrObject))
+            $hash = $this->genETag($hashOrObject);
+
+        if (!array_key_exists($hash, $this->_objs))
+            return false;
+
+        unset($this->_objs[$hash]);
+
+        return true;
+    }
+
+    /**
+     * // TODO 7 support keywords as method ame
+     * Remove All Entities Item
+     *
+     * @return $this
+     */
+    function emptyy()
+    {
+        foreach($this as $key => $v)
+            $this->del($key);
+
+        return $this;
+    }
+
+    /**
      * Search for first object that match accurate data
      *
-     * // TODO search case-insensitive
+     * - with data[':etag' => 'xxx'] you can search for
+     *   specific object by hash tag
      *
      * @param array $data
      *
-     * @return array[object]
+     * @return \Traversable|\Generator
      */
-    function search(array $data)
+    function find(array $data)
     {
         if ($data == array_values($data))
             throw new \InvalidArgumentException('Data tags must be associative array.');
 
-        $return = [];
-
         // .....................
-        if (isset($data['etag']) && $hash = $data['etag'])
+        if (isset($data[':etag']) && $hash = $data[':etag'])
             // ETags is unique and if present only search for etag match
-            if ($this->has($hash))
-                return [ $hash => $this->_objs[$hash]['object'] ];
+            if ($this->has($hash)) {
+                yield $hash => $this->_objs[$hash]['object'];
+                return;
+            }
         // ............................................................
 
         foreach($this->_objs as $hash => $obAr) {
             $obData = $obAr['data'];
-            if ($data == array_intersect($obData, $data))
-                $return[$hash] = $this->_objs[$hash]['object'];
+            if ($data == array_intersect_assoc($obData, $data))
+                yield $hash => $this->_objs[$hash]['object'];
         }
 
-        return $return;
+        return;
     }
 
     /**
@@ -160,7 +175,7 @@ class ObjectCollection implements iObjectCollection
         if (!$this->has($object))
             throw new \Exception('Object Not Found.');
 
-        $hash = $this->getETag($object);
+        $hash = $this->genETag($object);
 
         return $this->_objs[$hash]['data'];
     }
@@ -185,7 +200,7 @@ class ObjectCollection implements iObjectCollection
         if ($data == array_values($data))
             throw new \InvalidArgumentException('Data tags must be associative array.');
 
-        $hash = $this->getETag($object);
+        $hash = $this->genETag($object);
 
         $this->_objs[$hash]['data'] = $data;
 
@@ -199,9 +214,9 @@ class ObjectCollection implements iObjectCollection
      *
      * @return string
      */
-    function getETag($object)
+    function genETag($object)
     {
-        $this->_validateObject($object);
+        $this->doValidateObject($object);
 
         $hash = md5(\Poirot\Std\flatten($object));
 
