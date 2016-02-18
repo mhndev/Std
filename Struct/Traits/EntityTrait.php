@@ -4,7 +4,7 @@ namespace Poirot\Std\Struct\Traits;
 !defined('POIROT_CORE_LOADED') and include_once dirname(__FILE__) . '/../functions.php';
 
 use Poirot\Std;
-use Poirot\Std\Interfaces\Struct\iStructDataConveyor;
+use Poirot\Std\Interfaces\Struct\iStruct;
 use Poirot\Std\Interfaces\ipEntity;
 
 trait EntityTrait
@@ -25,17 +25,55 @@ trait EntityTrait
         # 'hash_string' => $none_string_property_value
     ];
 
+
     /**
-     * Construct
+     * Set Entity From A Given Resource
      *
-     * @param array|ipEntity $props Properties
+     * - you have to set resource internally that can given
+     *   by getResource method later
      *
-     * @throws \Exception
+     * @param mixed $resource
+     *
+     * @throws \InvalidArgumentException
+     * @return $this
      */
-    function __construct($props = null)
+    function from($resource)
     {
-        if ($props)
-            $this->from($props);
+        $this->__validateProps($resource);
+
+        $resource = $this->__setFrom($resource);
+
+        if (is_array($resource))
+            $this->fromArray($resource);
+
+        return $this;
+    }
+
+    /**
+     * Set Properties
+     *
+     * - You can implement this method on subclasses
+     *
+     * @param mixed $resource
+     *
+     * @throws \InvalidArgumentException
+     * @return array|void
+     */
+    protected function __setFrom($resource)
+    {
+        if ($resource instanceof iStruct)
+            $resource = $resource->toArray();
+
+        return $resource;
+    }
+
+    protected function __validateProps($resource)
+    {
+        if (!$resource instanceof iStruct && !is_array($resource))
+            throw new \InvalidArgumentException(sprintf(
+                'Resource must be instance of EntityInterface or array but "%s" given.'
+                , is_object($resource) ? get_class($resource) : gettype($resource)
+            ));
     }
 
     /**
@@ -101,55 +139,6 @@ trait EntityTrait
             else
                 return md5(serialize($prop));
         }
-
-    /**
-     * Set Entity From A Given Resource
-     *
-     * - you have to set resource internally that can given
-     *   by getResource method later
-     *
-     * @param mixed $resource
-     *
-     * @return $this
-     */
-    function from($resource)
-    {
-        $this->__validateProps($resource);
-
-        $resource = $this->__setFrom($resource);
-
-        if (is_array($resource))
-            $this->fromArray($resource);
-
-        return $this;
-    }
-
-    /**
-     * Set Properties
-     *
-     * - You can implement this method on subclasses
-     *
-     * @param mixed $resource
-     *
-     * @throws \InvalidArgumentException
-     * @return array|void
-     */
-    protected function __setFrom($resource)
-    {
-        if ($resource instanceof iStructDataConveyor)
-            $resource = $resource->toArray();
-
-        return $resource;
-    }
-
-    protected function __validateProps($resource)
-    {
-        if (!$resource instanceof iStructDataConveyor && !is_array($resource))
-            throw new \InvalidArgumentException(sprintf(
-                'Resource must be instance of EntityInterface or array but "%s" given.'
-                , is_object($resource) ? get_class($resource) : gettype($resource)
-            ));
-    }
 
     /**
      * Has Property

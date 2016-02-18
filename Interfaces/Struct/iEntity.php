@@ -1,20 +1,8 @@
 <?php
 namespace Poirot\Std\Interfaces\Struct;
 
-interface iEntity extends iStructDataConveyor
+interface iEntity extends iStruct
 {
-    /**
-     * Set Entity From A Given Resource
-     *
-     * - you have to set resource internally that can given
-     *   by getResource method later
-     *
-     * @param mixed $resource
-     *
-     * @return $this
-     */
-    function from($resource);
-
     /**
      * Set Entity
      *

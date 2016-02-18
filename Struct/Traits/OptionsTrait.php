@@ -3,7 +3,7 @@ namespace Poirot\Std\Struct\Traits;
 
 use Poirot\Std;
 use Poirot\Std\Interfaces\Struct\iOptionStruct;
-use Poirot\Std\Interfaces\Struct\iStructDataConveyor;
+use Poirot\Std\Interfaces\Struct\iStruct;
 use Poirot\Std\Struct\AbstractOptions\PropsObject;
 
 /**
@@ -42,7 +42,7 @@ trait OptionsTrait
      *
      * - Object instance of this call fromSimilar
      *
-     * @param array|iOptionStruct|iStructDataConveyor $options
+     * @param array|iOptionStruct|iStruct $options
      *
      * @return $this
      */
@@ -51,7 +51,7 @@ trait OptionsTrait
         if ($options instanceof $this)
             return $this->fromSimilar($options);
 
-        if ($options instanceof iStructDataConveyor)
+        if ($options instanceof iStruct)
             $options = $options->toArray();
 
         if (is_array($options))

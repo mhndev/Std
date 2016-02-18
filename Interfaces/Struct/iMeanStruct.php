@@ -11,7 +11,7 @@ namespace Poirot\Std\Interfaces\Struct;
  * DataField->field = 1;
  *
  */
-interface iMeanStruct
+interface iMeanStruct extends iStruct
 {
     /**
      * @param string $key
