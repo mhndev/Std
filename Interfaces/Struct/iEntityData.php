@@ -6,6 +6,8 @@ interface iEntityData extends iDataStruct
     /**
      * Set Entity
      *
+     * - values that set to null must be unset from entity
+     *
      * @param mixed      $key   Entity Key
      * @param mixed|null $value Entity Value
      *                          NULL value for a property considered __isset false
@@ -20,6 +22,7 @@ interface iEntityData extends iDataStruct
      * @param mixed $key     Entity Key
      * @param null  $default Default If Not Value/Key Exists
      *
+     * @throws \Exception Value not found
      * @return mixed|null NULL value for a property considered __isset false
      */
     function get($key, $default = null);
