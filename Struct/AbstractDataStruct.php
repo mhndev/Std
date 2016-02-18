@@ -45,7 +45,7 @@ abstract class AbstractDataStruct implements iDataStruct
     function emptyy()
     {
         foreach($this as $k => $v)
-            $this->__unset($k);
+            $this->del($k);
 
         return $this;
     }
@@ -63,27 +63,6 @@ abstract class AbstractDataStruct implements iDataStruct
         }
 
         return $isEmpty;
-    }
-
-    /**
-     * Proxy to __isset
-     * @param mixed $key
-     * @return bool
-     */
-    function has($key)
-    {
-        return $this->__isset($key);
-    }
-
-    /**
-     * Proxy to __unset
-     * @param mixed $key
-     * @return $this
-     */
-    function del($key)
-    {
-        $this->__unset($key);
-        return $this;
     }
 
     /**

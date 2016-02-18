@@ -1,10 +1,10 @@
 <?php
 namespace Poirot\Std\Struct;
 
-use Poirot\Std\Interfaces\Struct\iCollection;
+use Poirot\Std\Interfaces\Struct\iCollectionStruct;
 
-class PriorityCollection extends \SplPriorityQueue
-    implements iCollection
+class PriorityCollectionStruct extends \SplPriorityQueue
+    implements iCollectionStruct
 {
     protected $__sdec = PHP_INT_MAX;
 

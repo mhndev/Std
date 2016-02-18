@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Std\Interfaces\Struct;
 
-interface iCollection extends /*\Traversable,*/ \Countable
+interface iCollectionStruct extends /*\Traversable,*/ \Countable
 {
     /**
      * Insert Data Into Collection

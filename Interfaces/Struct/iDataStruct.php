@@ -35,32 +35,16 @@ interface iDataStruct extends \IteratorAggregate, \Countable
     function isEmpty();
 
     /**
-     * Proxy to __isset
+     * NULL value for a property considered __isset false
      * @param mixed $key
      * @return bool
      */
     function has($key);
 
     /**
-     * Proxy to __unset
+     * NULL value for a property considered __isset false
      * @param mixed $key
      * @return $this
      */
     function del($key);
-
-    // ...
-
-    /**
-     * NULL value for a property considered __isset false
-     * @param string $key
-     * @return bool
-     */
-    function __isset($key);
-
-    /**
-     * NULL value for a property considered __isset false
-     * @param string $key
-     * @return void
-     */
-    function __unset($key);
 }

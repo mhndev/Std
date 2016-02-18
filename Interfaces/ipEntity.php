@@ -1,18 +1,18 @@
 <?php
 namespace Poirot\Std\Interfaces;
 
-use Poirot\Std\Interfaces\Struct\iDataEntity;
+use Poirot\Std\Interfaces\Struct\iEntityData;
 
-interface ipEntity extends iDataEntity
+interface ipEntityData extends iEntityData
 {
     /**
      * Get a copy of properties as hydrate given entity struct
      *
-     * @param ipEntity $entity Entity
+     * @param ipEntityData $entity Entity
      *
      * @return mixed
      */
-    function getAs(ipEntity $entity);
+    function getAs(ipEntityData $entity);
 
     /**
      * Output Conveyor Props. as desired manipulated data struct.

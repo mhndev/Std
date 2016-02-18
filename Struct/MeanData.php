@@ -4,7 +4,7 @@ namespace Poirot\Std\Struct;
 use Traversable;
 
 /*
-$mean = new DataField();
+$mean = new MeanData();
 $mean->{ (string) this will converted to string by php };
 
 $mean->test = [];
@@ -16,7 +16,7 @@ var_dump($test);            // array(1) { [0]=> string(11) "insert item" }
 var_dump($mean->test); // array(1) { [0]=> string(11) "insert item" }
 */
 
-class DataMean extends AbstractDataStruct
+class MeanData extends AbstractDataStruct
 {
     protected $properties = [];
 
@@ -56,7 +56,7 @@ class DataMean extends AbstractDataStruct
     function __set($key, $value)
     {
         if ($value === null)
-            return $this->__unset($key);
+            return $this->del($key);
 
         $this->properties[$key] = $value;
     }
@@ -67,7 +67,7 @@ class DataMean extends AbstractDataStruct
      */
     function &__get($key)
     {
-        if (!$this->__isset($key))
+        if (!$this->has($key))
             $this->properties[$key] = null;
 
         $x = &$this->properties[$key];
@@ -79,9 +79,30 @@ class DataMean extends AbstractDataStruct
      * @param string $key
      * @return bool
      */
-    function __isset($key)
+    function has($key)
     {
         return (array_key_exists($key, $this->properties)) && $this->properties[$key] !== null;
+    }
+
+    /**
+     * NULL value for a property considered __isset false
+     * @param string $key
+     * @return bool
+     */
+    function __isset($key)
+    {
+        return $this->has($key);
+    }
+
+    /**
+     * NULL value for a property considered __isset false
+     * @param string $key
+     * @return void
+     */
+    function del($key)
+    {
+        if ($this->__isset($key))
+            unset($this->properties[$key]);
     }
 
     /**
@@ -91,8 +112,7 @@ class DataMean extends AbstractDataStruct
      */
     function __unset($key)
     {
-        if ($this->__isset($key))
-            unset($this->properties[$key]);
+        $this->del($key);
     }
 
     /**

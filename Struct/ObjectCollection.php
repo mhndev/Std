@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Std\Struct;
 
-use Poirot\Std\Interfaces\Struct\iObjectCollection;
+use Poirot\Std\Interfaces\Struct\iObjectCollectionStruct;
 
 /*
 $c = new ObjectCollection();
@@ -20,14 +20,14 @@ $data = [
 ];
 $c->insert(new DataMean($data), $data);
 print PHP_EOL. sprintf('You Add %s item(s) into collection.', count($c));
-foreach ($c->find(['firstName' => 'Payam',]) as $person)
+foreach ($c->find(['firstName' => 'Payam',]) as $hash => $person)
     print PHP_EOL.( $person->firstName );
 
 print PHP_EOL;
 die('>_');
 */
 
-class ObjectCollection implements iObjectCollection, \Iterator
+class ObjectCollection implements iObjectCollectionStruct, \Iterator
 {
     protected $_objs  = [
         /*
