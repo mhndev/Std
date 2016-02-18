@@ -3,6 +3,30 @@ namespace Poirot\Std\Struct;
 
 use Poirot\Std\Interfaces\Struct\iObjectCollection;
 
+/*
+$c = new ObjectCollection();
+
+$data = [
+    'firstName' => 'Payam',
+    'lastName' => 'Naderi',
+    'birthDate' => '1983-08-13',
+];
+$c->insert(new DataMean($data), /* info tags for this data * / $data);
+
+$data = [
+    'firstName' => 'Payam',
+    'lastName'  => 'Ezzati',
+    'birthDate' => '1983-08-13',
+];
+$c->insert(new DataMean($data), $data);
+print PHP_EOL. sprintf('You Add %s item(s) into collection.', count($c));
+foreach ($c->find(['firstName' => 'Payam',]) as $person)
+    print PHP_EOL.( $person->firstName );
+
+print PHP_EOL;
+die('>_');
+*/
+
 class ObjectCollection implements iObjectCollection, \Iterator
 {
     protected $_objs  = [
