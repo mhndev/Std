@@ -7,18 +7,29 @@ use Traversable;
 
 use Poirot\Std;
 
+/*
+$data = function() {
+    yield [0,1]            => ['this is data for this column'];
+    yield new \Directory() => 'this is value for Directory as a key.';
+};
+
+$entity = new Entity($data());
+
+$entity->set([0,1], ['this is data for this column']);
+$entity->set(new \Directory(), 'this is value for Directory as a key.');
+
+foreach($entity as $k => $v)
+        // $k: array, \Directory
+*/
+
+
 class Entity extends AbstractDataStruct
     implements Std\Interfaces\Struct\iEntityData
 {
-    // use Std\Struct\Traits\EntityTrait;
+    /** @var array Key/Values */
+    protected $_properties = [];
 
-    /**
-     * Entity's items
-     *
-     * @var array
-     */
-    protected $properties = [];
-
+    /** @var array Mapped None scalar as keys */
     protected $__mapedPropObjects = [
         # 'hash_string' => $none_scalar_key_self
     ];
@@ -135,13 +146,8 @@ class Entity extends AbstractDataStruct
      */
     protected function __normalizeKey($key)
     {
-        static $_c__normalized;
-
-        if (isset($_c__normalized[$key]))
-            return $_c__normalized[$key];
-
         if (!is_string($key) && !is_numeric($key))
-            $_c__normalized[$key] = $key = md5(Std\flatten($key));
+            $key = md5(Std\flatten($key));
 
         return $key;
     }
@@ -151,32 +157,9 @@ class Entity extends AbstractDataStruct
      */
     protected function &__attainDataArrayReference()
     {
-        return $this->properties;
+        return $this->_properties;
     }
 
-
-    /**
-     * // TODO deprecate and test by foreach to get keys
-     * Get All Properties Keys
-     *
-     * @return array
-     */
-    function keys()
-    {
-        $keys = [];
-        $data = $this->__attainDataArrayReference();
-        if (!$data)
-            return [];
-
-        foreach(array_keys($data) as $k) {
-            if (array_key_exists($k, $this->__mapedPropObjects))
-                $k = $this->__mapedPropObjects[$k];
-
-            $keys[] = $k;
-        }
-
-        return $keys;
-    }
 
     /**
      * Retrieve an external iterator
@@ -187,7 +170,13 @@ class Entity extends AbstractDataStruct
      */
     function getIterator()
     {
-        // TODO: Implement getIterator() method.
+        $data   = $this->__attainDataArrayReference();
+        foreach($data as $k => $v) {
+            (!array_key_exists($k, $this->__mapedPropObjects))
+                ?: $k = $this->__mapedPropObjects[$k];
+
+            yield $k => $v;
+        }
     }
 
     /**
@@ -201,6 +190,6 @@ class Entity extends AbstractDataStruct
      */
     public function count()
     {
-        return count($this->properties);
+        return count($this->_properties);
     }
 }
