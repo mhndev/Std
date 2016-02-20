@@ -3,20 +3,63 @@ namespace Poirot\Std\Struct\AbstractOptions;
 
 final class PropsObject
 {
-    ## read/write options
-    public $complex  = [];
-    public $readable = [];
-    public $writable = [];
+    /** @var string property_name */
+    protected $name;
 
-    function __construct(array $props)
+    protected $readable   = 001;
+    protected $writable   = 010;
+    protected $accumulate = 000; // its r/w 011
+
+    /**
+     * PropsObject constructor.
+     * @param string $propertyName
+     */
+    function __construct($propertyName)
     {
-        if (array_key_exists('writable', $props))
-            $this->writable = $props['writable'];
+        $this->name = (string) $propertyName;
+    }
 
-        if (array_key_exists('readable', $props))
-            $this->readable = $props['readable'];
+    function getName()
+    {
+        return $this->name;
+    }
 
-        if (is_array($this->readable) && is_array($this->writable))
-            $this->complex = array_intersect($this->readable, $this->writable);
+    function __toString()
+    {
+        return $this->getName();
+    }
+
+    function setReadable($flag = true)
+    {
+        $r = $this->readable;
+
+        if ($flag)
+            $this->accumulate |= $r;
+        else
+            $this->accumulate ^= $r;
+
+        return $this;
+    }
+
+    function setWritable($flag = true)
+    {
+        $w = $this->writable;
+
+        if ($flag)
+            $this->accumulate |= $w;
+        else
+            $this->accumulate ^= $w;
+
+        return $this;
+    }
+
+    function isReadable()
+    {
+        return (bool) ($this->accumulate & $this->readable);
+    }
+
+    function isWritable()
+    {
+        return (bool) ($this->accumulate & $this->writable);
     }
 }
