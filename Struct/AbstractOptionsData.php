@@ -237,7 +237,7 @@ abstract class AbstractOptionsData extends AbstractDataStruct
      * @param string $key
      *
      * @throws \Exception
-     * @return mixed
+     * @return mixed|null
      */
     function __get($key)
     {
@@ -246,15 +246,10 @@ abstract class AbstractOptionsData extends AbstractDataStruct
             $return = $this->$getter();
         elseif ($this->_isMethodExists('set' . $this->__normalize($key, 'internal')))
             throw new \Exception(sprintf(
-                'The Property "%s" is writeonly.'
+                'The Property (%s) is writeonly.'
                 , $key
             ));
 
-        if ($return === null)
-            throw new \Exception(sprintf(
-                'The Property "%s" is not found.'
-                , $key
-            ));
 
         return $return;
     }
