@@ -23,7 +23,7 @@ foreach($entity as $k => $v)
 */
 
 
-class Entity extends AbstractDataStruct
+class EntityData extends AbstractDataStruct
     implements Std\Interfaces\Struct\iEntityData
 {
     /** @var array Key/Values */

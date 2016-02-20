@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Std\Environment;
 
-use Poirot\Std\Struct\AbstractOptions;
+use Poirot\Std\Struct\AbstractOptionsData;
 
 /*
 
@@ -11,7 +11,7 @@ echo $not_defined_variable;
 
 */
 
-class BaseEnv extends AbstractOptions
+class BaseEnv extends AbstractOptionsData
 {
     protected $displayErrors;
     protected $errorReporting;

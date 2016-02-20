@@ -2,9 +2,9 @@
 namespace Poirot\Std;
 
 use Poirot\Std\Interfaces\Struct\iEntityData;
-use Poirot\Std\Struct\Entity;
+use Poirot\Std\Struct\EntityData;
 
-class Config extends Entity
+class Config extends EntityData
 {
     /**
      * Set Properties
