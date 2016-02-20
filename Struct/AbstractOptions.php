@@ -289,7 +289,7 @@ class AbstractOptions extends AbstractDataStruct
 
     /**
      * Get Options Properties Information
-     * @return PropsObject
+     *
      */
     protected function __props()
     {
