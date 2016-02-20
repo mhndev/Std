@@ -5,7 +5,7 @@ use Poirot\Std;
 use Poirot\Std\Struct\AbstractOptions\PropsObject;
 use Traversable;
 
-class AbstractOptionsData extends AbstractDataStruct
+abstract class AbstractOptionsData extends AbstractDataStruct
     implements Std\Interfaces\Struct\iOptionsData
 {
     /** @var string|\DateTime @required yyyy-mm-ddThh:mm:ss (1983-08-13) */
