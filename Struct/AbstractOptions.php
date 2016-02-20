@@ -21,13 +21,13 @@ class AbstractOptions extends AbstractDataStruct
 
     protected $_t_options__ignored = [];
 
-    /** @var \Closure Property keys normalizer */
-    protected $normalizer;
-
     /**
      * @var PropsObject Cached Props Once Call props()
      */
     protected $_cachedProps;
+
+    /** @var \Closure Property keys normalizer */
+    protected $__normalizer;
 
     /**
      * Do Set Data From
@@ -91,56 +91,10 @@ class AbstractOptions extends AbstractDataStruct
     public function getIterator()
     {
         /** @var PropsObject $p */
-        foreach($this->props() as $p) {
-//            $val = ($p->isReadable()) ? $this->__get($p->getName()) : null;
-            $val = 'xx';
+        foreach($this->__props() as $p) {
+            $val = ($p->isReadable()) ? $this->__get($p->getKey()) : null;
             yield $p => $val;
         }
-    }
-
-    /**
-     * Get Options Properties Information
-     *
-     * @return PropsObject
-     */
-    function props()
-    {
-props_st:
-        if ($this->_cachedProps) {
-            /** @var PropsObject $prop */
-            foreach($this->_cachedProps as $prop)
-                yield $prop;
-
-            return;
-        }
-
-        $props   = [];
-
-        $ref     = $this->_reflection();
-        $methods = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
-        foreach($methods as $method) {
-            foreach(['set', 'get', 'is'] as $prefix)
-                if (strpos($method->getName(), $prefix) === 0) {
-                    if (in_array($method->getName(), $this->doWhichMethodIgnored()))
-                        ## it will use as internal option method
-                        continue;
-
-                    ## getAttributeName -> AttributeName
-                    $propertyName = substr($method->getName(), strlen($prefix));
-                    $propertyName = $this->__normalize($propertyName, 'external');
-
-                    // mark readable/writable for property
-                    (isset($props[$propertyName])) ?: $props[$propertyName] = new PropsObject($propertyName);
-                    ($prefix == 'set')
-                        ? $props[$propertyName]->setWritable()
-                        : $props[$propertyName]->setReadable()
-                    ;
-
-                }
-        }
-
-        $this->_cachedProps = $props;
-        goto props_st;
     }
 
     /**
@@ -160,13 +114,13 @@ props_st:
         if ($property_key !== null)
             $props = [(string)$property_key];
         else
-            $props = $this->props();
+            $props = $this->__props();
 
         /** @var PropsObject $propObject */
         foreach($props as $propObject) {
             if (!$propObject->isReadable()) continue;
 
-            list($value, $expected) = $this->__extractValueAndExpectedMatchExpression($propObject->getName());
+            list($value, $expected) = $this->__extractValueAndExpectedMatchExpression($propObject->getKey());
             $fulFilled &= $this->__isValueMatchAsExpected($value, $expected);
 
             if (!$fulFilled)
@@ -246,8 +200,8 @@ props_st:
 
         /** @var PropsObject $p */
         $s = 0;
-        foreach($this->props() as $p) {
-            if (!$p->isReadable()) continue;
+        foreach($this->__props() as $p) {
+//            if (!$p->isReadable()) continue;
             $s++;
         }
 
@@ -287,7 +241,7 @@ props_st:
      */
     function __get($key)
     {
-        $return = VOID;
+        $return = null;
         if ($getter = $this->_getGetterIfHas($key))
             $return = $this->$getter();
         elseif ($this->_isMethodExists('set' . $this->__normalize($key, 'internal')))
@@ -296,7 +250,7 @@ props_st:
                 , $key
             ));
 
-        if ($return === VOID)
+        if ($return === null)
             throw new \Exception(sprintf(
                 'The Property "%s" is not found.'
                 , $key
@@ -315,7 +269,7 @@ props_st:
     {
         $isset = false;
         try {
-            $isset = ($this->__get($key) !== VOID);
+            $isset = ($this->__get($key) !== null);
         } catch(\Exception $e) { }
 
         return $isset;
@@ -327,11 +281,55 @@ props_st:
      */
     function __unset($key)
     {
-        $this->__set($key, VOID);
+        $this->__set($key, null);
     }
 
 
     // ...
+
+    /**
+     * Get Options Properties Information
+     * @return PropsObject
+     */
+    protected function __props()
+    {
+        props_st:
+        if ($this->_cachedProps) {
+            /** @var PropsObject $prop */
+            foreach($this->_cachedProps as $prop)
+                yield $prop;
+
+            return;
+        }
+
+        $props   = [];
+
+        $ref     = $this->_reflection();
+        $methods = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
+        foreach($methods as $method) {
+            foreach(['set', 'get', 'is'] as $prefix)
+                if (strpos($method->getName(), $prefix) === 0) {
+                    if (in_array($method->getName(), $this->doWhichMethodIgnored()))
+                        ## it will use as internal option method
+                        continue;
+
+                    ## getAttributeName -> AttributeName
+                    $propertyName = substr($method->getName(), strlen($prefix));
+                    $propertyName = $this->__normalize($propertyName, 'external');
+
+                    // mark readable/writable for property
+                    (isset($props[$propertyName])) ?: $props[$propertyName] = new PropsObject($propertyName);
+                    ($prefix == 'set')
+                        ? $props[$propertyName]->setWritable()
+                        : $props[$propertyName]->setReadable()
+                    ;
+
+                }
+        }
+
+        $this->_cachedProps = $props;
+        goto props_st;
+    }
 
     protected function _getGetterIfHas($key, $prefix = 'get')
     {
@@ -361,18 +359,18 @@ props_st:
         if ($type !== 'external' && $type !== 'internal')
             throw new \InvalidArgumentException;
 
-        if (!isset($this->normalizer['internal']))
-            $this->normalizer['internal'] = function($key) {
+        if (!isset($this->__normalizer['internal']))
+            $this->__normalizer['internal'] = function($key) {
                 return Std\sanitize_camelCase($key);
             };
 
-        if (!isset($this->normalizer['external']))
-            $this->normalizer['external'] = function($key) {
+        if (!isset($this->__normalizer['external']))
+            $this->__normalizer['external'] = function($key) {
                 return strtolower(Std\sanitize_under_score($key));
             };
 
 
-        $return = $this->normalizer[$type];
+        $return = $this->__normalizer[$type];
         $return = call_user_func($return, $key);
         return $return;
     }
@@ -390,7 +388,7 @@ props_st:
             $currentValue  = $this->__get($property_key);
         } catch(\Exception $e) {
             ## not set so consider as void
-            $currentValue = VOID;
+            $currentValue = null;
         }
 
         // ...
@@ -450,9 +448,9 @@ props_st:
     {
         $match = false;
         if ($expectedString == null)
-            ## undefined expected values must not be VOID
+            ## undefined expected values must not be NULL
             ## except when it write down on docblock "@return void"
-            return $value !== VOID;
+            return $value !== null;
 
         $valueType = strtolower(gettype($value));
 
@@ -466,7 +464,7 @@ props_st:
 
             if ($value === VOID && $ext == 'void')
                 $match = true;
-            elseif ($valueType === $ext && $value != VOID)
+            elseif ($valueType === $ext && $value != null)
                 $match = true;
             elseif ($valueType === 'object') {
                 if (is_a($value, $ext))

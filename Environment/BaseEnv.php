@@ -28,7 +28,7 @@ class BaseEnv extends AbstractOptions
         if ($settings === null)
             $settings = new static;
 
-        foreach($settings->props()->readable as $prop) {
+        foreach($settings->__props()->readable as $prop) {
             switch ($prop) {
                 case 'display_errors':
                     ini_set('display_errors', $settings->__get($prop));

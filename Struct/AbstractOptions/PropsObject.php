@@ -4,7 +4,7 @@ namespace Poirot\Std\Struct\AbstractOptions;
 final class PropsObject
 {
     /** @var string property_name */
-    protected $name;
+    protected $key;
 
     protected $readable   = 001;
     protected $writable   = 010;
@@ -16,17 +16,17 @@ final class PropsObject
      */
     function __construct($propertyName)
     {
-        $this->name = (string) $propertyName;
+        $this->key = (string) $propertyName;
     }
 
-    function getName()
+    function getKey()
     {
-        return $this->name;
+        return $this->key;
     }
 
     function __toString()
     {
-        return $this->getName();
+        return $this->getKey();
     }
 
     function setReadable($flag = true)
