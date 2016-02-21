@@ -290,7 +290,8 @@ abstract class AbstractOptionsData extends AbstractDataStruct
      */
     protected function __props()
     {
-        props_st:
+
+props_st:
         if ($this->_cachedProps !== null) {
             /** @var PropsObject $prop */
             foreach($this->_cachedProps as $prop)
@@ -432,7 +433,7 @@ abstract class AbstractOptionsData extends AbstractDataStruct
             }
         } catch(\Exception $e) {}
 
-        done:
+done:
         return [$currentValue, $expectedValue];
     }
 

@@ -33,7 +33,7 @@ class OpenOptionsData extends AbstractOptionsData
 
         if ($return === null) {
             $debugTrace = debug_backtrace();
-            // TODO line, file, for calling method backtrace
+            // TODO test debug backtrace existance
             throw new \ErrorException(sprintf(
                 'Call to undefined method (%s).'
                 , $method
