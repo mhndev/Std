@@ -24,7 +24,7 @@ abstract class AbstractOptionsData extends AbstractDataStruct
     /**
      * @var PropsObject Cached Props Once Call props()
      */
-    protected $_cachedProps;
+    protected $_cachedProps = null; // it must be null
 
     /** @var \Closure Property keys normalizer */
     protected $__normalizer;
@@ -75,9 +75,11 @@ abstract class AbstractOptionsData extends AbstractDataStruct
             $x[] = 'isFulfilled';
             $x[] = 'isEmpty';
             $x[] = 'getIterator';
+
+            $init = $this->_t_options__ignored;
         }
 
-        return $this->_t_options__ignored;
+        return $init = $this->_t_options__ignored;
     }
 
     /**
@@ -289,7 +291,7 @@ abstract class AbstractOptionsData extends AbstractDataStruct
     protected function __props()
     {
         props_st:
-        if ($this->_cachedProps) {
+        if ($this->_cachedProps !== null) {
             /** @var PropsObject $prop */
             foreach($this->_cachedProps as $prop)
                 yield $prop;
@@ -302,7 +304,7 @@ abstract class AbstractOptionsData extends AbstractDataStruct
         $ref     = $this->_reflection();
         $methods = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
         foreach($methods as $method) {
-            foreach(['set', 'get', 'is'] as $prefix)
+            foreach(['set', 'get', 'is'] as $prefix) {
                 if (strpos($method->getName(), $prefix) === 0) {
                     if (in_array($method->getName(), $this->doWhichMethodIgnored()))
                         ## it will use as internal option method
@@ -320,6 +322,7 @@ abstract class AbstractOptionsData extends AbstractDataStruct
                     ;
 
                 }
+            }
         }
 
         $this->_cachedProps = $props;

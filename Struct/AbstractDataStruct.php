@@ -27,7 +27,10 @@ abstract class AbstractDataStruct implements iDataStruct
      */
     final function from($data)
     {
-        if (!is_array($data) && !$data instanceof \Traversable)
+        if ($data === null)
+            return $this;
+
+        if (!(is_array($data) || $data instanceof \Traversable))
             throw new \InvalidArgumentException(sprintf(
                 'Data must be instance of \Traversable or array. given: (%s)'
                 , \Poirot\Std\flatten($data)
