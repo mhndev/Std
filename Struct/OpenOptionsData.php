@@ -18,21 +18,28 @@ class OpenOptionsData extends AbstractOptionsData
      * @param $method
      * @param $arguments
      *
-     * @return bool|mixed|$this
+     * @throws \ErrorException
+     * @return $this|bool|mixed
      */
     function __call($method, $arguments)
     {
         $return = null;
         foreach(['set', 'get', 'is'] as $action)
             if (strpos($method, $action) === 0) {
-                ## method setter/getter found
+                ## method setter/getter/is found
                 $return = true;
                 break;
             }
 
-        if ($return === null)
-            ## nothing to do
-            return $return;
+        if ($return === null) {
+            $debugTrace = debug_backtrace();
+            // TODO line, file, for calling method backtrace
+            throw new \ErrorException(sprintf(
+                'Call to undefined method (%s).'
+                , $method
+            ), 0, 1, $debugTrace[1]['file'], $debugTrace[1]['line']);
+        }
+
 
         // Option Name:
         $name = $method;
@@ -105,12 +112,6 @@ class OpenOptionsData extends AbstractOptionsData
             && !in_array('get'.$this->__normalize($key, 'internal'), $this->doWhichMethodIgnored())
         )
             $return = $this->properties[$key];
-
-        if ($return === null)
-            throw new \Exception(sprintf(
-                'The Property "%s" is not found.'
-                , $key
-            ));
 
         return $return;
     }
