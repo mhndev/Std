@@ -48,3 +48,4 @@ interface iDataStruct extends \IteratorAggregate, \Countable
      */
     function del($key);
 }
+

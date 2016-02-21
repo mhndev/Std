@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Std\Interfaces;
 
-use Poirot\Std\Struct\AbstractOptionsData;
+use Poirot\Std\Interfaces\Struct\iOptionsData;
 
 /**
  * The Class That Implement This Interface
@@ -11,9 +11,9 @@ use Poirot\Std\Struct\AbstractOptionsData;
 interface ipOptionsProvider
 {
     /**
-     * @return AbstractOptionsData
+     * @return iOptionsData
      */
-    function inOptions();
+    function optsData();
 
     /**
      * Get An Bare Options Instance
@@ -29,7 +29,7 @@ interface ipOptionsProvider
      *
      * @param null|mixed $builder Builder Options as Constructor
      *
-     * @return AbstractOptionsData
+     * @return iOptionsData
      */
-    static function newOptions($builder = null);
+    static function newOptsData($builder = null);
 }
