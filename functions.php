@@ -106,6 +106,34 @@ namespace Poirot\Std
     }
 
     /**
+     * Convert Iterator To An Array
+     *
+     * filter:
+     * // return false mean not present to output array
+     * bool function(&$key, &$val);
+     *
+     * @param \Traversable  $iterator
+     * @param \Closure|null $filter
+     *
+     * @return array
+     */
+    function iterator_to_array(\Traversable $iterator, \Closure $filter = null)
+    {
+        $arr = [];
+        foreach($iterator as $key => $val) {
+            $flag = true;
+            if ($filter !== null)
+                $flag = $filter($key, $val);
+
+            if (!$flag) continue;
+
+            $arr[(string) $key] = $val;
+        }
+
+        return $arr;
+    }
+
+    /**
      * Merge two arrays together.
      *
      * If an integer key exists in both arrays, the value from the second array
