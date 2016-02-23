@@ -20,6 +20,7 @@ abstract class AbstractOptionsData extends AbstractDataStruct
     // protected $planCode;
 
     protected $_t_options__ignored = [];
+    protected $_c_is_process_ignored_notation = false; // used as internal cache
 
     /**
      * @var PropsObject Cached Props Once Call props()
@@ -64,8 +65,7 @@ abstract class AbstractOptionsData extends AbstractDataStruct
      */
     protected function doWhichMethodIgnored()
     {
-        static $init;
-        if (is_null($init)) {
+        if (!$this->_c_is_process_ignored_notation) {
             ## Detect/Default Ignored
             ### Detect: by docblock
             $this->__ignoreFromDocBlock();
@@ -75,11 +75,9 @@ abstract class AbstractOptionsData extends AbstractDataStruct
             $x[] = 'isFulfilled';
             $x[] = 'isEmpty';
             $x[] = 'getIterator';
-
-            $init = $this->_t_options__ignored;
         }
 
-        return $init = $this->_t_options__ignored;
+        return $this->_t_options__ignored;
     }
 
     /**
@@ -175,9 +173,10 @@ abstract class AbstractOptionsData extends AbstractDataStruct
         $isEmpty = true;
         /** @var PropsObject $k */
         foreach($this as $k => $v) {
-            if ($k->isReadable()) continue;
-            $isEmpty = false;
-            break;
+            if ($this->{(string)$k} !== null) {
+                $isEmpty = false;
+                break;
+            }
         }
 
         return $isEmpty;
@@ -521,7 +520,8 @@ done:
             $return = $return && $ref->isPublic();
         }
 
-        return $return && !in_array($method, $this->doWhichMethodIgnored());
+        $ignored = $this->doWhichMethodIgnored();
+        return $return && !in_array($method, $ignored);
     }
 
     /**

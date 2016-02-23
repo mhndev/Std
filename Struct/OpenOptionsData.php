@@ -143,7 +143,6 @@ class OpenOptionsData extends AbstractOptionsData
     {
         $methodProps  = parent::__props();
 
-
         $props = [];
 
         // Methods as Options:
