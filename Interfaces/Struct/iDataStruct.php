@@ -14,7 +14,7 @@ interface iDataStruct extends \IteratorAggregate, \Countable
     /**
      * Set Struct Data From Array
      *
-     * @param array|\Traversable $data
+     * @param array|\Traversable|null $data
      *
      * @throws \InvalidArgumentException
      * @return $this

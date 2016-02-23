@@ -109,7 +109,7 @@ namespace Poirot\Std
      * Convert Iterator To An Array
      *
      * filter:
-     * // return false mean not present to output array
+     * // return true mean not present to output array
      * bool function(&$key, &$val);
      *
      * @param \Traversable  $iterator
@@ -121,11 +121,11 @@ namespace Poirot\Std
     {
         $arr = [];
         foreach($iterator as $key => $val) {
-            $flag = true;
+            $flag = false;
             if ($filter !== null)
                 $flag = $filter($key, $val);
 
-            if (!$flag) continue;
+            if ($flag) continue;
 
             $arr[(string) $key] = $val;
         }

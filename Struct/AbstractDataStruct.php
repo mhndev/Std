@@ -20,7 +20,7 @@ abstract class AbstractDataStruct implements iDataStruct
     /**
      * Set Struct Data From Array
      *
-     * @param array|\Traversable $data
+     * @param array|\Traversable|null $data
      *
      * @throws \InvalidArgumentException
      * @return $this
