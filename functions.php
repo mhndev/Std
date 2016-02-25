@@ -114,10 +114,11 @@ namespace Poirot\Std
      *
      * @param \Traversable  $iterator
      * @param \Closure|null $filter
+     * @param bool          $deep     Recursively convert values that can be iterated
      *
      * @return array
      */
-    function iterator_to_array(\Traversable $iterator, \Closure $filter = null)
+    function iterator_to_array(\Traversable $iterator, \Closure $filter = null, $deep = true)
     {
         $arr = [];
         foreach($iterator as $key => $val) {
@@ -126,6 +127,10 @@ namespace Poirot\Std
                 $flag = $filter($key, $val);
 
             if ($flag) continue;
+
+            if ($deep && $val instanceof \Traversable)
+                ## deep convert
+                $val = iterator_to_array($val, $filter);
 
             $arr[(string) $key] = $val;
         }
