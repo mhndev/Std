@@ -87,7 +87,9 @@ class ErrorStack
      * data/files when a critical error happens, or when you need to -
      * trigger an error under certain conditions
      *
-     * - handleBegin([$object, 'method'])
+     * - handleException(callable)
+     *   callable:
+     *   func(\Exception $e)
      *
      * @param callable|null $callable
      */
@@ -110,7 +112,10 @@ class ErrorStack
      * data/files when a critical error happens, or when you need to -
      * trigger an error under certain conditions
      *
-     * - handleError([$object, 'method'])
+     * - handleError(callable)
+     * - handleError(E_ALL, callable)
+     *   callable:
+     *   func($errno, $errstr = '', $errfile = '', $errline = 0)
      *
      * @param int $errorLevel
      * @param callable|null $callable
@@ -134,11 +139,11 @@ class ErrorStack
     }
 
     /**
-     * Get Current Accured Error If Has
+     * Get Current Accrued Error If Has
      *
      * @return null|\Exception|\ErrorException
      */
-    static function getAccuredErr()
+    static function getAccruedErr()
     {
         if (!self::hasHandling())
             return null;
