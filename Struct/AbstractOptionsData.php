@@ -92,8 +92,10 @@ abstract class AbstractOptionsData extends AbstractDataStruct
     {
         /** @var PropsObject $p */
         foreach($this->__props() as $p) {
-            $val = ($p->isReadable()) ? $this->__get($p->getKey()) : null;
-            yield $p => $val;
+            if (!$p->isReadable()) continue;
+
+            $val = $this->__get($p->getKey());
+            yield (string) $p => $val;
         }
     }
 
