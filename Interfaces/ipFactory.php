@@ -11,5 +11,5 @@ interface ipFactory
      * @throws \Exception
      * @return mixed
      */
-    static function with($valuable);
+    static function of($valuable);
 }

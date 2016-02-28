@@ -2,7 +2,7 @@
 namespace Poirot\Std\Struct;
 
 use Poirot\Std;
-use Poirot\Std\Struct\AbstractOptions\PropsObject;
+use Poirot\Std\Struct\AbstractOptions\PropObject;
 use Traversable;
 
 abstract class AbstractOptionsData extends AbstractDataStruct
@@ -23,7 +23,7 @@ abstract class AbstractOptionsData extends AbstractDataStruct
     protected $_c_is_process_ignored_notation = false; // used as internal cache
 
     /**
-     * @var PropsObject Cached Props Once Call props()
+     * @var PropObject Cached Props Once Call props()
      */
     protected $_cachedProps = null; // it must be null
 
@@ -90,7 +90,7 @@ abstract class AbstractOptionsData extends AbstractDataStruct
      */
     public function getIterator()
     {
-        /** @var PropsObject $p */
+        /** @var PropObject $p */
         foreach($this->__props() as $p) {
             if (!$p->isReadable()) continue;
 
@@ -118,7 +118,7 @@ abstract class AbstractOptionsData extends AbstractDataStruct
         else
             $props = $this->__props();
 
-        /** @var PropsObject $propObject */
+        /** @var PropObject $propObject */
         foreach($props as $propObject) {
             if (!$propObject->isReadable()) continue;
 
@@ -159,7 +159,7 @@ abstract class AbstractOptionsData extends AbstractDataStruct
      */
     function emptyy()
     {
-        /** @var PropsObject $k */
+        /** @var PropObject $k */
         foreach($this as $k => $v)
             $k->isReadable() && $this->del($k);
 
@@ -173,7 +173,7 @@ abstract class AbstractOptionsData extends AbstractDataStruct
     function isEmpty()
     {
         $isEmpty = true;
-        /** @var PropsObject $k */
+        /** @var PropObject $k */
         foreach($this as $k => $v) {
             if ($this->{(string)$k} !== null) {
                 $isEmpty = false;
@@ -201,7 +201,7 @@ abstract class AbstractOptionsData extends AbstractDataStruct
 
         // ..
 
-        /** @var PropsObject $p */
+        /** @var PropObject $p */
         $s = 0;
         foreach($this->__props() as $p) {
 //            if (!$p->isReadable()) continue;
@@ -294,7 +294,7 @@ abstract class AbstractOptionsData extends AbstractDataStruct
 
 props_st:
         if ($this->_cachedProps !== null) {
-            /** @var PropsObject $prop */
+            /** @var PropObject $prop */
             foreach($this->_cachedProps as $prop)
                 yield $prop;
 
@@ -317,7 +317,7 @@ props_st:
                     $propertyName = $this->__normalize($propertyName, 'external');
 
                     // mark readable/writable for property
-                    (isset($props[$propertyName])) ?: $props[$propertyName] = new PropsObject($propertyName);
+                    (isset($props[$propertyName])) ?: $props[$propertyName] = new PropObject($propertyName);
                     ($prefix == 'set')
                         ? $props[$propertyName]->setWritable()
                         : $props[$propertyName]->setReadable()
