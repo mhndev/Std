@@ -3,6 +3,22 @@ namespace Poirot\Std;
 
 use Poirot\Std\Traits\OpenCallTrait;
 
+/**
+ * TODO Call by reference not working as expected
+ *
+    $changeMe = 'I`m Bad.';
+    $openCall = new OpenCall();
+
+    $_F_make = function(&$changeMe) {
+        $changeMe = 'We make you good.';
+    };
+
+    $openCall->addMethod('makeMe', $_F_make);
+
+    $openCall->makeMe($changeMe);
+ *
+ */
+
 class OpenCall
 {
     use OpenCallTrait;

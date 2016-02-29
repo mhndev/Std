@@ -36,7 +36,7 @@ class AliasEnvFactory implements ipFactory
      * @throws \Exception
      * @return BaseEnv
      */
-    static function with($aliasOrCallable)
+    static function of($aliasOrCallable)
     {
         if (is_callable($aliasOrCallable))
             $aliasOrCallable = call_user_func($aliasOrCallable);

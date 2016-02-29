@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Std\Struct\AbstractOptions;
 
-final class PropsObject
+final class PropObject
 {
     /** @var string property_name */
     protected $key;

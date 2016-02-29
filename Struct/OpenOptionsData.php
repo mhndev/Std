@@ -2,7 +2,7 @@
 namespace Poirot\Std\Struct;
 
 use Poirot\Std\Interfaces\Struct\iOptionsData;
-use Poirot\Std\Struct\AbstractOptions\PropsObject;
+use Poirot\Std\Struct\AbstractOptions\PropObject;
 
 class OpenOptionsData extends AbstractOptionsData
     implements iOptionsData
@@ -160,7 +160,7 @@ class OpenOptionsData extends AbstractOptionsData
                     continue;
 
                 // mark readable/writable for property
-                (isset($props[$propertyName])) ?: $props[$propertyName] = new PropsObject($propertyName);
+                (isset($props[$propertyName])) ?: $props[$propertyName] = new PropObject($propertyName);
                 ($prefix == 'set')
                     ? $props[$propertyName]->setWritable()
                     : $props[$propertyName]->setReadable()
