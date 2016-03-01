@@ -10,6 +10,8 @@ namespace {
 
 namespace Poirot\Std
 {
+
+    use Poirot\Std\Type\StdArray;
     use Poirot\Std\Type\StdString;
 
     trait SetterBuilderTrait
@@ -94,12 +96,14 @@ namespace Poirot\Std
      * @param mixed $type
      *
      * @throws \UnexpectedValueException
-     * @return StdString|\SplType
+     * @return StdString|StdArray|\SplType
      */
     function cast($type)
     {
         switch(1) {
             case is_string($type): $return = new StdString($type);
+                break;
+            case is_array($type) : $return = new StdArray($type);
                 break;
 
             default: throw new \UnexpectedValueException(sprintf(
@@ -161,66 +165,6 @@ namespace Poirot\Std
         }
 
         return $arr;
-    }
-
-    /**
-     * Merge two arrays together.
-     *
-     * If an integer key exists in both arrays, the value from the second array
-     * will be appended the the first array. If both values are arrays, they
-     * are merged together, else the value of the second array overwrites the
-     * one of the first array.
-     *
-     * @param  array $a
-     * @param  array $b
-     * @return array
-     */
-    function array_merge(array $a, array $b)
-    {
-        foreach ($b as $key => $value)
-            if (array_key_exists($key, $a)) {
-                if (is_int($key)) {
-                    if (!in_array($value, $a))
-                        $a[] = $value;
-                }
-                elseif (is_array($value) && is_array($a[$key]))
-                    $a[$key] = \Poirot\Std\array_merge($a[$key], $value);
-                else
-                    $a[$key] = $value;
-            } else
-                $a[$key] = $value;
-
-        return $a;
-    }
-
-    /**
-     * Merge two arrays together, reserve previous values
-     *
-     * @param  array $a
-     * @param  array $b
-     * @return array
-     */
-    function array_merge_recursive(array $a, array $b)
-    {
-        foreach ($b as $key => $value)
-            if (array_key_exists($key, $a)) {
-                if (is_int($key)) {
-                    if (!in_array($value, $a))
-                        $a[] = $value;
-                }
-                elseif (is_array($value) && is_array($a[$key]))
-                    $a[$key] = \Poirot\Std\array_merge_recursive($a[$key], $value);
-                else {
-                    $cv = $a[$key];
-                    $a[$key] = [];
-                    $pa = &$a[$key];
-                    array_push($pa, $cv);
-                    array_push($pa, $value);
-                }
-            } else
-                $a[$key] = $value;
-
-        return $a;
     }
 
     /**
