@@ -10,9 +10,9 @@ namespace {
 
 namespace Poirot\Std
 {
-
     use Poirot\Std\Type\StdArray;
     use Poirot\Std\Type\StdString;
+    use Poirot\Std\Type\StdTravers;
 
     trait SetterBuilderTrait
     {
@@ -96,7 +96,7 @@ namespace Poirot\Std
      * @param mixed $type
      *
      * @throws \UnexpectedValueException
-     * @return StdString|StdArray|\SplType
+     * @return StdString|StdArray|StdTravers|\SplType
      */
     function cast($type)
     {
@@ -104,6 +104,8 @@ namespace Poirot\Std
             case is_string($type): $return = new StdString($type);
                 break;
             case is_array($type) : $return = new StdArray($type);
+                break;
+            case ($type instanceof \Traversable) : $return = new StdTravers($type);
                 break;
 
             default: throw new \UnexpectedValueException(sprintf(
@@ -132,39 +134,6 @@ namespace Poirot\Std
                 (is_object($var)  && method_exists($var, '__toString' ))
             )
         );
-    }
-
-    /**
-     * Convert Iterator To An Array
-     *
-     * filter:
-     * // return true mean not present to output array
-     * bool function(&$key, &$val);
-     *
-     * @param \Traversable  $iterator
-     * @param \Closure|null $filter
-     * @param bool          $deep     Recursively convert values that can be iterated
-     *
-     * @return array
-     */
-    function iterator_to_array(\Traversable $iterator, \Closure $filter = null, $deep = true)
-    {
-        $arr = [];
-        foreach($iterator as $key => $val) {
-            $flag = false;
-            if ($filter !== null)
-                $flag = $filter($key, $val);
-
-            if ($flag) continue;
-
-            if ($deep && $val instanceof \Traversable)
-                ## deep convert
-                $val = iterator_to_array($val, $filter);
-
-            $arr[(string) $key] = $val;
-        }
-
-        return $arr;
     }
 
     /**
