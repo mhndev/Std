@@ -4,7 +4,7 @@ namespace Poirot\Std\Type;
 if (!class_exists('\SplString'))
     class_alias('\Poirot\Std\Type\NSplString', '\SplString');
 
-class StdString extends \SplString
+final class StdString extends \SplString
 {
     /**
      * Sanitize Underscore To Camelcase

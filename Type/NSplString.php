@@ -32,6 +32,8 @@ class NSplString extends AbstractNSplType
             throw new \UnexpectedValueException(sprintf(
                 'Type (%s) is unexpected.', gettype($initial_value)
             ));
+
+        // with default value
     }
 
 
