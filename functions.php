@@ -10,6 +10,8 @@ namespace {
 
 namespace Poirot\Std
 {
+    use Poirot\Std\Type\StdString;
+
     trait SetterBuilderTrait
     {
         /**
@@ -83,6 +85,29 @@ namespace Poirot\Std
 
             return $remained;
         }
+    }
+
+    /**
+     * Cast Given Value Into SplTypes
+     * SplTypes Contains Some Utility For That Specific Type
+     *
+     * @param mixed $type
+     *
+     * @throws \UnexpectedValueException
+     * @return StdString|\SplType
+     */
+    function cast($type)
+    {
+        switch(1) {
+            case is_string($type): $return = new StdString($type);
+                break;
+
+            default: throw new \UnexpectedValueException(sprintf(
+                'Type (%s) is unexpected.', gettype($type)
+            ));
+        }
+
+        return $return;
     }
 
     /**
@@ -228,46 +253,5 @@ namespace Poirot\Std
         }
 
         return $value;
-    }
-
-    // TODO move to string nStd type
-
-    /**
-     * Sanitize Underscore To Camelcase
-     *
-     * @param string $key Key
-     *
-     * @return string
-     */
-    function sanitize_camelCase($key)
-    {
-        return lcfirst(sanitize_PascalCase($key));
-    }
-
-    /**
-     * Sanitize Underscore To Camelcase
-     *
-     * @param string $key Key
-     *
-     * @return string
-     */
-    function sanitize_PascalCase($key)
-    {
-        return str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
-    }
-
-    /**
-     * Sanitize CamelCase To under_score
-     *
-     * @param string $key Key
-     *
-     * @return string
-     */
-    function sanitize_under_score($key)
-    {
-        $pattern     = array('#(?<=(?:[A-Z]))([A-Z]+)([A-Z][A-z])#', '#(?<=(?:[a-z0-9]))([A-Z])#');
-        $replacement = array('\1_\2', '_\1');
-
-        return strtolower(preg_replace($pattern, $replacement, $key));
     }
 }
