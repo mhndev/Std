@@ -23,7 +23,7 @@ final class StdTravers extends \SplType
      * @link http://php.net/manual/en/spltype.construct.php
      * // TODO As of PHP 5.6 we can use math expressions in PHP constants
      */
-    function __construct($initial_value, $strict = true)
+    function __construct($initial_value = null, $strict = true)
     {
         if ($initial_value instanceof \Traversable) {
             $this->value = $initial_value;
@@ -43,31 +43,31 @@ final class StdTravers extends \SplType
      *
      * filter:
      * // return true mean not present to output array
-     * bool function(&$key, &$val);
+     * bool function(&$val, &$key = null);
      *
      * @param \Closure|null $filter
-     * @param bool          $deep     Recursively convert values that can be iterated
+     * @param bool          $recursive     Recursively convert values that can be iterated
      *
-     * @return array
+     * @return StdArray
      */
-    function toArray(\Closure $filter = null, $deep = true)
+    function toArray(\Closure $filter = null, $recursive = true)
     {
         $arr = [];
         foreach($this->getIterator() as $key => $val) {
             $flag = false;
             if ($filter !== null)
-                $flag = $filter($key, $val);
+                $flag = $filter($val, $key);
 
             if ($flag) continue;
 
-            if ($deep && $val instanceof \Traversable)
+            if ($recursive && $val instanceof \Traversable)
                 ## deep convert
                 $val = (new static($val))->toArray($filter);
 
             $arr[(string) $key] = $val;
         }
 
-        return $arr;
+        return new StdArray($arr);
     }
 
 
