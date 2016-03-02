@@ -14,6 +14,7 @@ final class StdArray extends \SplType
     // TODO As of PHP 5.6 we can use math expressions in PHP constants
     // const __default = [];
 
+
     /**
      * Creates a new value of some type
      *
@@ -40,6 +41,38 @@ final class StdArray extends \SplType
 
 
     // Implement Features:
+
+    /**
+     * Walk an Array And Filter Or Manipulate Items Of Array
+     *
+     * filter:
+     * // return true mean not present to output array
+     * bool function(&$val, &$key = null);
+     *
+     * @param \Closure $filter
+     * @param bool     $recursive  Recursively convert values that can be iterated
+     *
+     * @return StdArray
+     */
+    function walk(\Closure $filter, $recursive = true)
+    {
+        $arr = [];
+        foreach((array) $this as $key => $val) {
+            $flag = false;
+            if ($filter !== null)
+                $flag = $filter($val, $key);
+
+            if ($flag) continue;
+
+            if ($recursive && is_array($val))
+                ## recursively walk
+                $val = (new static($val))->walk($filter);
+
+            $arr[(string) $key] = $val;
+        }
+
+        return new StdArray($arr);
+    }
 
     /**
      * Merge two arrays together.
@@ -105,6 +138,16 @@ final class StdArray extends \SplType
         return new static($a);
     }
 
+    /**
+     * Is This An Associative Array?
+     *
+     * @return bool
+     */
+    function isAssoc()
+    {
+        $data = (array) $this;
+        return (array_values($data) !== $data);
+    }
 
     // Implement ArrayAccess:
 
