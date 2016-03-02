@@ -6,6 +6,13 @@ use Traversable;
 if (!class_exists('\SplType'))
     class_alias('\Poirot\Std\Type\AbstractNSplType', '\SplType');
 
+/*
+// mean from root-any key presentation - that cantains Passenger
+$result->select('/* /Passengers');
+// mean from root-insurance|hotels-that cantains Passenger
+$result->select('/insurance|hotels/Passengers');
+*/
+
 final class StdArray extends \SplType
     implements \ArrayAccess
     , \Countable
