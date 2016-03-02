@@ -177,7 +177,7 @@ final class StdArray extends \SplType
      * @return mixed Can return all value types.
      * @since 5.0.0
      */
-    public function offsetGet($offset)
+    public function &offsetGet($offset)
     {
         return $this->{$offset};
     }
