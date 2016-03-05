@@ -6,13 +6,6 @@ use Traversable;
 if (!class_exists('\SplType'))
     class_alias('\Poirot\Std\Type\AbstractNSplType', '\SplType');
 
-/*
-// mean from root-any key presentation - that cantains Passenger
-$result->select('/* /Passengers');
-// mean from root-insurance|hotels-that cantains Passenger
-$result->select('/insurance|hotels/Passengers');
-*/
-
 final class StdArray extends \SplType
     implements \ArrayAccess
     , \Countable
@@ -48,6 +41,38 @@ final class StdArray extends \SplType
 
 
     // Implement Features:
+
+    /**
+     * Select Bunch Of Items Regard To Given Query
+     *
+     * * mean from root-any key presentation - that cantains Passenger
+     *   $result->select('/* /Passengers');
+     *
+     * * mean from root-insurance|hotels-that cantains Passenger
+     *   $result->select('/insurance|hotels/Passengers');
+     *
+     * @param string $query
+     *
+     * @return \Generator
+     */
+    function select($query)
+    {
+        if (strpos($query, '/') === 0)
+            ## ignore first slash from commands (withespace command has meaningful command)
+            $query = substr($query, 1);
+
+        $commands = explode('/',$query);
+
+        $pointer  = (array) $this;
+        $result   = [];
+        foreach($commands as $i => $command) {
+            if (!array_key_exists($command, $pointer))
+                ## query does not match
+                return;
+
+            // TODO i`m so tired today, think about it when i`ve sleep at night.
+        }
+    }
 
     /**
      * Walk an Array And Filter Or Manipulate Items Of Array
