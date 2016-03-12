@@ -106,6 +106,7 @@ final class StdArray extends \SplType
                         $return[] = &$r;
 
                     if (is_array($v) && $v = &current($v)) {
+                        #### continue with deeper data
                         $r = &$_f__select($queryOrig, $v);
                         if ($r !== null) {
                             $return = array_merge($return, $r);
