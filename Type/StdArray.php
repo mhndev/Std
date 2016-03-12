@@ -6,6 +6,20 @@ use Traversable;
 if (!class_exists('\SplType'))
     class_alias('\Poirot\Std\Type\AbstractNSplType', '\SplType');
 
+/*
+
+// lowercase exact item
+$name = &$stdArr->select('/1/Passenger/name');
+$name = strtolower($name);
+
+// lowercase whole passenger names
+// it will return array of matched query
+$credentials = $stdArr->select('/* /Passenger/name');
+foreach($credentials as &$v)
+    $v = strtolower($v);
+
+*/
+
 final class StdArray extends \SplType
     implements \ArrayAccess
     , \Countable
@@ -14,6 +28,7 @@ final class StdArray extends \SplType
     // TODO As of PHP 5.6 we can use math expressions in PHP constants
     // const __default = [];
 
+    public $value = [];
 
     /**
      * Creates a new value of some type
@@ -27,11 +42,9 @@ final class StdArray extends \SplType
      */
     function __construct($initial_value = []/*self::__default*/, $strict = true)
     {
-        if (is_array($initial_value)) {
-            foreach($initial_value as $key => $val)
-                // so it can be easily convert into array by type cast (array)
-                $this->{$key} = $val;
-        } elseif ($strict)
+        if (is_array($initial_value))
+            $this->value = $initial_value;
+        elseif ($strict)
             throw new \UnexpectedValueException(sprintf(
                 'Type (%s) is unexpected.', gettype($initial_value)
             ));
@@ -45,33 +58,93 @@ final class StdArray extends \SplType
     /**
      * Select Bunch Of Items Regard To Given Query
      *
-     * * mean from root-any key presentation - that cantains Passenger
-     *   $result->select('/* /Passengers');
+     * !! for reference return must call with reference
+     *    &$stdArr->select('/1/Passenger/Credentials');
      *
-     * * mean from root-insurance|hotels-that cantains Passenger
-     *   $result->select('/insurance|hotels/Passengers');
+     * $result->select('/* /Passengers');
+     * mean from root-any key presentation - that contains Passenger
+     *
+     * $result->select('/insurance|hotels/Passengers');
+     * mean from root-insurance|hotels-that contains Passenger
      *
      * @param string $query
      *
-     * @return \Generator
+     * @return &mixed
      */
-    function select($query)
+    function &select($query)
     {
-        if (strpos($query, '/') === 0)
-            ## ignore first slash from commands (withespace command has meaningful command)
-            $query = substr($query, 1);
+        $_f__select = function & ($query, &$stackArr) use (&$_f__select)
+        {
+            $queryOrig = $query;
+            if (strpos($query, '/') === 0)
+                ## ignore first slash from instructions
+                ## it cause an empty unwanted item on command stacks(exploded instructions)
+                ## (withespace instruction has meaningful command "//item_on_any_depth")
+                $query = substr($query, 1);
 
-        $commands = explode('/',$query);
+            if (!is_array($stackArr) && $query !== '') {
+                // notice: only variable by reference must return
+                $z = null;
+                return $x = &$z;
+            }
 
-        $pointer  = (array) $this;
-        $result   = [];
-        foreach($commands as $i => $command) {
-            if (!array_key_exists($command, $pointer))
-                ## query does not match
-                return;
 
-            // TODO i`m so tired today, think about it when i`ve sleep at night.
-        }
+            if ($query === '')
+                return $stackArr;
+
+            $instructions = explode('/', $query);
+            $ins          = array_shift($instructions);
+            $remainQuery  = implode('/', $instructions);
+
+            ## match find(//):
+            if ($ins === '') {
+                ### looking for any array elements to match query
+                $return = [];
+                foreach($stackArr as &$v) {
+                    $r = &$_f__select($remainQuery, $v);
+                    if ($r !== null)
+                        $return[] = &$r;
+
+                    if (is_array($v) && $v = &current($v)) {
+                        $r = &$_f__select($queryOrig, $v);
+                        if ($r !== null) {
+                            $return = array_merge($return, $r);
+                        }
+                    }
+                }
+
+                if (empty($return)) {
+                    // notice: only variable by reference must return
+                    $z = null;
+                    return $x = &$z;
+                }
+
+                return $return;
+            }
+
+            ## match wildcard:
+            if ($ins === '*') {
+                $return = [];
+                foreach($stackArr as &$v)
+                    $return[] = &$_f__select($remainQuery, $v);
+
+                return $return;
+            }
+
+            ## match data item against current query instruct:
+            if (array_key_exists($ins, $stackArr))
+                ### looking for exact match of an item:
+                ### /*/[query/to/match/item]
+                return $_f__select($remainQuery, $stackArr[$ins]);
+            else {
+                ## nothing match query
+                // notice: only variable by reference must return
+                $z = null;
+                return $x = &$z;
+            }
+        };
+
+        return $_f__select($query, $this->value);
     }
 
     /**
@@ -89,7 +162,7 @@ final class StdArray extends \SplType
     function walk(\Closure $filter, $recursive = true)
     {
         $arr = [];
-        foreach((array) $this as $key => $val) {
+        foreach($this->value as $key => $val) {
             $flag = false;
             if ($filter !== null)
                 $flag = $filter($val, $key);
@@ -120,7 +193,7 @@ final class StdArray extends \SplType
     function merge($b)
     {
         $b = (array) $b;
-        $a = (array) $this;
+        $a = $this->value;
 
         foreach ($b as $key => $value)
             if (array_key_exists($key, $a)) {
@@ -147,7 +220,7 @@ final class StdArray extends \SplType
     function mergeRecursive($b)
     {
         $b = (array) $b;
-        $a = (array) $this;
+        $a = $this->value;
 
         foreach ($b as $key => $value)
             if (array_key_exists($key, $a)) {
@@ -177,9 +250,10 @@ final class StdArray extends \SplType
      */
     function isAssoc()
     {
-        $data = (array) $this;
+        $data = $this->value;
         return (array_values($data) !== $data);
     }
+
 
     // Implement ArrayAccess:
 
@@ -197,7 +271,7 @@ final class StdArray extends \SplType
      */
     public function offsetExists($offset)
     {
-        return isset($this->{$offset});
+        return isset($this->value[$offset]);
     }
 
     /**
@@ -211,7 +285,7 @@ final class StdArray extends \SplType
      */
     public function &offsetGet($offset)
     {
-        return $this->{$offset};
+        return $this->value[$offset];
     }
 
     /**
@@ -228,7 +302,7 @@ final class StdArray extends \SplType
      */
     public function offsetSet($offset, $value)
     {
-        $this->{$offset} = $value;
+        $this->value[$offset] = $value;
     }
 
     /**
@@ -242,7 +316,7 @@ final class StdArray extends \SplType
      */
     public function offsetUnset($offset)
     {
-        unset($this->{$offset});
+        unset($this->value[$offset]);
     }
 
 
@@ -259,7 +333,7 @@ final class StdArray extends \SplType
      */
     public function count()
     {
-        return count((array)$this);
+        return count($this->value);
     }
 
 
@@ -274,6 +348,6 @@ final class StdArray extends \SplType
      */
     public function getIterator()
     {
-        return (new \ArrayObject((array)$this))->getIterator();
+        return (new \ArrayObject($this->value))->getIterator();
     }
 }
