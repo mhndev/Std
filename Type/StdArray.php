@@ -105,7 +105,7 @@ final class StdArray extends \SplType
                     if ($r !== null)
                         $return[] = &$r;
 
-                    if (is_array($v) && $v = &current($v)) {
+                    if (is_array($v)) {
                         #### continue with deeper data
                         $r = &$_f__select($queryOrig, $v);
                         if ($r !== null) {
