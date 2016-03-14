@@ -1,8 +1,10 @@
 <?php
 namespace Poirot\Std\Type;
 
-if (!class_exists('\SplType'))
+if (!class_exists('\SplType')) {
+    require __DIR__.'/fixes/AbstractNSplType.php';
     class_alias('\Poirot\Std\Type\AbstractNSplType', '\SplType');
+}
 
 final class StdTravers extends \SplType
     implements \IteratorAggregate

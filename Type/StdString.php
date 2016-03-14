@@ -1,8 +1,10 @@
 <?php
 namespace Poirot\Std\Type;
 
-if (!class_exists('\SplString'))
+if (!class_exists('\SplString')) {
+    require __DIR__.'/fixes/NSplString.php';
     class_alias('\Poirot\Std\Type\NSplString', '\SplString');
+}
 
 final class StdString extends \SplString
 {
