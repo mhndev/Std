@@ -18,6 +18,8 @@ $credentials = $stdArr->select('/* /Passenger/name');
 foreach($credentials as &$v)
     $v = strtolower($v);
 
+$allNamesWithPassenger = &$stdArr->select('//Passenger//name');
+
 */
 
 final class StdArray extends \SplType
