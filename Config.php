@@ -4,6 +4,10 @@ namespace Poirot\Std;
 use Poirot\Std\Interfaces\Struct\iEntityData;
 use Poirot\Std\Struct\EntityData;
 
+// TODO deprecate; change to something that get file extension, list of files or directory then do call back
+//      also it must have error handling enabled
+//      maybe it can used as a function instead of a class
+
 class Config extends EntityData
 {
     /**
