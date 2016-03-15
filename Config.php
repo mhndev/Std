@@ -18,7 +18,7 @@ class Config extends EntityData
      */
     protected function __setFrom($resource)
     {
-        if (is_string($resource)) {
+        if (isString($resource)) {
             if (is_file($resource))
                 $this->fromFile($resource);
             else

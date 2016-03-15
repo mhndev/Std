@@ -24,7 +24,7 @@ class NSplString extends AbstractNSplType
     function __construct ($initial_value = self::__default, $strict = true )
     {
         if (is_object($initial_value)) {
-            if (\Poirot\Std\is_string($initial_value))
+            if (\Poirot\Std\isString($initial_value))
                 $initial_value = (string) $initial_value;
         }
 
