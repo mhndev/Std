@@ -1,5 +1,5 @@
 <?php
-namespace poirot\std\Poirot\Std\Interfaces;
+namespace Poirot\Std\Interfaces;
 
 interface ipFactory
 {

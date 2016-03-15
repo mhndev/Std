@@ -19,30 +19,36 @@ class BaseEnv extends AbstractOptionsData
     protected $htmlErrors;
 
     /**
-     * Setup Php Environment With Given Settings
+     * Setup Php Environment
      *
-     * @param BaseEnv $settings
+     * $settings will override default environment values
+     *
+     * @param BaseEnv|array|\Traversable $settings
      */
-    static function setupSystemWide(BaseEnv $settings = null)
+    static function setupSystemWide($settings = null)
     {
-        if ($settings === null)
-            $settings = new static;
+        $self = new static;
 
-        foreach($settings->__props()->readable as $prop) {
+        if ($settings !== null)
+            $self->from($settings);
+
+        // use properties
+
+        foreach($self as $prop => $value) {
             switch ($prop) {
                 case 'display_errors':
-                    ini_set('display_errors', $settings->__get($prop));
+                    ini_set('display_errors', $value);
                     break;
                 case 'error_reporting':
-                    error_reporting($settings->__get($prop));
+                    error_reporting($value);
                     break;
             }
         }
 
-        $settings->init();
+        $self->doInitSystem();
     }
 
-    protected function init()
+    protected function doInitSystem()
     {
         // specific system wide setting initialize ...
     }

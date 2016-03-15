@@ -361,12 +361,12 @@ props_st:
 
         if (!isset($this->__normalizer['internal']))
             $this->__normalizer['internal'] = function($key) {
-                return Std\sanitize_camelCase($key);
+                return Std\cast($key)->camelCase();
             };
 
         if (!isset($this->__normalizer['external']))
             $this->__normalizer['external'] = function($key) {
-                return strtolower(Std\sanitize_under_score($key));
+                return strtolower(Std\cast($key)->under_score());
             };
 
 

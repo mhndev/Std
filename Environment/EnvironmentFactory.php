@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Std\Environment;
 
-use poirot\std\Poirot\Std\Interfaces\ipFactory;
+use Poirot\Std\Interfaces\ipFactory;
 
 /*
 
