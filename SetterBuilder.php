@@ -1,31 +1,20 @@
 <?php
 namespace Poirot\Std;
 
+use Poirot\Std\Traits\SetterBuilderTrait;
+
 class SetterBuilder
 {
     use SetterBuilderTrait;
 
     /**
-     * @var array List Setters By Priority
-     * [
-     *  'service_config',
-     *  'listeners',
-     *  // ...
-     * ]
-     *
-     * application calls setter methods from top ...
-     *
-     */
-    protected $__setup_array_priority = [];
-
-    /**
      * Construct
      *
-     * @param array $realm
+     * @param array $setter
      */
-    function __construct(array $realm = null)
+    function __construct(array $setter = null)
     {
-        if ($realm !== null)
-            $this->setupFromArray($realm);
+        if ($setter !== null)
+            $this->build($setter);
     }
 }

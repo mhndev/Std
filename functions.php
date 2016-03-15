@@ -14,81 +14,6 @@ namespace Poirot\Std
     use Poirot\Std\Type\StdString;
     use Poirot\Std\Type\StdTravers;
 
-    trait SetterBuilderTrait
-    {
-        /**
-         * @var array List Setters By Priority
-         * [
-         *  'service_config',
-         *  'listeners',
-         *  // ...
-         * ]
-         *
-         * application calls setter methods from top ...
-         *
-         */
-        # protected $__setup_array_priority = array();
-
-        /**
-         * Setter Setup From Array
-         *
-         * @param array $setters        Associated Array
-         *
-         * @param bool  $throwException Throw Exception
-         *
-         * @throws \Exception
-         * @return array Remained Options (if not throw exception)
-         */
-        function setupFromArray(array $setters, $throwException = false)
-        {
-            if (empty($setters))
-                # nothing to do
-                return $this;
-
-            if (array_values($setters) == $setters)
-                throw new \InvalidArgumentException(sprintf(
-                    'Setters Array must be associative array. given: %s'
-                    , var_export($setters, true)
-                ));
-
-            if (isset($this->__setup_array_priority)
-                && is_array($this->__setup_array_priority)
-            ) {
-                $sortQuee = $this->__setup_array_priority;
-                uksort($setters, function($a, $b) use ($sortQuee) {
-                    // sort array to reach setter priorities
-                    $ai = array_search($a, $sortQuee);
-                    $ai = ($ai !== false) ? $ai : 1000;
-
-                    $bi = array_search($b, $sortQuee);
-                    $bi = ($bi !== false) ? $bi : 1000;
-
-                    return $ai < $bi ? -1 : ($ai == $bi) ? 0 : 1;
-                });
-            }
-
-            $remained = [];
-            foreach($setters as $key => $val) {
-                $setter = 'set' . sanitize_camelCase($key);
-                if (method_exists($this, $setter)) {
-                    // check for methods
-                    $this->{$setter}($val);
-                } elseif($throwException) {
-                    throw new \InvalidArgumentException(
-                        sprintf(
-                            'The option "%s" does not have a matching "%s" setter method',
-                            $key, $setter
-                        )
-                    );
-                }
-                else
-                    $remained[] = $key;
-            }
-
-            return $remained;
-        }
-    }
-
     /**
      * Cast Given Value Into SplTypes
      * SplTypes Contains Some Utility For That Specific Type
@@ -101,7 +26,7 @@ namespace Poirot\Std
     function cast($type)
     {
         switch(1) {
-            case is_string($type): $return = new StdString($type);
+            case isString($type): $return = new StdString($type);
                 break;
             case is_array($type) : $return = new StdArray($type);
                 break;
@@ -123,7 +48,7 @@ namespace Poirot\Std
      *
      * @return bool
      */
-    function is_string($var)
+    function isString($var)
     {
         return (
             (!is_array($var))
