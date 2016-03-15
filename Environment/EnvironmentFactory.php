@@ -13,7 +13,7 @@ $EnvSettings::setupSystemWide();
 
 */
 
-class AliasEnvFactory implements ipFactory
+class EnvironmentFactory implements ipFactory
 {
     protected static $_aliases = [
         'development'     => \Poirot\Std\Environment\DevelopmentEnv::class,
