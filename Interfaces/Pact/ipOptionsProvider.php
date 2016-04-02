@@ -1,5 +1,5 @@
 <?php
-namespace Poirot\Std\Interfaces;
+namespace Poirot\Std\Interfaces\Pact;
 
 use Poirot\Std\Interfaces\Struct\iOptionsData;
 
