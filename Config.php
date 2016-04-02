@@ -8,6 +8,9 @@ use Poirot\Std\Struct\EntityData;
 //      also it must have error handling enabled
 //      maybe it can used as a function instead of a class
 
+/**
+ * @deprecated
+ */
 class Config extends EntityData
 {
     /**

@@ -1,8 +1,6 @@
 <?php
 namespace Poirot\Std\Struct;
 
-use Traversable;
-
 /*
 $mean = new MeanData();
 $mean->{ (string) this will converted to string by php };
@@ -34,7 +32,7 @@ class MeanData extends AbstractDataStruct
     /**
      * Retrieve an external iterator
      * @link http://php.net/manual/en/iteratoraggregate.getiterator.php
-     * @return Traversable An instance of an object implementing <b>Iterator</b> or
+     * @return \Traversable An instance of an object implementing <b>Iterator</b> or
      * <b>Traversable</b>
      * @since 5.0.0
      */
