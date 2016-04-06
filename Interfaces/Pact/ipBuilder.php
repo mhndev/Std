@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Std\Interfaces\Pact;
 
-interface ipSetterBuilder
+interface ipBuilder
 {
     /**
      * Setter Setup From Array
@@ -13,5 +13,5 @@ interface ipSetterBuilder
      * @throws \Exception
      * @return $this
      */
-    function setupFromArray(array $setters, $throwException = false);
+    function with(array $setters, $throwException = false);
 }
