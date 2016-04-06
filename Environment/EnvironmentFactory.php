@@ -31,6 +31,8 @@ class EnvironmentFactory implements ipFactory
     /**
      * Factory To Settings Environment
      *
+     * !! callable: string|BaseEnv function()
+     *
      * @param string|callable $aliasOrCallable
      *
      * @throws \Exception
@@ -38,15 +40,30 @@ class EnvironmentFactory implements ipFactory
      */
     static function of($aliasOrCallable)
     {
-        if (is_callable($aliasOrCallable))
-            $aliasOrCallable = call_user_func($aliasOrCallable);
+        $alias = $aliasOrCallable;
 
-        while(isset(self::$_aliases[$aliasOrCallable]))
-            $aliasOrCallable = self::$_aliases[$aliasOrCallable];
+        if (is_callable($alias))
+            $alias = call_user_func($aliasOrCallable);
 
-        if (!class_exists($aliasOrCallable))
-            throw new \Exception("Settings for {$aliasOrCallable} not implemented.");
+        if ($alias instanceof BaseEnv)
+            ## Callable return Environment Instance
+            return $alias;
 
-        return new $aliasOrCallable;
+        elseif (!is_string($alias))
+            throw new \Exception(sprintf(
+                'Invalid Alias name provided. it must be string given: %s.'
+                , (is_callable($aliasOrCallable))
+                  ? \Poirot\Std\flatten($alias).' provided from Callable' : \Poirot\Std\flatten($alias)
+            ));
+
+        ## find alias names: dev->development ==> class_name
+        $EnvClass = null;
+        while(isset(self::$_aliases[$alias]))
+            $EnvClass = $alias = self::$_aliases[$alias];
+
+        if (!class_exists($EnvClass))
+            throw new \Exception("Class map for {$alias} environment not implemented.");
+
+        return new $alias;
     }
 }
