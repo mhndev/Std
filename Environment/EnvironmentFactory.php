@@ -61,7 +61,7 @@ class EnvironmentFactory implements ipFactory
         while(isset(self::$_aliases[$alias]))
             $EnvClass = $alias = self::$_aliases[$alias];
 
-        if (!class_exists($EnvClass))
+        if ($EnvClass == null || !class_exists($EnvClass))
             throw new \Exception("Class map for {$alias} environment not implemented.");
 
         return new $alias;
