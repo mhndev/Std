@@ -42,6 +42,20 @@ namespace Poirot\Std
     }
 
     /**
+     * With Null Data Return Default Value
+     * Elsewhere Return Data
+     *
+     * @param null|false|mixed $data
+     * @param mixed            $default
+     *
+     * @return mixed
+     */
+    function ifNull($data, $default)
+    {
+        return ($data === null || $data === false) ? $default : $data;
+    }
+
+    /**
      * Check Variable/Object Is String
      *
      * @param mixed $var
