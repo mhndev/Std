@@ -1,11 +1,11 @@
 <?php
 namespace Poirot\Std;
 
-use Poirot\Std\Traits\SetterBuilderTrait;
+use Poirot\Std\Traits\ConfigurableSetterTrait;
 
-class SetterBuilder
+class ConfigurableSetter
 {
-    use SetterBuilderTrait;
+    use ConfigurableSetterTrait;
 
     /**
      * Construct
@@ -15,6 +15,6 @@ class SetterBuilder
     function __construct(array $setter = null)
     {
         if ($setter !== null)
-            $this->build($setter);
+            $this->with($setter);
     }
 }

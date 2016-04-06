@@ -1,12 +1,12 @@
 <?php
 namespace Poirot\Std\Interfaces\Pact;
 
-use Poirot\Std\Interfaces\Struct\iMeanData;
+use Poirot\Std\Interfaces\Struct\iDataMean;
 
 interface ipMetaProvider
 {
     /**
-     * @return iMeanData
+     * @return iDataMean
      */
     function meta();
 }

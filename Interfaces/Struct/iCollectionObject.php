@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Std\Interfaces\Struct;
 
-interface iObjectCollectionStruct extends iCollectionStruct
+interface iCollectionObject extends iCollection
 {
     /**
      * Attach Object

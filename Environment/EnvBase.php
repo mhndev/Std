@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Std\Environment;
 
-use Poirot\Std\Struct\AbstractOptionsData;
+use Poirot\Std\Struct\aDataOptions;
 
 /*
 
@@ -11,7 +11,7 @@ echo $not_defined_variable;
 
 */
 
-class BaseEnv extends AbstractOptionsData
+class EnvBase extends aDataOptions
 {
     protected $displayErrors;
     protected $errorReporting;
@@ -23,7 +23,7 @@ class BaseEnv extends AbstractOptionsData
      *
      * $settings will override default environment values
      *
-     * @param BaseEnv|array|\Traversable $settings
+     * @param EnvBase|array|\Traversable $settings
      */
     static function setupSystemWide($settings = null)
     {

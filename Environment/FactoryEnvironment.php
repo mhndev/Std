@@ -13,17 +13,17 @@ $EnvSettings::setupSystemWide();
 
 */
 
-class EnvironmentFactory implements ipFactory
+class FactoryEnvironment implements ipFactory
 {
     protected static $_aliases = [
-        'development'     => \Poirot\Std\Environment\DevelopmentEnv::class,
+        'development'     => \Poirot\Std\Environment\EnvDevelopment::class,
         'dev'             => 'development',
         'debug'           => 'development',
 
-        'production'      => \Poirot\Std\Environment\ProductionEnv::class,
+        'production'      => \Poirot\Std\Environment\EnvProduction::class,
         'prod'            => 'production',
 
-        'php-environment' => \Poirot\Std\Environment\PhpCurrentEnv::class,
+        'php-environment' => \Poirot\Std\Environment\EnvServerDefault::class,
         'php'             => 'php-environment',
         'default'         => 'php',
     ];
@@ -36,7 +36,7 @@ class EnvironmentFactory implements ipFactory
      * @param string|callable $aliasOrCallable
      *
      * @throws \Exception
-     * @return BaseEnv
+     * @return EnvBase
      */
     static function of($aliasOrCallable)
     {
@@ -45,7 +45,7 @@ class EnvironmentFactory implements ipFactory
         if (is_callable($alias))
             $alias = call_user_func($aliasOrCallable);
 
-        if ($alias instanceof BaseEnv)
+        if ($alias instanceof EnvBase)
             ## Callable return Environment Instance
             return $alias;
 

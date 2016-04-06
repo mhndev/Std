@@ -14,7 +14,7 @@ var_dump($test);            // array(1) { [0]=> string(11) "insert item" }
 var_dump($mean->test); // array(1) { [0]=> string(11) "insert item" }
 */
 
-class MeanData extends AbstractDataStruct
+class DataMean extends aDataAbstract
 {
     protected $properties = [];
 

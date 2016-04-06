@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Std\Traits;
 
-trait SetterBuilderTrait
+trait ConfigurableSetterTrait
 {
     /**
      * [
@@ -13,32 +13,31 @@ trait SetterBuilderTrait
     protected $_t__props_priorities = [];
 
     /**
-     * Setter Setup From Array
+     * Build Object With Provided Options
      *
-     * @param array $setters        Associated Array
-     *
+     * @param array $options        Associated Array
      * @param bool  $throwException Throw Exception
      *
      * @throws \Exception
      * @return array Remained Options (if not throw exception)
      */
-    function build(array $setters, $throwException = false)
+    function with(array $options, $throwException = false)
     {
-        if (empty($setters))
+        if (empty($options))
             # nothing to do
             return $this;
 
-        if (array_values($setters) == $setters)
+        if (array_values($options) == $options)
             throw new \InvalidArgumentException(sprintf(
                 'Setters Array must be associative array. given: %s'
-                , var_export($setters, true)
+                , var_export($options, true)
             ));
 
         if (isset($this->_t__props_priorities)
             && is_array($this->_t__props_priorities)
         ) {
             $sortQuee = $this->_t__props_priorities;
-            uksort($setters, function($a, $b) use ($sortQuee) {
+            uksort($options, function($a, $b) use ($sortQuee) {
                 // sort array to reach setter priorities
                 $ai = array_search($a, $sortQuee);
                 $ai = ($ai !== false) ? $ai : 1000;
@@ -51,7 +50,7 @@ trait SetterBuilderTrait
         }
 
         $remained = [];
-        foreach($setters as $key => $val) {
+        foreach($options as $key => $val) {
             $setter = 'set' . \Poirot\Std\cast($key)->camelCase();
             if (method_exists($this, $setter)) {
                 // check for methods

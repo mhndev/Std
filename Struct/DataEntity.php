@@ -4,7 +4,7 @@ namespace Poirot\Std\Struct;
 !defined('POIROT_CORE_LOADED') and include_once __DIR__.'/../functions.php';
 
 use Poirot\Std;
-use Poirot\Std\Struct\Traits\EntityDataTrait;
+use Poirot\Std\Struct\Traits\DataEntityTrait;
 
 /*
 $data = function() {
@@ -22,8 +22,8 @@ foreach($entity as $k => $v)
 */
 
 
-class EntityData extends AbstractDataStruct
-    implements Std\Interfaces\Struct\iEntityData
+class DataEntity extends aDataAbstract
+    implements Std\Interfaces\Struct\iDataEntity
 {
-    use EntityDataTrait;
+    use DataEntityTrait;
 }

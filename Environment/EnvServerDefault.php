@@ -1,23 +1,15 @@
 <?php
 namespace Poirot\Std\Environment;
 
-/**
- * - Enabling E_NOTICE, E_STRICT Error Messages
- *
- */
-
-class DevelopmentEnv extends BaseEnv
+class EnvServerDefault extends EnvBase
 {
-    /** PHP 5.3 or later, the default value is E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED */
-    protected $errorReporting;
-
     /**
      * @return mixed
      */
     function getDisplayErrors()
     {
         if($this->errorReporting === null)
-            $this->setDisplayErrors(1);
+            $this->setDisplayErrors( (int) ini_get('display_errors'));
 
         return $this->displayErrors;
     }
@@ -27,8 +19,9 @@ class DevelopmentEnv extends BaseEnv
      */
     function getErrorReporting()
     {
-        if($this->errorReporting === null)
-            $this->setErrorReporting(E_ALL);
+        if ($this->errorReporting === null)
+            ## current php settings
+            $this->setErrorReporting( (int) ini_get('error_reporting'));
 
         return $this->errorReporting;
     }
@@ -39,7 +32,7 @@ class DevelopmentEnv extends BaseEnv
     function getDisplayStartupErrors()
     {
         if($this->displayStartupErrors === null)
-            $this->setDisplayStartupErrors(1);
+            $this->setDisplayStartupErrors( (int) ini_get('display_startup_errors'));
 
         return $this->displayStartupErrors;
     }

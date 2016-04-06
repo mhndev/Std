@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Std\Struct;
 
-use Poirot\Std\Interfaces\Struct\iObjectCollectionStruct;
+use Poirot\Std\Interfaces\Struct\iCollectionObject;
 
 /*
 $c = new ObjectCollection();
@@ -27,7 +27,7 @@ print PHP_EOL;
 die('>_');
 */
 
-class ObjectCollection implements iObjectCollectionStruct, \Iterator
+class CollectionObject implements iCollectionObject, \Iterator
 {
     protected $_objs  = [
         /*

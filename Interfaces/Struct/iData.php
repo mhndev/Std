@@ -9,7 +9,7 @@ namespace Poirot\Std\Interfaces\Struct;
  *
  * ! iterator_to_array
  */
-interface iDataStruct extends \IteratorAggregate, \Countable
+interface iData extends \IteratorAggregate, \Countable
 {
     /**
      * Set Struct Data From Array

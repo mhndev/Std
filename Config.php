@@ -1,8 +1,8 @@
 <?php
 namespace Poirot\Std;
 
-use Poirot\Std\Interfaces\Struct\iEntityData;
-use Poirot\Std\Struct\EntityData;
+use Poirot\Std\Interfaces\Struct\iDataEntity;
+use Poirot\Std\Struct\DataEntity;
 
 // TODO deprecate; change to something that get file extension, list of files or directory then do call back
 //      also it must have error handling enabled
@@ -11,14 +11,14 @@ use Poirot\Std\Struct\EntityData;
 /**
  * @deprecated
  */
-class Config extends EntityData
+class Config extends DataEntity
 {
     /**
      * Set Properties
      *
      * - You can implement this method on subclasses
      *
-     * @param iEntityData $resource
+     * @param iDataEntity $resource
      *
      * @throws \InvalidArgumentException
      * @return array

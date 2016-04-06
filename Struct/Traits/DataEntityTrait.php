@@ -3,9 +3,9 @@ namespace Poirot\Std\Struct\Traits;
 
 use Poirot\Std;
 
-trait EntityDataTrait
+trait DataEntityTrait
 {
-    use AbstractDataStructTrait;
+    use aDataTrait;
 
     /** @var array Key/Values */
     protected $_properties = [];

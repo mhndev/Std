@@ -1,5 +1,5 @@
 <?php
-namespace Poirot\Std\Struct\AbstractOptions;
+namespace Poirot\Std\Struct\aDataOptions;
 
 final class PropObject
 {

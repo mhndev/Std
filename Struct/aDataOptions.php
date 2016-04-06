@@ -1,12 +1,14 @@
 <?php
 namespace Poirot\Std\Struct;
 
-use Poirot\Std;
-use Poirot\Std\Struct\AbstractOptions\PropObject;
 use Traversable;
 
-abstract class AbstractOptionsData extends AbstractDataStruct
-    implements Std\Interfaces\Struct\iOptionsData
+use Poirot\Std;
+use Poirot\Std\Struct\aDataOptions\PropObject;
+
+abstract class aDataOptions
+    extends    aDataAbstract
+    implements Std\Interfaces\Struct\iDataOptions
 {
     /** @var string|\DateTime @required yyyy-mm-ddThh:mm:ss (1983-08-13) */
     // protected $birthDate;

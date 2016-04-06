@@ -18,7 +18,7 @@ class ent extends Spinal
 }
 */
 
-trait AbstractDataStructTrait
+trait aDataTrait
 {
     /**
      * Set Struct Data From Array
@@ -48,7 +48,7 @@ trait AbstractDataStructTrait
      * Empty from all values
      * @return $this
      */
-    function empty()
+    function clean()
     {
         foreach($this as $k => $v)
             $this->del($k);

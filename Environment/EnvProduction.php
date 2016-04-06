@@ -7,7 +7,7 @@ namespace Poirot\Std\Environment;
  *
  */
 
-class ProductionEnv extends BaseEnv
+class EnvProduction extends EnvBase
 {
     /**
      * @return mixed

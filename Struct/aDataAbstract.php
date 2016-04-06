@@ -1,12 +1,12 @@
 <?php
 namespace Poirot\Std\Struct;
 
-use Poirot\Std\Interfaces\Struct\iDataStruct;
-use Poirot\Std\Struct\Traits\AbstractDataStructTrait;
+use Poirot\Std\Interfaces\Struct\iData;
+use Poirot\Std\Struct\Traits\aDataTrait;
 
-abstract class AbstractDataStruct implements iDataStruct
+abstract class aDataAbstract implements iData
 {
-    use AbstractDataStructTrait;
+    use aDataTrait;
 
     /**
      * AbstractStruct constructor.

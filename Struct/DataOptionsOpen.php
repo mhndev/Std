@@ -1,11 +1,11 @@
 <?php
 namespace Poirot\Std\Struct;
 
-use Poirot\Std\Interfaces\Struct\iOptionsData;
-use Poirot\Std\Struct\AbstractOptions\PropObject;
+use Poirot\Std\Interfaces\Struct\iDataOptions;
+use Poirot\Std\Struct\aDataOptions\PropObject;
 
-class OpenOptionsData extends AbstractOptionsData
-    implements iOptionsData
+class DataOptionsOpen extends aDataOptions
+    implements iDataOptions
 {
     /**
      * @var array
