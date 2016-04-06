@@ -137,12 +137,11 @@ class ObjectCollection implements iObjectCollectionStruct, \Iterator
     }
 
     /**
-     * // TODO 7 support keywords as method ame
      * Remove All Entities Item
      *
      * @return $this
      */
-    function emptyy()
+    function clean()
     {
         foreach($this as $key => $v)
             $this->del($key);

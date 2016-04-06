@@ -75,7 +75,7 @@ class PriorityCollectionStruct extends \SplPriorityQueue
 
         $current = $this->__mapped_items;
         unset($current[$index]);
-        $this->emptyy();
+        $this->clean();
         foreach ($current as $item)
             $this->insert($item['data'], $item['priority']);
 
@@ -83,12 +83,11 @@ class PriorityCollectionStruct extends \SplPriorityQueue
     }
 
     /**
-     * // TODO 7 support keywords as method ame
      * Remove All Entities Item
      *
      * @return $this
      */
-    function emptyy()
+    function clean()
     {
         foreach($this as $i)
             // Just Iterate Over Entities will delete items

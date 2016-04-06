@@ -22,11 +22,10 @@ interface iDataStruct extends \IteratorAggregate, \Countable
     function from($data);
 
     /**
-     * // TODO 7 support keywords as method ame
      * Empty from all values
      * @return $this
      */
-    function emptyy();
+    function clean();
 
     /**
      * Is Empty?

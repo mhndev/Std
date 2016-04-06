@@ -31,10 +31,9 @@ interface iCollectionStruct extends /*\Traversable,*/ \Countable
     function del($data);
 
     /**
-     * // TODO 7 support keywords as method ame
      * Remove All Entities Item
      *
      * @return $this
      */
-    function emptyy();
+    function clean();
 }

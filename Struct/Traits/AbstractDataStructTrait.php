@@ -48,7 +48,7 @@ trait AbstractDataStructTrait
      * Empty from all values
      * @return $this
      */
-    function emptyy()
+    function empty()
     {
         foreach($this as $k => $v)
             $this->del($k);

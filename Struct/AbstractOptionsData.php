@@ -157,7 +157,7 @@ abstract class AbstractOptionsData extends AbstractDataStruct
      * Empty from all values
      * @return $this
      */
-    function emptyy()
+    function clean()
     {
         /** @var PropObject $k */
         foreach($this as $k => $v)
