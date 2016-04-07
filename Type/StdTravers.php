@@ -66,6 +66,10 @@ final class StdTravers extends \SplType
                 ## deep convert
                 $val = (new static($val))->toArray($filter);
 
+            if (!\Poirot\Std\isString($key))
+                ## some poirot Traversable is able to handle objects as key
+                $key = \Poirot\Std\flatten($key);
+
             $arr[(string) $key] = $val;
         }
 
