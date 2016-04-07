@@ -2,7 +2,7 @@
 namespace Poirot\Std\Type;
 
 if (!class_exists('\SplType')) {
-    require __DIR__.'/fixes/AbstractNSplType.php';
+    require_once __DIR__.'/fixes/AbstractNSplType.php';
     class_alias('\Poirot\Std\Type\AbstractNSplType', '\SplType');
 }
 
@@ -65,6 +65,10 @@ final class StdTravers extends \SplType
             if ($recursive && $val instanceof \Traversable)
                 ## deep convert
                 $val = (new static($val))->toArray($filter);
+
+            if (!\Poirot\Std\isString($key))
+                ## some poirot Traversable is able to handle objects as key
+                $key = \Poirot\Std\flatten($key);
 
             $arr[(string) $key] = $val;
         }
