@@ -1,7 +1,7 @@
 <?php
 namespace Poirot\Std\Type;
 
-require __DIR__.'/AbstractNSplType.php';
+require_once __DIR__.'/AbstractNSplType.php';
 
 class NSplEnum extends AbstractNSplType
 {
